@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="250dp"
+        android:background="@drawable/bg_add_text_dialog"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/tv_feedback_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:minHeight="200dp"
+            android:gravity="start"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/no_bg"
+            android:padding="10dp"
+            android:textColorHint="@color/gray"
+            android:hint="Write here"
+            android:textSize="16sp"
+            android:paddingLeft="10dp" />
+        <RelativeLayout
+            android:id="@+id/rv_cancel_done"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/search_bg_color"
+            android:paddingTop="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp">
+            <ImageView
+                android:id="@+id/ic_cross"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="4dp"
+                android:src="@drawable/cancel"/>
+            <ImageView
+                android:id="@+id/ic_done"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:padding="4dp"
+                android:src="@drawable/done"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

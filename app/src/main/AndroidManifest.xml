@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.greeting.greet_app">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+        </intent>
+
+        <package android:name="com.google.android.apps.nbu.paisa.user" />
+        <package android:name="com.whatsapp" />
+        <package android:name="net.one97.paytm" />
+        <package android:name="com.whatsapp.w4b" />
+        <package android:name="com.gbwhatsapp" />
+        <package android:name="com.phonepe.app" />
+    </queries>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:name=".Model.MyApplication"
+        android:allowBackup="true"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.InputNumber"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".FamilyDetails"
+            android:exported="false" />
+        <activity
+            android:name=".AllFamilyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DailyWishes"
+            android:exported="false" />
+        <activity
+            android:name=".AllFestivalesActivity"
+            android:exported="false" />
+        <activity android:name=".Policy_Activity" />
+        <activity android:name=".Create_Activity" />
+        <activity android:name=".AllCategory_Activity" />
+        <activity
+            android:name=".Quote_Preview_Activity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Preview_Activity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MainActivity" />
+        <activity
+            android:name=".ActivitySplash"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.greeting.greet_app.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+
+</manifest>

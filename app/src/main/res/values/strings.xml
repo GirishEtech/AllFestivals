@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">All Festivals &amp; Wishes</string>
+    <string name="Add">Add</string>
+    <string name="Added_Successfully">Added Successfully</string>
+    <string name="Client_Name">Client Name</string>
+    <string name="Comm">Comm</string>
+    <string name="Create">Create</string>
+    <string name="Enter_Client_Name">Enter Client Name</string>
+    <string name="Enter_Sheet">Enter Sheet</string>
+    <string name="Enter_Sheet_Name">Enter Sheet Name</string>
+    <string name="Expire">Expire</string>
+    <string name="IN_Out">IN/Out</string>
+    <string name="No">No</string>
+    <string name="Pair">Pair</string>
+    <string name="Patti">Patti</string>
+    <string name="Required_Name">Required Name</string>
+    <string name="SL">SL</string>
+    <string name="Set_QR_OFF">Set QR OFF</string>
+    <string name="Set_QR_ON">Set QR ON</string>
+    <string name="Update">Update</string>
+    <string name="Yes">Yes</string>
+
+    <string name="Book">Book</string>
+    <string name="Counter">Counter</string>
+    <string name="History">History</string>
+    <string name="All_Festivals">All Festivals</string>
+    <string name="Daily_Wishes">Daily Wishes</string>
+    <string name="Trending_Festivals">Trending Festivals</string>
+    <string name="Trending_Daily_Wihses">Trending Daily Wihses</string>
+    <string name="Favourite">Favourite</string>
+    <string name="Create_e_Cards">Create E Cards</string>
+    <string name="Settings">Settings</string>
+    <string name="Collections">Collections</string>
+    <string name="Categories">Categories</string>
+    <string name="Special_Events">Special Events</string>
+    <string name="Best_Quotes">Best Quotes</string>
+    <string name="Saved_items">Saved items</string>
+    <string name="View_All">View All</string>
+    <string name="Family_Wishes">Family Wishes</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_templete">Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</string>
+    <string name="Gifs">Gifs</string>
+    <string name="Cards">Cards</string>
+    <string name="Quatation">Quatation</string>
+    <string name="Emoji">Emoji</string>
+    <string name="Frames">Frames</string>
+    <string name="Stickers">Stickers</string>
+    <string name="All_Quotes">All Quotes</string>
+    <string name="title_activity_preview">Preview_Activity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="Gif_Preview">Gif Preview</string>
+    <string name="Quote_Preview">Quote Preview</string>
+    <string name="Color">Color</string>
+    <string name="Text">Text</string>
+    <string name="Filters">Filters</string>
+    <string name="Select_Background">Select Background</string>
+    <string name="Gallery">Gallery</string>
+    <string name="Camera">Camera</string>
+    <string name="Gradient">Gradient</string>
+    <string name="Opacity">Opacity</string>
+    <string name="Privacy_Policy">Privacy Policy</string>
+    <string name="No_Data_Found">No Data Found</string>
+</resources>

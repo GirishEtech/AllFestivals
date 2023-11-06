@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "176677117419",
+    "firebase_url": "https://festivals-greetings-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "festivals-greetings",
+    "storage_bucket": "festivals-greetings.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176677117419:android:075e27df685e6ca4550dae",
+        "android_client_info": {
+          "package_name": "com.greeting.greet_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176677117419-pv8ni58907o3kdpcqsgle2l9jbcmceaa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNj_qz-NeYWaJfQKXQqxxin5DbF67dtpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176677117419-pv8ni58907o3kdpcqsgle2l9jbcmceaa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

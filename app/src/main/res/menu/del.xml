@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/clean"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:iconTint="@color/white"
+        android:title="Clear"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/log_out"
+        android:iconTint="@color/white"
+        android:title="LogOut"
+        android:visible="false"
+        app:showAsAction="always" />
+</menu>
