@@ -101,8 +101,9 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
     DatabaseReference UserSavedref;
     ArrayList<String> Saved_list = new ArrayList<>();
     TextView download;
-LinearLayout add_frame_image;
-ImageView main_img;
+    LinearLayout add_frame_image;
+    ImageView main_img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,20 +127,20 @@ ImageView main_img;
         ArrayList<String> previewList = Stash.getArrayList("preview_list", String.class);
 
         List<String> sliderItems = new ArrayList<>();
-        for (int i = 0; i <previewList.size(); i++) {
+        for (int i = 0; i < previewList.size(); i++) {
             sliderItems.add(previewList.get(i).toString());
         }
 
         main_img.setOnTouchListener(this);
 
-        Log.d("data", sliderItems+"hhh+"+sliderItems.toString());
+        Log.d("data", sliderItems + "hhh+" + sliderItems.toString());
         viewPager2.setAdapter(new SlidersAdapter(sliderItems, viewPager2, Preview_Activity.this));
         viewPager2.setClipToPadding(false);
         viewPager2.setClipChildren(false);
         int position = Stash.getInt("position");
         viewPager2.setCurrentItem(position);
         viewPager2.setOffscreenPageLimit(3);
-        viewPager2.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
+        viewPager2.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_ALWAYS);
 
         CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
         compositePageTransformer.addTransformer(new MarginPageTransformer(5));
@@ -160,12 +161,9 @@ ImageView main_img;
 //        Stash.put(Config.favourite, resturantModelArrayList);
             }
         });
-        if(Type.equals(Utils.Frames))
-        {
+        if (Type.equals(Utils.Frames)) {
             add_frame_image.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             add_frame_image.setVisibility(View.GONE);
         }
         add_frame_image.setOnClickListener(new View.OnClickListener() {
@@ -567,6 +565,7 @@ ImageView main_img;
             Toast.makeText(Preview_Activity.this, "You haven't picked Image", Toast.LENGTH_LONG).show();
         }
     }
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         ImageView view = (ImageView) v;

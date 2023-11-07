@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.greeting.greet_app"
@@ -65,4 +65,5 @@ dependencies {
     implementation "com.makeramen:roundedimageview:2.3.0"
     implementation 'com.flying.xiaopo:sticker:1.4.0'
     implementation 'com.karumi:dexter:4.1.0'
+    implementation "com.github.skydoves:colorpickerview:2.3.0"
 }

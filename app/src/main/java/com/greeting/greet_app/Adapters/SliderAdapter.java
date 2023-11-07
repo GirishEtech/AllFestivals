@@ -68,7 +68,6 @@ public class SliderAdapter extends
                 .fitCenter()
                 .into(viewHolder.imageViewBackground);*/
 
-
     }
 
     @Override

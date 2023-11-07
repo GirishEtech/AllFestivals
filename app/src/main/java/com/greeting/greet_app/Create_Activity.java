@@ -60,6 +60,9 @@ import com.greeting.greet_app.Adapters.DataAdapter;
 import com.greeting.greet_app.Adapters.Gifs_Adapters;
 import com.greeting.greet_app.Adapters.StickersAdapter;
 import com.greeting.greet_app.Model.SimpleColor;
+import com.skydoves.colorpickerview.ColorPickerView;
+import com.skydoves.colorpickerview.sliders.AlphaSlideBar;
+import com.skydoves.colorpickerview.sliders.BrightnessSlideBar;
 import com.xiaopo.flying.sticker.BitmapStickerIcon;
 import com.xiaopo.flying.sticker.DeleteIconEvent;
 import com.xiaopo.flying.sticker.DrawableSticker;
@@ -108,6 +111,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     Activity activity;
     Toolbar toolbar;
     String UserMobileId = "";
+    AlphaSlideBar brightnessSlideBar;
+    ColorPickerView colorPickerView;
     LinearLayout bottom_nav_card, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
     RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView;
@@ -161,6 +166,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         getWindow().setStatusBarColor(getResources().getColor(R.color.teal_200));
         activity = this;
         UserMobileId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        colorPickerView = findViewById(R.id.colorPickerView);
+        brightnessSlideBar = findViewById(R.id.alphaSlideBar);
         toolbar = findViewById(R.id.toolbar);
         bg_img = findViewById(R.id.bg_img);
         bg_image = findViewById(R.id.bg_image);
@@ -223,6 +230,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
             }
         });
+        colorPickerView.attachAlphaSlider(brightnessSlideBar);
+
         ivOld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

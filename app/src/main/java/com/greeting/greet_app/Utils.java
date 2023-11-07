@@ -8,7 +8,7 @@ import com.greeting.greet_app.Model.CategoryModel;
 public class Utils {
     public static final String CAT_TYPE = "CATEGORYTYPE";
     public static final String TAB_NAME = "tab_name";
-    public static Integer Span_Count = 3;
+    public static Integer Span_Count = 4;
     public static Context context;
     public static CategoryModel categoryModel;
     public static String Cards = "Cards";
