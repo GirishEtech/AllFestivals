@@ -20,14 +20,12 @@
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:textAllCaps="true"
         android:layout_gravity="center_horizontal"
         android:visibility="visible"
         android:gravity="center"
         android:textStyle="normal"
-        android:fontFamily="@font/regular"
+        style="@style/textStyle"
         android:text="Eid Mubarak"
-        android:textSize="10sp"
         android:textColor="@color/white"/>
 
 </LinearLayout>

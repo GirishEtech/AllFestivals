@@ -58,9 +58,9 @@ public class Daily_Wishes_Category_Adapters extends RecyclerView.Adapter<Daily_W
         if (clientModelArrayList.size()>0){
          //   holder.setIsRecyclable(false);
             CategoryModel model= clientModelArrayList.get(position);
+            holder.tv_name.setAllCaps(true);
             holder.tv_name.setText(model.getName());
           //  holder.img.setImageResource(model.getImage());
-
             Glide.with(context).load(model.getImageLink()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.img);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

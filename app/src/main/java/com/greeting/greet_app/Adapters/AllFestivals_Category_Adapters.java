@@ -58,6 +58,7 @@ public class AllFestivals_Category_Adapters extends RecyclerView.Adapter<AllFest
          //   holder.setIsRecyclable(false);
             CategoryModel model= clientModelArrayList.get(position);
             holder.tv_name.setText(model.getName());
+
           //  holder.img.setImageResource(model.getImage());
             Glide.with(context).load(model.getImageLink()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.img);
             holder.itemView.setOnClickListener(new View.OnClickListener() {

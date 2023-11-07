@@ -90,7 +90,6 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     StickersAdapter stickersAdapter;
 
     private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
-    int CAMERA_REQUEST = 200;
     DataAdapter dataAdapter1;
     int RESULT_LOAD_IMG = 100;
 

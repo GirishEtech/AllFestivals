@@ -231,7 +231,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (i==3){
             nav0_img.setImageResource(R.drawable.home);
-
             nav1_img.setImageResource(R.drawable.ic_categories1);
             nav2_img.setImageResource(R.drawable.special_events_filled);
             nav3_img.setImageResource(R.drawable.ic_best_quotes1);
