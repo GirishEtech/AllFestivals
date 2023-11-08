@@ -38,6 +38,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -60,9 +61,8 @@ import com.greeting.greet_app.Adapters.DataAdapter;
 import com.greeting.greet_app.Adapters.Gifs_Adapters;
 import com.greeting.greet_app.Adapters.StickersAdapter;
 import com.greeting.greet_app.Model.SimpleColor;
-import com.skydoves.colorpickerview.ColorPickerView;
-import com.skydoves.colorpickerview.sliders.AlphaSlideBar;
-import com.skydoves.colorpickerview.sliders.BrightnessSlideBar;
+import com.madrapps.pikolo.RGBColorPicker;
+import com.madrapps.pikolo.listeners.SimpleColorSelectionListener;
 import com.xiaopo.flying.sticker.BitmapStickerIcon;
 import com.xiaopo.flying.sticker.DeleteIconEvent;
 import com.xiaopo.flying.sticker.DrawableSticker;
@@ -77,6 +77,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import ir.kotlin.kavehcolorpicker.KavehColorAlphaSlider;
+import top.defaults.colorpicker.ColorPickerPopup;
+import top.defaults.colorpicker.ColorWheelPalette;
+
 public class Create_Activity extends AppCompatActivity implements View.OnTouchListener {
 
 
@@ -86,9 +90,11 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     private com.xiaopo.flying.sticker.StickerView stickerView;
     private TextSticker sticker;
 
+    private KavehColorAlphaSlider kavehColorAlphaSlider;
     @SuppressWarnings("unused")
     StickersAdapter stickersAdapter;
 
+    private RGBColorPicker gradiant_colorPicker;
     private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
     DataAdapter dataAdapter1;
     int RESULT_LOAD_IMG = 100;
@@ -110,9 +116,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     Activity activity;
     Toolbar toolbar;
     String UserMobileId = "";
-    AlphaSlideBar brightnessSlideBar;
-    ColorPickerView colorPickerView;
-    LinearLayout bottom_nav_card, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
+    ColorWheelPalette add_color_btn, add_gradiant_color;
+    LinearLayout bottom_nav_card, add_gradiant_layout, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
     RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView;
     TextView tv_title;
@@ -165,8 +170,6 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         getWindow().setStatusBarColor(getResources().getColor(R.color.teal_200));
         activity = this;
         UserMobileId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        colorPickerView = findViewById(R.id.colorPickerView);
-        brightnessSlideBar = findViewById(R.id.alphaSlideBar);
         toolbar = findViewById(R.id.toolbar);
         bg_img = findViewById(R.id.bg_img);
         bg_image = findViewById(R.id.bg_image);
@@ -179,6 +182,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         grediant = findViewById(R.id.grediant);
         grediant_Color = findViewById(R.id.grediant_Color);
         grediant_btn = findViewById(R.id.gredient_btn);
+        kavehColorAlphaSlider = findViewById(R.id.colorAlphaSlider);
         setSupportActionBar(toolbar);
         viewDialog = new ViewDialog(this);
         In_it_List();
@@ -188,6 +192,10 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         bottom_add_filters_layout = findViewById(R.id.bottom_add_filters_layout);
         nav_add_text = findViewById(R.id.nav_add_text);
         nav_add_filters = findViewById(R.id.nav_add_filters);
+        add_color_btn = findViewById(R.id.add_color_layout);
+        add_gradiant_color = findViewById(R.id.add_gradiant_color);
+        add_gradiant_layout = findViewById(R.id.add_gradiant_layout);
+        gradiant_colorPicker = findViewById(R.id.gradiant_colorPicker);
         nav_add_sticker = findViewById(R.id.nav_add_sticker);
         ic_cross = findViewById(R.id.ic_cross);
         ic_done = findViewById(R.id.ic_done);
@@ -229,8 +237,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
             }
         });
-        colorPickerView.attachAlphaSlider(brightnessSlideBar);
-
+        add_color_btn.setOnClickListener(this::showColorPickerDiologe);
         ivOld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -324,7 +331,9 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         DataAdapter dataAdapter = new DataAdapter(this, arrayList);
         this.simple_Color.setAdapter(dataAdapter);
 
-
+        add_gradiant_color.setOnClickListener(view -> {
+            showGradiantDioloue();
+        });
         grediant_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -542,6 +551,49 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 //            loadSticker();
         }
 
+    }
+
+    private void showGradiantDioloue() {
+        Set_Layout_Gone();
+        add_gradiant_layout.setVisibility(View.VISIBLE);
+        gradiant_colorPicker.setColorSelectionListener(new SimpleColorSelectionListener() {
+            @Override
+            public void onColorSelected(int color) {
+                super.onColorSelected(color);
+                main_view.setBackgroundColor(color);
+            }
+        });
+        findViewById(R.id.btnGColorCencel).setOnClickListener(view -> {
+            add_gradiant_layout.setVisibility(View.GONE);
+        });
+        findViewById(R.id.btnGColorChoose).setOnClickListener(view -> {
+            add_gradiant_layout.setVisibility(View.GONE);
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void showColorPickerDiologe(View view) {
+        kavehColorAlphaSlider.setOnAlphaChangedListener(aFloat -> {
+            main_view.setAlpha(aFloat);
+            Log.i(TAG, "showColorPickerDiologe: VALUE OF FLOAT : -" + Math.abs(aFloat));
+        });
+        new ColorPickerPopup.Builder(this)
+                .initialColor(Color.RED)
+                .enableBrightness(true)
+                .enableAlpha(true)
+                .okTitle("Choose")
+                .cancelTitle("Cencel")
+                .showIndicator(true)
+                .showValue(false)
+                .build()
+                .show(view, new ColorPickerPopup.ColorPickerObserver() {
+                    @Override
+                    public void onColorPicked(int color) {
+                        main_view.setBackgroundColor(color);
+                        kavehColorAlphaSlider.setSelectedColor(color);
+                    }
+                });
+        ;
     }
 
     private void permission() {

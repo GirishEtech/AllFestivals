@@ -66,5 +66,7 @@ dependencies {
     implementation "com.makeramen:roundedimageview:2.3.0"
     implementation 'com.flying.xiaopo:sticker:1.4.0'
     implementation 'com.karumi:dexter:4.1.0'
-    implementation "com.github.skydoves:colorpickerview:2.3.0"
+    implementation "com.github.duanhong169:colorpicker:1.1.6"
+    implementation "com.github.Mohammad3125:KavehColorPicker:v1.0.0"
+    implementation "com.github.madrapps:pikolo:2.0.2"
 }
