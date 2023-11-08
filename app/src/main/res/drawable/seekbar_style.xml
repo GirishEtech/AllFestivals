@@ -8,7 +8,7 @@
                 android:startColor="@color/yellow"
                 android:useLevel="true" />
             <corners
-                android:radius="100dp"/>
+                android:radius="40dp"/>
         </shape>
     </item>
 

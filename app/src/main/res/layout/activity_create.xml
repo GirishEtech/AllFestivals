@@ -489,43 +489,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/add_gradiant_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/rv_cancel_done"
-            android:background="@color/AliceBlue"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_marginTop="400dp"
-            android:padding="5dp">
-            <com.madrapps.pikolo.RGBColorPicker
-                android:id="@+id/gradiant_colorPicker"
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                />
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <Button
-                    android:id="@+id/btnGColorChoose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:text="Choose"
-                    android:backgroundTint="@color/AntiqueWhite"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </LinearLayout>
         <LinearLayout
             android:id="@+id/bottom_color_layout"
             android:layout_width="match_parent"
@@ -533,7 +496,7 @@
             android:layout_above="@id/rv_cancel_done"
             android:background="@color/search_bg_color"
             android:orientation="vertical"
-            android:visibility="gone"
+
             android:padding="5dp">
 
             <LinearLayout
@@ -548,9 +511,9 @@
                     android:gravity="left"
                     android:paddingRight="4dp"
                     android:text="@string/Color"
-                    android:textColor="@color/white"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textColor="@android:color/darker_gray"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"/>
 
                 <top.defaults.colorpicker.ColorWheelPalette
                     android:id="@+id/add_color_layout"
@@ -573,9 +536,10 @@
                     android:gravity="left"
                     android:paddingRight="4dp"
                     android:text="@string/Gradient"
-                    android:textColor="@color/white"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="16sp"
+                    />
 
                 <top.defaults.colorpicker.ColorWheelPalette
                     android:id="@+id/add_gradiant_color"
@@ -598,32 +562,36 @@
                     android:gravity="left"
                     android:paddingRight="4dp"
                     android:text="@string/Opacity"
-                    android:textColor="@color/white"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textColor="@android:color/darker_gray"
+                    android:textAllCaps="true"
+                    android:textSize="16sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
 
-                    <ir.kotlin.kavehcolorpicker.KavehColorAlphaSlider
-                        android:id="@+id/colorAlphaSlider"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
+                    <com.rtugeek.android.colorseekbar.AlphaSeekBar
+                        android:id="@+id/alphaSeekBar"
+                        app:alphaSeekBarShowThumb="true"
+                        android:layout_width="350dp"
+                        app:alphaSeekBarDirection="LEFT_TO_RIGHT"
+                        app:alphaSeekBarHeight="17dp"
+                        android:layout_height="30dp" />
 
                     <TextView
                         android:id="@+id/tv_opacity_per"
-                        android:layout_width="wrap_content"
+                        android:layout_width="45dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:gravity="left"
+                        android:gravity="center"
+                        android:background="@drawable/seekbar_style"
                         android:paddingRight="4dp"
+                        android:padding="5sp"
                         android:text="100%"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="normal" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

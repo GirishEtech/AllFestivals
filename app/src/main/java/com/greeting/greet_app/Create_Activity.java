@@ -3,19 +3,24 @@ package com.greeting.greet_app;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.graphics.Region;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Layout;
@@ -62,11 +67,13 @@ import com.greeting.greet_app.Adapters.StickersAdapter;
 import com.greeting.greet_app.Model.SimpleColor;
 import com.madrapps.pikolo.RGBColorPicker;
 import com.madrapps.pikolo.listeners.SimpleColorSelectionListener;
+import com.rtugeek.android.colorseekbar.AlphaSeekBar;
 import com.xiaopo.flying.sticker.BitmapStickerIcon;
 import com.xiaopo.flying.sticker.DeleteIconEvent;
 import com.xiaopo.flying.sticker.DrawableSticker;
 import com.xiaopo.flying.sticker.FlipHorizontallyEvent;
 import com.xiaopo.flying.sticker.Sticker;
+import com.xiaopo.flying.sticker.StickerView;
 import com.xiaopo.flying.sticker.TextSticker;
 import com.xiaopo.flying.sticker.ZoomIconEvent;
 
@@ -79,18 +86,19 @@ import ir.kotlin.kavehcolorpicker.KavehColorAlphaSlider;
 import top.defaults.colorpicker.ColorPickerPopup;
 import top.defaults.colorpicker.ColorWheelPalette;
 
-public class Create_Activity extends AppCompatActivity implements View.OnTouchListener {
+public class Create_Activity extends AppCompatActivity implements View.OnTouchListener,ColorListner {
 
     private int originalColor = 1;
-
+    private ColorBox colorBox;
     private ViewDialog viewDialog;
     private static final String TAG = "Touch";
     public static final int PERM_RQST_CODE = 110;
     private com.xiaopo.flying.sticker.StickerView stickerView;
-    private TextSticker sticker, TextSticker;
+    private TextSticker sticker;
+    private TextSticker TextSticker;
 
     private EditText tv_feedback_text;
-    private KavehColorAlphaSlider kavehColorAlphaSlider;
+    private AlphaSeekBar kavehColorAlphaSlider;
     @SuppressWarnings("unused")
     StickersAdapter stickersAdapter;
 
@@ -120,7 +128,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     LinearLayout bottom_nav_card, add_gradiant_layout, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
     RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView;
-    TextView tv_title;
+    TextView tv_title,tv_opacity_per;
     RelativeLayout rv_cancel_done;
     ImageView ic_cross, ic_done;
     Gifs_Adapters quotation_adapters;
@@ -182,7 +190,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         grediant = findViewById(R.id.grediant);
         grediant_Color = findViewById(R.id.grediant_Color);
         grediant_btn = findViewById(R.id.gredient_btn);
-        kavehColorAlphaSlider = findViewById(R.id.colorAlphaSlider);
+        kavehColorAlphaSlider = findViewById(R.id.alphaSeekBar);
         setSupportActionBar(toolbar);
         viewDialog = new ViewDialog(this);
         In_it_List();
@@ -191,11 +199,10 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         bottom_add_sticker_layout = findViewById(R.id.bottom_add_sticker_layout);
         bottom_add_filters_layout = findViewById(R.id.bottom_add_filters_layout);
         nav_add_text = findViewById(R.id.nav_add_text);
+        tv_opacity_per = findViewById(R.id.tv_opacity_per);
         nav_add_filters = findViewById(R.id.nav_add_filters);
         add_color_btn = findViewById(R.id.add_color_layout);
         add_gradiant_color = findViewById(R.id.add_gradiant_color);
-        add_gradiant_layout = findViewById(R.id.add_gradiant_layout);
-        gradiant_colorPicker = findViewById(R.id.gradiant_colorPicker);
         nav_add_sticker = findViewById(R.id.nav_add_sticker);
         ic_cross = findViewById(R.id.ic_cross);
         ic_done = findViewById(R.id.ic_done);
@@ -208,6 +215,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         nav_add_color = findViewById(R.id.nav_add_color);
         camera_img = findViewById(R.id.camera_img);
         main_img.setOnTouchListener(this);
+        colorBox = new ColorBox(this,this);
         ivoriginal = findViewById(R.id.ivoriginal);
         main_view = findViewById(R.id.main_view);
         ivOld = findViewById(R.id.ivOld);
@@ -555,21 +563,18 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     private void showGradiantDioloue() {
         Set_Layout_Gone();
-        add_gradiant_layout.setVisibility(View.VISIBLE);
-        gradiant_colorPicker.setColorSelectionListener(new SimpleColorSelectionListener() {
-            @Override
-            public void onColorSelected(int color) {
-                super.onColorSelected(color);
-                TextSticker = (com.xiaopo.flying.sticker.TextSticker) stickerView.getCurrentSticker();
-                TextSticker.setTextColor(color);
-                stickerView.invalidate();
-            }
-        });
-        findViewById(R.id.btnGColorChoose).setOnClickListener(view -> {
-            add_gradiant_layout.setVisibility(View.GONE);
-            TextSticker.setTextColor(originalColor);
-            stickerView.invalidate();
-        });
+//        gradiant_colorPicker.setColorSelectionListener(new SimpleColorSelectionListener() {
+//            @Override
+//            public void onColorSelected(int color) {
+//                super.onColorSelected(color);
+//                TextSticker = (com.xiaopo.flying.sticker.TextSticker) stickerView.getCurrentSticker();
+//                TextSticker.setTextColor(color);
+//                stickerView.invalidate();
+//            }
+//        });
+
+
+        colorBox.showDialog();
     }
 
     public  int adjustColorOpacity(int color, float opacity) {
@@ -577,17 +582,23 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
-
         return Color.argb(alpha, red, green, blue);
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void showColorPickerDiologe(View view) {
-        kavehColorAlphaSlider.setOnAlphaChangedListener(aFloat -> {
-            main_view.setAlpha(aFloat);
-            TextSticker = (com.xiaopo.flying.sticker.TextSticker) stickerView.getCurrentSticker();
-            TextSticker.setTextColor(adjustColorOpacity(originalColor,aFloat));
-            stickerView.invalidate();
-            Log.i(TAG, "showColorPickerDiologe: VALUE OF FLOAT : -" + Math.abs(aFloat));
+        kavehColorAlphaSlider.setOnAlphaChangeListener((progress, alpha) -> {
+            if (TextSticker != null){
+                double percentage;
+                if (progress == 0) {
+                    percentage = 1.0; // Set the percentage to 1 if the progress is 0
+                } else {
+                    percentage = (double) progress / 255 * 100; // Calculate the percentage normally
+                }
+                int percentageValue = (int) percentage;
+                tv_opacity_per.setText(""+percentageValue+"%");
+                TextSticker.setTextColor(adjustColorOpacity(originalColor,alpha));
+                stickerView.invalidate();
+            }
         });
         new ColorPickerPopup.Builder(this)
                 .initialColor(Color.RED)
@@ -602,11 +613,9 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                     @Override
                     public void onColorPicked(int color) {
                         if (TextSticker != null) {
-                            TextSticker = (com.xiaopo.flying.sticker.TextSticker) stickerView.getCurrentSticker();
                             TextSticker.setTextColor(color);
                             originalColor = color;
                             stickerView.invalidate();
-                            kavehColorAlphaSlider.setSelectedColor(color);
                         }
                     }
                 });
@@ -933,6 +942,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     public void testAdd(String text) {
         if (text.length() > 1) {
+
             TextSticker = new TextSticker(this);
             TextSticker.setText("" + text);
             TextSticker.setTextAlign(Layout.Alignment.ALIGN_CENTER);
@@ -942,14 +952,13 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     }
 
     public void testAdd(View view) {
-        final TextSticker sticker = new TextSticker(this);
-        sticker.setText("Hello, world!");
-        sticker.setTextColor(Color.BLUE);
-        sticker.setTextAlign(Layout.Alignment.ALIGN_CENTER);
-//        sticker.resizeText();
-
-        sticker.setMaxTextSize(12);
-        stickerView.addSticker(sticker);
+        TextSticker = new TextSticker(this);
+        TextSticker.setText("Hello, world!");
+        TextSticker.setTextColor(Color.BLUE);
+        TextSticker.setTextAlign(Layout.Alignment.ALIGN_CENTER);
+        TextSticker.resizeText();
+        TextSticker.setMaxTextSize(12);
+        stickerView.addSticker(TextSticker);
     }
 
     private void Get_Storage() {
@@ -987,4 +996,13 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void  setDrawable(GradientDrawable drawable) {
+        Log.i(TAG, "setDrawable: Listner is Click");
+        if (TextSticker != null){
+
+        }
+        stickerView.invalidate();
+    }
 }
