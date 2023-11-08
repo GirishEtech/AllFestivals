@@ -56,7 +56,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.greeting.greet_app.Adapters.BG_Adapters;
-import com.greeting.greet_app.Adapters.Cards_Adapters;
 import com.greeting.greet_app.Adapters.DataAdapter;
 import com.greeting.greet_app.Adapters.Gifs_Adapters;
 import com.greeting.greet_app.Adapters.StickersAdapter;
@@ -75,7 +74,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 import ir.kotlin.kavehcolorpicker.KavehColorAlphaSlider;
 import top.defaults.colorpicker.ColorPickerPopup;
@@ -83,13 +81,15 @@ import top.defaults.colorpicker.ColorWheelPalette;
 
 public class Create_Activity extends AppCompatActivity implements View.OnTouchListener {
 
+    private int originalColor = 1;
 
     private ViewDialog viewDialog;
     private static final String TAG = "Touch";
     public static final int PERM_RQST_CODE = 110;
     private com.xiaopo.flying.sticker.StickerView stickerView;
-    private TextSticker sticker;
+    private TextSticker sticker, TextSticker;
 
+    private EditText tv_feedback_text;
     private KavehColorAlphaSlider kavehColorAlphaSlider;
     @SuppressWarnings("unused")
     StickersAdapter stickersAdapter;
@@ -560,21 +560,33 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             @Override
             public void onColorSelected(int color) {
                 super.onColorSelected(color);
-                main_view.setBackgroundColor(color);
+                TextSticker = (com.xiaopo.flying.sticker.TextSticker) stickerView.getCurrentSticker();
+                TextSticker.setTextColor(color);
+                stickerView.invalidate();
             }
-        });
-        findViewById(R.id.btnGColorCencel).setOnClickListener(view -> {
-            add_gradiant_layout.setVisibility(View.GONE);
         });
         findViewById(R.id.btnGColorChoose).setOnClickListener(view -> {
             add_gradiant_layout.setVisibility(View.GONE);
+            TextSticker.setTextColor(originalColor);
+            stickerView.invalidate();
         });
     }
 
+    public  int adjustColorOpacity(int color, float opacity) {
+        int alpha = Math.round(Color.alpha(color) * opacity);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+
+        return Color.argb(alpha, red, green, blue);
+    }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void showColorPickerDiologe(View view) {
         kavehColorAlphaSlider.setOnAlphaChangedListener(aFloat -> {
             main_view.setAlpha(aFloat);
+            TextSticker = (com.xiaopo.flying.sticker.TextSticker) stickerView.getCurrentSticker();
+            TextSticker.setTextColor(adjustColorOpacity(originalColor,aFloat));
+            stickerView.invalidate();
             Log.i(TAG, "showColorPickerDiologe: VALUE OF FLOAT : -" + Math.abs(aFloat));
         });
         new ColorPickerPopup.Builder(this)
@@ -589,8 +601,13 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 .show(view, new ColorPickerPopup.ColorPickerObserver() {
                     @Override
                     public void onColorPicked(int color) {
-                        main_view.setBackgroundColor(color);
-                        kavehColorAlphaSlider.setSelectedColor(color);
+                        if (TextSticker != null) {
+                            TextSticker = (com.xiaopo.flying.sticker.TextSticker) stickerView.getCurrentSticker();
+                            TextSticker.setTextColor(color);
+                            originalColor = color;
+                            stickerView.invalidate();
+                            kavehColorAlphaSlider.setSelectedColor(color);
+                        }
                     }
                 });
         ;
@@ -640,8 +657,9 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                EditText tv_feedback_text = v.findViewById(R.id.tv_feedback_text);
+                tv_feedback_text = v.findViewById(R.id.tv_feedback_text);
                 testAdd(tv_feedback_text.getText().toString() + "");
+                Log.i(TAG, "onClick: " + tv_feedback_text.getText().toString());
                 Set_Layout_Gone();
             }
         });
@@ -915,13 +933,11 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     public void testAdd(String text) {
         if (text.length() > 1) {
-            final TextSticker sticker = new TextSticker(this);
-            sticker.setText("" + text);
-            sticker.setTextColor(Color.WHITE);
-            sticker.setTextAlign(Layout.Alignment.ALIGN_CENTER);
-            sticker.resizeText();
-
-            stickerView.addSticker(sticker);
+            TextSticker = new TextSticker(this);
+            TextSticker.setText("" + text);
+            TextSticker.setTextAlign(Layout.Alignment.ALIGN_CENTER);
+            TextSticker.resizeText();
+            stickerView.addSticker(TextSticker);
         }
     }
 
