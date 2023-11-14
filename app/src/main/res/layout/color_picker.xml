@@ -1,97 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/myColorPicker"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/myColorPicker"
     android:layout_width="410dp"
-    app:cardCornerRadius="10dp"
-    app:cardBackgroundColor="@android:color/white"
-    android:layout_height="500dp">
+    android:layout_height="400dp"
+    android:backgroundTint="@color/white"
+    android:background="@drawable/bg_add_text_dialog"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/testBgColor"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            app:cardBackgroundColor="@android:color/holo_blue_light"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="10dp"
+        <FrameLayout
+            android:id="@+id/frameLayout4"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/frameLayout3"
+            app:layout_constraintStart_toEndOf="@+id/frameLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/outPutTest"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="@android:color/holo_blue_light"
+                app:cardCornerRadius="10dp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.03"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.025" />
+            app:layout_constraintVertical_bias="0.01999998">
 
-        <com.madrapps.pikolo.RGBColorPicker
-            android:id="@+id/firstColor"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/testBgColor"
-            app:layout_constraintVertical_bias="0.503" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/firstColor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="@android:color/holo_blue_light"
+                app:cardCornerRadius="10dp">
 
-        <TextView
-            android:id="@+id/txtFirstColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Left Color"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="@+id/firstColor"
-            app:layout_constraintStart_toStartOf="@+id/firstColor"
-            app:layout_constraintTop_toBottomOf="@+id/firstColor" />
+                <TextView
+                    android:id="@+id/textview_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="FirstColor"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
 
-        <com.madrapps.pikolo.RGBColorPicker
-            android:id="@+id/secondColor"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_marginEnd="36dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <FrameLayout
+            android:id="@+id/frameLayout3"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_margin="5dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/testBgColor"
-            app:layout_constraintVertical_bias="0.503" />
+            app:layout_constraintHorizontal_bias="0.82"
+            app:layout_constraintStart_toEndOf="@+id/frameLayout"
+            app:layout_constraintTop_toTopOf="@+id/frameLayout"
+            app:layout_constraintVertical_bias="0.53">
 
-        <TextView
-            android:id="@+id/txtSecondText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Right Color"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="@+id/secondColor"
-            app:layout_constraintStart_toStartOf="@+id/secondColor"
-            app:layout_constraintTop_toBottomOf="@+id/secondColor" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/SecondColor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="@android:color/holo_blue_light"
+                app:cardCornerRadius="10dp">
+
+                <TextView
+                    android:id="@+id/textview_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="SecondColor"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+            </androidx.cardview.widget.CardView>
+
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_marginTop="44dp"
+            android:backgroundTint="@android:color/transparent"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout4"
+            app:layout_constraintEnd_toStartOf="@+id/frameLayout3"
+            app:layout_constraintStart_toEndOf="@+id/frameLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:srcCompat="@android:drawable/arrow_down_float"
+            app:tint="@color/search_bg_color" />
 
         <Button
             android:id="@+id/btnCencel"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/holo_blue_dark"
+            android:layout_marginStart="28dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/zxing_custom_viewfinder_laser"
             android:text="CENCEL"
-            android:layout_margin="7dp"
+            app:cornerRadius="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/firstColor"
-            app:layout_constraintStart_toStartOf="@+id/firstColor"
-            app:layout_constraintTop_toBottomOf="@+id/txtFirstColor"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/btnDone"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="7dp"
-            android:backgroundTint="@android:color/holo_blue_dark"
+            android:layout_marginStart="72dp"
+            android:backgroundTint="@color/zxing_custom_viewfinder_laser"
             android:text="OK"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/secondColor"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/secondColor" />
+            app:cornerRadius="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnCencel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.746"
+            app:layout_constraintStart_toEndOf="@+id/btnCencel" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</LinearLayout>

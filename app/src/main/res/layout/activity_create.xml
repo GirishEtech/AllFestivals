@@ -604,7 +604,7 @@
                         android:id="@+id/alphaSeekBar"
                         android:layout_width="350dp"
                         android:layout_height="30dp"
-                        app:alphaSeekBarDirection="RIGHT_TO_LEFT"
+                        app:alphaSeekBarDirection="LEFT_TO_RIGHT"
                         app:alphaSeekBarHeight="17dp"
                         android:foregroundTintMode="screen"
                         android:backgroundTint="@color/yellow"
