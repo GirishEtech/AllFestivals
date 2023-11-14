@@ -17,6 +17,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Layout;
@@ -57,8 +58,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.greeting.greet_app.Adapters.BG_Adapters;
+import com.greeting.greet_app.Adapters.ColorListAdapter;
 import com.greeting.greet_app.Adapters.DataAdapter;
 import com.greeting.greet_app.Adapters.Gifs_Adapters;
+import com.greeting.greet_app.Adapters.GradiantColorAdapter;
 import com.greeting.greet_app.Adapters.StickersAdapter;
 import com.greeting.greet_app.Model.SimpleColor;
 import com.madrapps.pikolo.RGBColorPicker;
@@ -99,6 +102,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     private RGBColorPicker gradiant_colorPicker;
     private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
     DataAdapter dataAdapter1;
+    GradiantColorAdapter gradiantColorAdapter;
     int RESULT_LOAD_IMG = 100;
 
     Matrix matrix = new Matrix();
@@ -121,7 +125,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     ColorWheelPalette add_color_btn, add_gradiant_color;
     LinearLayout bottom_nav_card, add_gradiant_layout, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
-    RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView;
+    RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView, gradiantList;
     TextView tv_title, tv_opacity_per;
     RelativeLayout rv_cancel_done;
     ImageView ic_cross, ic_done;
@@ -134,7 +138,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     ArrayList<String> list_bg = new ArrayList<>();
 
     LinearLayout gallery_img, camera_img, color, color_btn, grediant, grediant_btn;
-    RecyclerView simple_Color, grediant_Color;
+    RecyclerView simple_Color, grediant_Color, listColors;
     TextView text;
     ImageView ivOld;
 
@@ -183,6 +187,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         color_btn = findViewById(R.id.color_btn);
         grediant = findViewById(R.id.grediant);
         grediant_Color = findViewById(R.id.grediant_Color);
+        listColors = findViewById(R.id.listColors);
+        gradiantList = findViewById(R.id.listGradiant);
         grediant_btn = findViewById(R.id.gredient_btn);
         kavehColorAlphaSlider = findViewById(R.id.alphaSeekBar);
         setSupportActionBar(toolbar);
@@ -356,7 +362,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 dataAdapter1.setOnClickListener(new DataAdapter.OnClickListener() {
                     @Override
                     public void onClick(int position, SimpleColor model) {
-                        main_img.setImageResource(arrayList.get(position).getColorToUse());
+                        main_img.setImageResource(model.getColorToUse());
                     }
                 });
             }
@@ -390,6 +396,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             }
         });
         nav_add_color.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 bottom_nav_card.setVisibility(View.GONE);
@@ -399,6 +406,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 tv_title.setText(getString(R.string.Color));
                 bottom_color_layout.setVisibility(View.VISIBLE);
                 rv_cancel_done.setVisibility(View.VISIBLE);
+                setGradiantColorList();
+                setColorsList();
             }
         });
         nav_add_text.setOnClickListener(new View.OnClickListener() {
@@ -562,40 +571,11 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         colorBox.showDialog();
     }
 
-    public int adjustColorOpacity(int color, float opacity) {
-        int alpha = Math.round(Color.alpha(color) * opacity);
-        int red = Color.red(color);
-        int green = Color.green(color);
-        int blue = Color.blue(color);
-        return Color.argb(alpha, red, green, blue);
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void showColorPickerDiologe(View view) {
         isColor = true;
         TextSticker = getSelected();
-        kavehColorAlphaSlider.setOnAlphaChangeListener((progress, alpha) -> {
-            if (TextSticker != null) {
-                int percentage;
-                if (progress == 0) {
-                    percentage = 1;
-                } else {
-                    int max = kavehColorAlphaSlider.getMaxProgress();
-                    percentage = (int) ((int) progress / (float) max * 100.0f);
-                }
-
-                Log.d(TAG, "showColorPickerDiologe: Percentage " + percentage);
-                tv_opacity_per.setText("" +percentage + "%");
-                if (isColor) {
-                    TextSticker.setTextAlpha(originalColor,alpha);
-                    stickerView.invalidate();
-                } else {
-                    Log.d(TAG, "showColorPickerDiologe: Condition is  True and Progress :" + percentage);
-                    TextSticker.setGradientOpacity(alpha);
-                    stickerView.invalidate();
-                }
-            }
-        });
+        setSeekBarOposity();
         new ColorPickerPopup.Builder(this)
                 .initialColor(Color.RED)
                 .enableBrightness(true)
@@ -617,6 +597,31 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                     }
                 });
         ;
+    }
+
+    public void setSeekBarOposity() {
+        kavehColorAlphaSlider.setOnAlphaChangeListener((progress, alpha) -> {
+            if (TextSticker != null) {
+                int percentage;
+                if (progress == 0) {
+                    percentage = 1;
+                } else {
+                    int max = kavehColorAlphaSlider.getMaxProgress();
+                    percentage = (int) ((int) progress / (float) max * 100.0f);
+                }
+
+                Log.d(TAG, "showColorPickerDiologe: Percentage " + percentage);
+                tv_opacity_per.setText("" + percentage + "%");
+                if (isColor) {
+                    TextSticker.setTextAlpha(originalColor, alpha);
+                    stickerView.invalidate();
+                } else {
+                    Log.d(TAG, "showColorPickerDiologe: Condition is  True and Progress :" + percentage);
+                    TextSticker.setGradientOpacity(alpha);
+                    stickerView.invalidate();
+                }
+            }
+        });
     }
 
     private void permission() {
@@ -948,15 +953,6 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         }
     }
 
-    public void testAdd(View view) {
-        TextSticker = new com.greeting.greet_app.sticker.TextSticker(this);
-        TextSticker.setText("Hello, world!");
-        TextSticker.setTextColor(Color.BLUE);
-        TextSticker.setTextAlign(Layout.Alignment.ALIGN_CENTER);
-        TextSticker.resizeText();
-        TextSticker.setMaxTextSize(12);
-        stickerView.addSticker(TextSticker);
-    }
 
     private void Get_Storage() {
         list_bg.clear();
@@ -1005,5 +1001,62 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     public com.greeting.greet_app.sticker.TextSticker getSelected() {
         return (com.greeting.greet_app.sticker.TextSticker) stickerView.getCurrentSticker();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void setGradiantColorList() {
+        setSeekBarOposity();
+        gradiantList.setLayoutManager(new LinearLayoutManager(Create_Activity.this, RecyclerView.HORIZONTAL, false));
+        gradiantList.setHasFixedSize(true);
+        ArrayList<SimpleColor> arrayList = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            SimpleColor m = new SimpleColor();
+            TypedArray ta = getResources().obtainTypedArray(R.array.frag_home_ids);
+            int colorToUse = ta.getResourceId(i, 0);
+            m.setColorToUse(colorToUse);
+            arrayList.add(m);
+        }
+        gradiantColorAdapter = new GradiantColorAdapter(Create_Activity.this, arrayList);
+        gradiantList.setAdapter(gradiantColorAdapter);
+        gradiantColorAdapter.setOnClickListener((position, model) ->
+        {
+            isColor = false;
+            TextSticker = getSelected();
+            if (TextSticker != null) {
+                int[] arr = model.getColors();
+                int startColor = arr != null ? arr[0] : 0;
+                int endColor = arr != null ? arr[1] : 0;
+                TextSticker.setGradientColor(startColor, endColor);
+                stickerView.invalidate();
+            }
+            Log.d(TAG, "setGradiantColorList: Gradiant Color :-" + model);
+        });
+    }
+
+    public void setColorsList() {
+        TextSticker = getSelected();
+        this.listColors.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        this.listColors.setHasFixedSize(true);
+        String[] colorNames = getResources().getStringArray(R.array.colorNames);
+        ArrayList<SimpleColor> arrayList = new ArrayList<>();
+        for (int i = 0; i < colorNames.length; i++) {
+            SimpleColor m = new SimpleColor();
+            TypedArray ta = getResources().obtainTypedArray(R.array.colors);
+            int colorToUse = ta.getResourceId(i, 0);
+            m.setColor(ta.getColor(i,0));
+            m.setColorToUse(colorToUse);
+            arrayList.add(m);
+        }
+        ColorListAdapter dataAdapter = new ColorListAdapter(this, arrayList);
+        this.listColors.setAdapter(dataAdapter);
+        dataAdapter.setOnClickListener((position, model) -> {
+            if (TextSticker != null) {
+                Log.i(TAG, "setColorsList: Color is "+model.getColorToUse());
+               TextSticker.setTextColor(model.getColor());
+               originalColor = model.getColor();
+               setSeekBarOposity();
+               stickerView.invalidate();
+            }
+        });
     }
 }

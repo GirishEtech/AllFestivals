@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="52dp"
+    android:layout_height="52dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="50dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="10dp"
+    android:background="@drawable/colors_bg">
+
+    <View
+        android:id="@+id/gradiantView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</androidx.cardview.widget.CardView>

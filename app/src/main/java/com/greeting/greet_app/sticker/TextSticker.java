@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
@@ -341,4 +342,7 @@ public class TextSticker extends Sticker {
         mTextPaint.setShader(linearGradient);
     }
 
+    public void setmDrawable(Drawable drawable){
+
+    }
 }

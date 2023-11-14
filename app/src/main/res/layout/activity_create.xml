@@ -481,7 +481,7 @@
             android:layout_marginBottom="60dp"
             android:orientation="vertical"
             android:padding="5dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:weightSum="4">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -494,6 +494,7 @@
             android:id="@+id/bottom_color_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             android:layout_above="@id/rv_cancel_done"
             android:background="@color/search_bg_color"
             android:orientation="vertical"
@@ -516,11 +517,26 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="16sp" />
 
-                <top.defaults.colorpicker.ColorWheelPalette
-                    android:id="@+id/add_color_layout"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5sp" />
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   >
+                   <top.defaults.colorpicker.ColorWheelPalette
+                       android:id="@+id/add_color_layout"
+                       android:layout_width="50dp"
+                       android:layout_height="50dp"
+                       android:layout_marginTop="10dp" />
+                   <androidx.recyclerview.widget.RecyclerView
+                       android:id="@+id/listColors"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal"
+                       android:layout_marginBottom="10dp"
+                       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                       android:layout_margin="5sp"
+                       />
+
+               </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -540,11 +556,26 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="16sp" />
 
-                <top.defaults.colorpicker.ColorWheelPalette
-                    android:id="@+id/add_gradiant_color"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5sp" />
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               >
+               <top.defaults.colorpicker.ColorWheelPalette
+                   android:id="@+id/add_gradiant_color"
+                   android:layout_width="50dp"
+                   android:layout_height="50dp"
+                   android:layout_marginTop="10dp" />
+               <androidx.recyclerview.widget.RecyclerView
+                   android:id="@+id/listGradiant"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                   android:layout_marginBottom="10dp"
+                   app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                   android:layout_margin="5sp"
+                   />
+           </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -625,7 +656,7 @@
             android:background="@color/search_bg_color"
             android:orientation="vertical"
             android:padding="5dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <HorizontalScrollView
                 android:layout_width="match_parent"

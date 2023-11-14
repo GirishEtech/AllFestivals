@@ -1,6 +1,8 @@
 package com.greeting.greet_app;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.widget.Toast;
 
 import com.greeting.greet_app.Model.CategoryModel;
@@ -45,6 +47,18 @@ public class Utils {
     public static void setToast(Context activity, String s) {
         Toast.makeText(activity, s, Toast.LENGTH_SHORT).show();
 
+    }
+    public static String convertColorToHex(Drawable drawable) {
+        if (drawable instanceof ColorDrawable) {
+            // If the Drawable is a ColorDrawable, get its color
+            int color = ((ColorDrawable) drawable).getColor();
+
+            // Convert the color to hexadecimal
+            return String.format("#%06X", (0xFFFFFF & color));
+        }
+
+        // Return a default color or handle the case where the Drawable is not a ColorDrawable
+        return "#000000"; // Default to black
     }
 
 }
