@@ -3,7 +3,6 @@ package com.greeting.greet_app;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -13,14 +12,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.graphics.Region;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Layout;
@@ -66,14 +62,12 @@ import com.greeting.greet_app.Adapters.Gifs_Adapters;
 import com.greeting.greet_app.Adapters.StickersAdapter;
 import com.greeting.greet_app.Model.SimpleColor;
 import com.madrapps.pikolo.RGBColorPicker;
-import com.madrapps.pikolo.listeners.SimpleColorSelectionListener;
 import com.rtugeek.android.colorseekbar.AlphaSeekBar;
 import com.xiaopo.flying.sticker.BitmapStickerIcon;
 import com.xiaopo.flying.sticker.DeleteIconEvent;
 import com.xiaopo.flying.sticker.DrawableSticker;
 import com.xiaopo.flying.sticker.FlipHorizontallyEvent;
 import com.xiaopo.flying.sticker.Sticker;
-import com.xiaopo.flying.sticker.StickerView;
 import com.xiaopo.flying.sticker.TextSticker;
 import com.xiaopo.flying.sticker.ZoomIconEvent;
 
@@ -81,12 +75,12 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import ir.kotlin.kavehcolorpicker.KavehColorAlphaSlider;
 import top.defaults.colorpicker.ColorPickerPopup;
 import top.defaults.colorpicker.ColorWheelPalette;
 
-public class Create_Activity extends AppCompatActivity implements View.OnTouchListener,ColorListner {
+public class Create_Activity extends AppCompatActivity implements View.OnTouchListener, ColorListner {
 
     private int originalColor = 1;
     private ColorBox colorBox;
@@ -95,8 +89,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     public static final int PERM_RQST_CODE = 110;
     private com.xiaopo.flying.sticker.StickerView stickerView;
     private TextSticker sticker;
-    private TextSticker TextSticker;
-
+    private com.greeting.greet_app.sticker.TextSticker TextSticker;
+    private Boolean isColor = true;
     private EditText tv_feedback_text;
     private AlphaSeekBar kavehColorAlphaSlider;
     @SuppressWarnings("unused")
@@ -128,7 +122,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     LinearLayout bottom_nav_card, add_gradiant_layout, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
     RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView;
-    TextView tv_title,tv_opacity_per;
+    TextView tv_title, tv_opacity_per;
     RelativeLayout rv_cancel_done;
     ImageView ic_cross, ic_done;
     Gifs_Adapters quotation_adapters;
@@ -215,7 +209,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         nav_add_color = findViewById(R.id.nav_add_color);
         camera_img = findViewById(R.id.camera_img);
         main_img.setOnTouchListener(this);
-        colorBox = new ColorBox(this,this);
+        colorBox = new ColorBox(this, this);
         ivoriginal = findViewById(R.id.ivoriginal);
         main_view = findViewById(R.id.main_view);
         ivOld = findViewById(R.id.ivOld);
@@ -563,41 +557,43 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     private void showGradiantDioloue() {
         Set_Layout_Gone();
-//        gradiant_colorPicker.setColorSelectionListener(new SimpleColorSelectionListener() {
-//            @Override
-//            public void onColorSelected(int color) {
-//                super.onColorSelected(color);
-//                TextSticker = (com.xiaopo.flying.sticker.TextSticker) stickerView.getCurrentSticker();
-//                TextSticker.setTextColor(color);
-//                stickerView.invalidate();
-//            }
-//        });
-
-
+        TextSticker = getSelected();
+        isColor = false;
         colorBox.showDialog();
     }
 
-    public  int adjustColorOpacity(int color, float opacity) {
+    public int adjustColorOpacity(int color, float opacity) {
         int alpha = Math.round(Color.alpha(color) * opacity);
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
         return Color.argb(alpha, red, green, blue);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void showColorPickerDiologe(View view) {
+        isColor = true;
+        TextSticker = getSelected();
         kavehColorAlphaSlider.setOnAlphaChangeListener((progress, alpha) -> {
-            if (TextSticker != null){
-                double percentage;
+            if (TextSticker != null) {
+                int percentage;
                 if (progress == 0) {
-                    percentage = 1.0; // Set the percentage to 1 if the progress is 0
+                    percentage = 1;
                 } else {
-                    percentage = (double) progress / 255 * 100; // Calculate the percentage normally
+                    int max = kavehColorAlphaSlider.getMaxProgress();
+                    percentage = (int) ((int) progress / (float) max * 100.0f);
                 }
-                int percentageValue = (int) percentage;
-                tv_opacity_per.setText(""+percentageValue+"%");
-                TextSticker.setTextColor(adjustColorOpacity(originalColor,alpha));
-                stickerView.invalidate();
+
+                Log.d(TAG, "showColorPickerDiologe: Percentage " + percentage);
+                tv_opacity_per.setText("" +percentage + "%");
+                if (isColor) {
+                    TextSticker.setTextAlpha(originalColor,alpha);
+                    stickerView.invalidate();
+                } else {
+                    Log.d(TAG, "showColorPickerDiologe: Condition is  True and Progress :" + percentage);
+                    TextSticker.setGradientOpacity(alpha);
+                    stickerView.invalidate();
+                }
             }
         });
         new ColorPickerPopup.Builder(this)
@@ -615,6 +611,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                         if (TextSticker != null) {
                             TextSticker.setTextColor(color);
                             originalColor = color;
+                            kavehColorAlphaSlider.setBackgroundTintList(ColorStateList.valueOf(color));
                             stickerView.invalidate();
                         }
                     }
@@ -943,7 +940,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     public void testAdd(String text) {
         if (text.length() > 1) {
 
-            TextSticker = new TextSticker(this);
+            TextSticker = new com.greeting.greet_app.sticker.TextSticker(this);
             TextSticker.setText("" + text);
             TextSticker.setTextAlign(Layout.Alignment.ALIGN_CENTER);
             TextSticker.resizeText();
@@ -952,7 +949,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     }
 
     public void testAdd(View view) {
-        TextSticker = new TextSticker(this);
+        TextSticker = new com.greeting.greet_app.sticker.TextSticker(this);
         TextSticker.setText("Hello, world!");
         TextSticker.setTextColor(Color.BLUE);
         TextSticker.setTextAlign(Layout.Alignment.ALIGN_CENTER);
@@ -998,11 +995,15 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public void  setDrawable(GradientDrawable drawable) {
+    public void setDrawable(int colors[]) {
         Log.i(TAG, "setDrawable: Listner is Click");
-        if (TextSticker != null){
-
+        if (TextSticker != null) {
+            TextSticker.setGradientColor(colors[0], colors[1]);
         }
         stickerView.invalidate();
+    }
+
+    public com.greeting.greet_app.sticker.TextSticker getSelected() {
+        return (com.greeting.greet_app.sticker.TextSticker) stickerView.getCurrentSticker();
     }
 }

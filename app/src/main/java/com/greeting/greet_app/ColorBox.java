@@ -51,7 +51,7 @@ public class ColorBox {
         btnCencel = dialog.findViewById(R.id.btnCencel);
         btnDone = dialog.findViewById(R.id.btnDone);
         colors = new int[]{1, 2};
-        drawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+        drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
         firstColor.setColorSelectionListener(new SimpleColorSelectionListener() {
             @Override
             public void onColorSelected(int color) {
@@ -59,6 +59,7 @@ public class ColorBox {
                 colors[0] = color;
                 drawable.setColors(colors);
                 testBgColor.setBackground(drawable);
+                listner.setDrawable(colors);
             }
         });
         SecondColor.setColorSelectionListener(new SimpleColorSelectionListener() {
@@ -67,6 +68,7 @@ public class ColorBox {
                 super.onColorSelected(color);
                 colors[1] = color;
                 drawable.setColors(colors);
+                listner.setDrawable(colors);
                 testBgColor.setBackground(drawable);
             }
         });
@@ -74,7 +76,7 @@ public class ColorBox {
             dialog.dismiss();
         });
         btnDone.setOnClickListener(view1 -> {
-            listner.setDrawable(drawable);
+            listner.setDrawable(colors);
             dialog.dismiss();
         });
         dialog.show();
@@ -98,5 +100,5 @@ public class ColorBox {
 }
 
 interface ColorListner {
-    public void setDrawable(GradientDrawable drawable);
+    public void setDrawable(int colors[]);
 }
