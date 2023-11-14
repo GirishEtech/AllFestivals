@@ -5,9 +5,8 @@
     android:id="@+id/myColorPicker"
     android:layout_width="410dp"
     android:layout_height="400dp"
-    android:backgroundTint="@color/white"
     android:background="@drawable/bg_add_text_dialog"
-    >
+    android:backgroundTint="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -60,8 +59,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="FirstColor"
                     android:background="@android:color/transparent"
+                    android:text="FirstColor"
                     android:textColor="@color/white"
                     android:textSize="10sp" />
             </androidx.cardview.widget.CardView>
@@ -92,8 +91,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="SecondColor"
                     android:background="@android:color/transparent"
+                    android:text="SecondColor"
                     android:textColor="@color/white"
                     android:textSize="10sp" />
             </androidx.cardview.widget.CardView>
