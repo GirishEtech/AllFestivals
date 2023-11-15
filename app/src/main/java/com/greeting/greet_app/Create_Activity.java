@@ -1,6 +1,7 @@
 package com.greeting.greet_app;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -96,11 +97,10 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     private com.greeting.greet_app.sticker.TextSticker TextSticker;
     private Boolean isColor = true;
     private EditText tv_feedback_text;
-    private AlphaSeekBar kavehColorAlphaSlider;
+    private AlphaSeekBar kavehColorAlphaSlider,kavehColorAlphaBackground;
     @SuppressWarnings("unused")
     StickersAdapter stickersAdapter;
 
-    private RGBColorPicker gradiant_colorPicker;
     private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
     DataAdapter dataAdapter1;
     GradiantColorAdapter gradiantColorAdapter;
@@ -124,7 +124,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     Toolbar toolbar;
     String UserMobileId = "";
     ColorWheelPalette add_color_btn, add_gradiant_color;
-    LinearLayout bottom_nav_card, add_gradiant_layout, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
+    LinearLayout bottom_nav_card, add_gradiant_layout, seekLayout,nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
     RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView, gradiantList;
     TextView tv_title, tv_opacity_per;
@@ -169,6 +169,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 }
             });
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,7 +192,9 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         listColors = findViewById(R.id.listColors);
         gradiantList = findViewById(R.id.listGradiant);
         grediant_btn = findViewById(R.id.gredient_btn);
+        seekLayout = findViewById(R.id.seekLayout);
         kavehColorAlphaSlider = findViewById(R.id.alphaSeekBar);
+        kavehColorAlphaBackground = findViewById(R.id.alphaSeekBarBackground);
         setSupportActionBar(toolbar);
         viewDialog = new ViewDialog(this);
         In_it_List();
@@ -237,6 +240,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             public void onClick(View view) {
                 bottom_add_layout.setVisibility(View.GONE);
                 bg_image.setVisibility(View.VISIBLE);
+                seekLayout.setVisibility(View.GONE);
                 quotation_adapters_bg.setOnClickListener(new BG_Adapters.OnClickListener() {
                     @Override
                     public void onClick(int position, String model) {
@@ -394,6 +398,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 tv_title.setText(getString(R.string.Add));
                 bottom_add_layout.setVisibility(View.VISIBLE);
                 rv_cancel_done.setVisibility(View.VISIBLE);
+                seekLayout.setVisibility(View.VISIBLE);
             }
         });
         nav_add_color.setOnClickListener(new View.OnClickListener() {
@@ -406,6 +411,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 bottom_add_filters_layout.setVisibility(View.GONE);
                 tv_title.setText(getString(R.string.Color));
                 bottom_color_layout.setVisibility(View.VISIBLE);
+                seekLayout.setVisibility(View.GONE);
                 rv_cancel_done.setVisibility(View.VISIBLE);
                 setGradiantColorList();
                 setColorsList();
@@ -648,6 +654,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         color.setVisibility(View.GONE);
         bg_image.setVisibility(View.GONE);
         grediant.setVisibility(View.GONE);
+        seekLayout.setVisibility(View.GONE);
         tv_title.setText(getString(R.string.Create));
 //        testLock();
     }

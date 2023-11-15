@@ -162,7 +162,7 @@
 
                 <ImageView
                     android:id="@+id/nav2_img"
-                    android:layout_width="25dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="-3dp"
@@ -283,7 +283,7 @@
             android:background="@color/search_bg_color"
             android:orientation="vertical"
             android:padding="5dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:weightSum="4">
 
             <LinearLayout
@@ -481,7 +481,7 @@
             android:layout_marginBottom="60dp"
             android:orientation="vertical"
             android:padding="5dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:weightSum="4">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -494,11 +494,10 @@
             android:id="@+id/bottom_color_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_above="@id/rv_cancel_done"
             android:background="@color/search_bg_color"
             android:orientation="vertical"
-
             android:padding="5dp">
 
             <LinearLayout
@@ -845,6 +844,7 @@
             android:visibility="gone">
 
             <LinearLayout
+                android:id="@+id/seekLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -852,8 +852,9 @@
 
                 <com.rtugeek.android.colorseekbar.AlphaSeekBar
                     android:id="@+id/alphaSeekBarBackground"
-                    android:layout_width="325dp"
+                    android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/yellow"
                     android:foregroundTintMode="screen"
                     app:alphaSeekBarDirection="LEFT_TO_RIGHT"
@@ -862,7 +863,7 @@
 
                 <TextView
                     android:id="@+id/tv_opacity_perBg"
-                    android:layout_width="45dp"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/seekbar_style"
