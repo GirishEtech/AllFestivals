@@ -601,7 +601,7 @@
 
                     <com.rtugeek.android.colorseekbar.AlphaSeekBar
                         android:id="@+id/alphaSeekBar"
-                        android:layout_width="335dp"
+                        android:layout_width="328dp"
                         android:layout_height="30dp"
                         app:alphaSeekBarDirection="LEFT_TO_RIGHT"
                         app:alphaSeekBarHeight="17dp"
