@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,27 +97,14 @@ public class Quote_Preview_Activity extends AppCompatActivity {
             }
         });
     }
-    private void share_img(Bitmap imgbitmap) {
-        File imgfolder=new File(getCacheDir(),"images");
-        Uri uri=null;
-        try {
-            imgfolder.mkdir();
-            File file=new File(imgfolder,"shared_img.jpeg");
-            FileOutputStream stream=new FileOutputStream(file);
-            imgbitmap.compress(Bitmap.CompressFormat.JPEG,90,stream);
-            stream.flush();
-            stream.close();
-            uri= FileProvider.getUriForFile(getApplicationContext(),
-                    "com.greeting.greet_app.fileprovider",file);
-        }catch (IOException e){
+    private void share_img(String imgbitmap) {
 
-        }
         String compUrl="Please Download App At : https://play.google.com/store/apps/details?id=" + getPackageName();
         Intent shareintent=new Intent(Intent.ACTION_SEND);
-        shareintent.setType("image/jpeg");
-        shareintent.putExtra(Intent.EXTRA_STREAM,uri);
-        shareintent.putExtra(Intent.EXTRA_TEXT,compUrl);
-        shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        shareintent.setType("text/plain");
+        shareintent.putExtra(Intent.EXTRA_SUBJECT, "Share Quotes");
+        shareintent.putExtra(Intent.EXTRA_TEXT,imgbitmap);
+        //shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(Intent.createChooser(shareintent,"share"));
         Snackbar.make(findViewById(R.id.rv_main), "Shared",Snackbar.LENGTH_LONG).show();
     }
@@ -130,7 +116,7 @@ public class Quote_Preview_Activity extends AppCompatActivity {
         carview.setDrawingCacheEnabled(true);
         carview.buildDrawingCache();
         Bitmap imgbitmap=carview.getDrawingCache();
-        share_img(imgbitmap);
+        share_img(Link);
         //   Toast.makeText(getApplicationContext(),"load",Toast.LENGTH_LONG).show();
     }
     private void Share_App(String text) {

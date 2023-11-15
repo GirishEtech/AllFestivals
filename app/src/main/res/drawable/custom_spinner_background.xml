@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <!-- Customize background color -->
+            <solid android:color="#CCCCCC" />
+            <!-- Customize corner radius if needed -->
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
+
+    <!-- Border (optional) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <stroke
+                android:width="1dp"
+                android:color="#000000" />
+            <!-- Customize border color and width as needed -->
+        </shape>
+    </item>
+
+    <!-- Arrow icon (optional) -->
+    <item android:gravity="end">
+        <bitmap
+            android:src="@drawable/ic_right_arrow"
+            android:tint="#000000" />
+        <!-- Replace with your custom arrow icon and tint color -->
+    </item>
+</layer-list>

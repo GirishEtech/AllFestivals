@@ -133,17 +133,17 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
 
         main_img.setOnTouchListener(this);
 
-        Log.d("data", sliderItems + "hhh+" + sliderItems.toString());
+        Log.d("data", "Slider Items"+sliderItems.toString());
         viewPager2.setAdapter(new SlidersAdapter(sliderItems, viewPager2, Preview_Activity.this));
         viewPager2.setClipToPadding(false);
         viewPager2.setClipChildren(false);
         int position = Stash.getInt("position");
         viewPager2.setCurrentItem(position);
         viewPager2.setOffscreenPageLimit(3);
-        viewPager2.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_ALWAYS);
+        viewPager2.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
 
         CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
-        compositePageTransformer.addTransformer(new MarginPageTransformer(5));
+        compositePageTransformer.addTransformer(new MarginPageTransformer(40));
         compositePageTransformer.addTransformer(new ViewPager2.PageTransformer() {
             @Override
             public void transformPage(@NonNull View page, float position) {
@@ -214,7 +214,7 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
                 UserSavedref.child(android_id).child(Type).child(Key).setValue(Link);
                 Toast.makeText(activity, "Downloaded", Toast.LENGTH_SHORT).show();
                 Saved_list.add(Link);
-                /*if (!checkPermission()){
+                if (!checkPermission()){
                     getpermission();
                 }else {
                     if (!Type.equals(Utils.Gifs)){
@@ -222,7 +222,7 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
                     }else {
                         storeGif(gif_file);
                     }
-                }*/
+                }
             }
         });
         findViewById(R.id.llShare).setOnClickListener(new View.OnClickListener() {

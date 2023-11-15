@@ -339,6 +339,7 @@ public class TextSticker extends Sticker {
     private void updateGradientShader() {
         linearGradient = new LinearGradient(0, 0, getWidth(), getHeight(),
                 gradientStartColor, gradientEndColor, Shader.TileMode.CLAMP);
+
         mTextPaint.setShader(linearGradient);
     }
 
