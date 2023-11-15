@@ -3,15 +3,20 @@ package com.greeting.greet_app;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.cardview.widget.CardView;
 
 import com.madrapps.pikolo.RGBColorPicker;
@@ -20,21 +25,24 @@ import com.skydoves.colorpickerview.ColorEnvelope;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
+import top.defaults.colorpicker.ColorWheelView;
+
 public class ColorBox {
 
     ColorListner listner;
     GradientDrawable drawable;
     Button btnCencel, btnDone;
     int[] colors;
-    TextView txtfirst,txtsecond;
+    TextView txtfirst, txtsecond;
     View view;
-
+    Context context;
     CardView testBgColor;
-    CardView firstColor, SecondColor;
+    ColorWheelView firstColor, SecondColor;
     Activity activity;
     Dialog dialog;
 
-    public ColorBox(Activity activity, ColorListner listner) {
+    public ColorBox(Activity activity, ColorListner listner, Context context) {
+        this.context = context;
         this.activity = activity;
         this.listner = listner;
     }
@@ -49,62 +57,31 @@ public class ColorBox {
         }
         dialog = new Dialog(activity);
         dialog.setCancelable(false);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         View v = activity.getLayoutInflater().inflate(R.layout.color_picker, null);
         dialog.setContentView(v);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        txtfirst = dialog.findViewById(R.id.textview_first);
-        txtsecond = dialog.findViewById(R.id.textview_second);
         testBgColor = dialog.findViewById(R.id.outPutTest);
-        firstColor = dialog.findViewById(R.id.firstColor);
-        SecondColor = dialog.findViewById(R.id.SecondColor);
+        firstColor = dialog.findViewById(R.id.firstcolor);
+        SecondColor = dialog.findViewById(R.id.secondcolor);
         btnCencel = dialog.findViewById(R.id.btnCencel);
         btnDone = dialog.findViewById(R.id.btnDone);
         colors = new int[]{1, 2};
         drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
-        firstColor.setOnClickListener(view1 -> {
-            new ColorPickerDialog.Builder(activity)
-                    .setTitle("Select First Gradiant")
-                    .setPreferenceName("MyColorPickerDialog")
-                    .setPositiveButton("OK", new ColorEnvelopeListener() {
-                        @Override
-                        public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
-                            colors[0] = envelope.getColor();
-                            drawable.setColors(colors);
-                            testBgColor.setBackground(drawable);
-                            txtfirst.setText(convertColorToHex(envelope.getColor()));
-                            firstColor.setCardBackgroundColor(envelope.getColor());
-                        }
-                    })
-                    .setNegativeButton("CENCEL",(dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                    })
-                    .attachBrightnessSlideBar(true)
-                    .setBottomSpace(12)
-                    .attachAlphaSlideBar(true)
-                    .show();
+
+        firstColor.subscribe((color, fromUser, shouldPropagate) -> {
+            if (fromUser){
+                colors[0] =color;
+                drawable.setColors(colors);
+                testBgColor.setBackground(drawable);
+            }
         });
-        SecondColor.setOnClickListener(view1 -> {
-            new ColorPickerDialog.Builder(activity)
-                    .setTitle("Select First Gradiant")
-                    .setPreferenceName("MyColorPickerDialog")
-                    .setPositiveButton("OK", new ColorEnvelopeListener() {
-                        @Override
-                        public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
-                            colors[1]=envelope.getColor();
-                            drawable.setColors(colors);
-                            txtsecond.setText(convertColorToHex(envelope.getColor()));
-                            testBgColor.setBackground(drawable);
-                            SecondColor.setCardBackgroundColor(envelope.getColor());
-                        }
-                    })
-                    .setNegativeButton("CENCEL",(dialogInterface, i) -> {
-                        dialogInterface.dismiss();
-                    })
-                    .attachBrightnessSlideBar(true)
-                    .setBottomSpace(12)
-                    .attachAlphaSlideBar(true)
-                    .show();
+
+        SecondColor.subscribe((color, fromUser, shouldPropagate) -> {
+            if (fromUser){
+                colors[1] =color;
+                drawable.setColors(colors);
+                testBgColor.setBackground(drawable);
+            }
         });
         btnCencel.setOnClickListener(view1 -> {
             dialog.dismiss();
@@ -113,7 +90,6 @@ public class ColorBox {
             listner.setDrawable(colors);
             dialog.dismiss();
             listner.setDrawable(colors);
-
         });
         dialog.show();
     }

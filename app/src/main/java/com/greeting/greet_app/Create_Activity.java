@@ -43,6 +43,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -215,7 +216,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         nav_add_color = findViewById(R.id.nav_add_color);
         camera_img = findViewById(R.id.camera_img);
         main_img.setOnTouchListener(this);
-        colorBox = new ColorBox(this, this);
+        colorBox = new ColorBox(this, this,this);
         ivoriginal = findViewById(R.id.ivoriginal);
         main_view = findViewById(R.id.main_view);
         ivOld = findViewById(R.id.ivOld);
