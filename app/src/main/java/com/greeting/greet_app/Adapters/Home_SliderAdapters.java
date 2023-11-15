@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.greeting.greet_app.AllCategory_Activity;
+import com.greeting.greet_app.FamilyDetails;
 import com.greeting.greet_app.Model.CategoryModel;
 import com.greeting.greet_app.R;
 
@@ -63,8 +64,8 @@ public class Home_SliderAdapters extends RecyclerView.Adapter<Home_SliderAdapter
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.startActivity(new Intent(context, AllCategory_Activity.class)
-                            .putExtra("model",model));
+                    context.startActivity(new Intent(context, FamilyDetails.class)
+                            .putExtra("name",model.getName()));
                 }
             });
         }

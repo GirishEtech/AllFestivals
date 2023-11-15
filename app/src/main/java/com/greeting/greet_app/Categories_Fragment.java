@@ -114,6 +114,7 @@ public class Categories_Fragment extends Fragment implements Daily_Wishes_Catego
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     CategoryModel categoryModel=new CategoryModel();
+                                    categoryModel.setMainCategoryName("Categories");
                                     categoryModel.setImageLink(uri.toString());
                                     categoryModel.setName(item.getName().split("\\.")[0]);
                                     categoryModel.setPath(item.getPath().split("\\.")[0]);

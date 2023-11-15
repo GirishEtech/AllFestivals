@@ -119,7 +119,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     PointF start = new PointF();
     PointF mid = new PointF();
     float oldDist = 1f;
-    ImageView main_img;
+    ImageView main_img,ic_backBtn;
     Activity activity;
     Toolbar toolbar;
     String UserMobileId = "";
@@ -140,7 +140,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     LinearLayout gallery_img, camera_img, color, color_btn, grediant, grediant_btn;
     RecyclerView simple_Color, grediant_Color, listColors;
-    TextView text;
+    TextView text,tv_opacity_perBg;
     ImageView ivOld;
 
     ImageView ivBlur;
@@ -187,12 +187,14 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         main_img = findViewById(R.id.main_img);
         color = findViewById(R.id.color);
         color_btn = findViewById(R.id.color_btn);
+        ic_backBtn = findViewById(R.id.ic_nav_menu);
         grediant = findViewById(R.id.grediant);
         grediant_Color = findViewById(R.id.grediant_Color);
         listColors = findViewById(R.id.listColors);
         gradiantList = findViewById(R.id.listGradiant);
         grediant_btn = findViewById(R.id.gredient_btn);
         seekLayout = findViewById(R.id.seekLayout);
+        tv_opacity_perBg = findViewById(R.id.tv_opacity_perBg);
         kavehColorAlphaSlider = findViewById(R.id.alphaSeekBar);
         kavehColorAlphaBackground = findViewById(R.id.alphaSeekBarBackground);
         setSupportActionBar(toolbar);
@@ -231,10 +233,14 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         ivDark = (ImageView) findViewById(R.id.ivDark);
         ivPunch = (ImageView) findViewById(R.id.ivPunch);
         simple_image = findViewById(R.id.simple_image);
-        simple_image.setLayoutManager(new GridLayoutManager(Create_Activity.this, 3));
+        simple_image.setLayoutManager(new LinearLayoutManager(Create_Activity.this,LinearLayoutManager.HORIZONTAL,false));
         quotation_adapters_bg = new BG_Adapters(getApplicationContext(), list_bg, Utils.Background);
         simple_image.setAdapter(quotation_adapters_bg);
         Get_Storage();
+        ic_backBtn.setOnClickListener(view -> {
+            onBackPressed();
+            Log.i(TAG, "onCreate: BackPress Clicked");
+        });
         bg_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -337,6 +343,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         for (int i = 0; i < colorNames.length; i++) {
             SimpleColor m = new SimpleColor();
             TypedArray ta = getResources().obtainTypedArray(R.array.colors);
+            m.setColor(ta.getColor(i,0));
             int colorToUse = ta.getResourceId(i, 0);
             m.setColorToUse(colorToUse);
             arrayList.add(m);
@@ -368,6 +375,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                     @Override
                     public void onClick(int position, SimpleColor model) {
                         main_img.setImageResource(model.getColorToUse());
+                        setAlphaForBackground();
                     }
                 });
             }
@@ -376,6 +384,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             @Override
             public void onClick(int position, SimpleColor model) {
                 main_img.setImageResource(arrayList.get(position).getColorToUse());
+                setAlphaForBackground();
             }
         });
         findViewById(R.id.tv_done).setOnClickListener(new View.OnClickListener() {
@@ -571,6 +580,21 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     }
 
+    private void setAlphaForBackground() {
+        kavehColorAlphaBackground.setOnAlphaChangeListener((progress, alpha) -> {
+            int percentage;
+            if (progress == 0) {
+                percentage = 1;
+            } else {
+                int max = kavehColorAlphaBackground.getMaxProgress();
+                percentage = (int) ((int) progress / (float) max * 100.0f);
+            }
+
+            tv_opacity_perBg.setText("" + percentage + "%");
+            main_img.setImageAlpha(alpha);
+        });
+    }
+
     private void showGradiantDioloue() {
         Set_Layout_Gone();
         TextSticker = getSelected();
@@ -744,6 +768,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 Log.i(TAG, "In_it_List: TEST CAT - >" + Category);
                 Log.i(TAG, "In_it_List: TEST NAME ->" + child);
                 StorageReference ref = FirebaseStorage.getInstance().getReference(Category).child(child).child("Stickers");
+                Log.i(TAG, "In_it_List: REFERENCE PATH"+ref.getPath());
                 ref.listAll().addOnSuccessListener(listResult -> {
                             for (StorageReference item : listResult.getItems()) {
                                 item.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -964,37 +989,48 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     private void Get_Storage() {
         list_bg.clear();
-        StorageReference listRef = FirebaseStorage.getInstance().getReference(Utils.Background);
-        listRef.listAll()
-                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
-                    @Override
-                    public void onSuccess(ListResult listResult) {
-
-                        for (StorageReference prefix : listResult.getPrefixes()) {
-                            Log.e("Path", "" + prefix.getName());
-                            // All the prefixes under listRef.
-                            // You may call listAll() recursively on them.
-                        }
-                        for (StorageReference item : listResult.getItems()) {
-                            // All the items under listRef.
-                            Log.e("Path", "" + item.getPath());
-                            item.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    list_bg.add(uri.toString());
-                                    quotation_adapters_bg.notifyDataSetChanged();
-                                    Log.e("url", uri.toString());
+        String Category = getIntent().getStringExtra(Utils.CAT_TYPE);
+        String child = getIntent().getStringExtra(Utils.TAB_NAME);
+        Log.i(TAG, "Get_Storage: Category : -> "+Category +"\n"+"Child ->"+child);
+        try {
+            StorageReference listRef = FirebaseStorage.getInstance().getReference(Category).child(child).child(Utils.Background);
+            if (listRef != null && listRef.getStorage() != null) {
+                listRef.listAll()
+                        .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                            @Override
+                            public void onSuccess(ListResult listResult) {
+                                for (StorageReference prefix : listResult.getPrefixes()) {
+                                    Log.e("Path", "" + prefix.getName());
+                                    // All the prefixes under listRef.
+                                    // You may call listAll() recursively on them.
                                 }
-                            });
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Uh-oh, an error occurred!
-                    }
-                });
+                                for (StorageReference item : listResult.getItems()) {
+                                    // All the items under listRef.
+                                    Log.e("Path", "" + item.getPath());
+                                    item.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            list_bg.add(uri.toString());
+                                            quotation_adapters_bg.notifyDataSetChanged();
+                                            Log.e("url", uri.toString());
+                                        }
+                                    });
+                                }
+                                viewDialog.hideDialog();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                viewDialog.hideDialog();
+                            }
+                        });
+            }
+        }
+        catch (Exception exception){
+            Log.e(TAG, "Get_Storage: Exception",exception);
+            //viewDialog.hideDialog();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

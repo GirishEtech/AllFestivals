@@ -442,7 +442,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="90dp"
             android:orientation="vertical"
             android:padding="5dp"
             android:visibility="gone"
@@ -460,7 +460,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="95dp"
             android:orientation="vertical"
             android:padding="5dp"
             android:visibility="gone"
@@ -478,15 +478,17 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="90dp"
             android:orientation="vertical"
             android:padding="5dp"
-            android:visibility="visible"
-            android:weightSum="4">
+            android:visibility="gone"
+            >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/grediant_Color"
                 android:layout_width="match_parent"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
@@ -494,7 +496,7 @@
             android:id="@+id/bottom_color_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_above="@id/rv_cancel_done"
             android:background="@color/search_bg_color"
             android:orientation="vertical"
@@ -651,7 +653,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="60dp"
+            android:layout_marginBottom="90dp"
             android:background="@color/search_bg_color"
             android:orientation="vertical"
             android:padding="5dp"
@@ -852,7 +854,7 @@
 
                 <com.rtugeek.android.colorseekbar.AlphaSeekBar
                     android:id="@+id/alphaSeekBarBackground"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/yellow"
@@ -863,7 +865,7 @@
 
                 <TextView
                     android:id="@+id/tv_opacity_perBg"
-                    android:layout_width="40dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/seekbar_style"

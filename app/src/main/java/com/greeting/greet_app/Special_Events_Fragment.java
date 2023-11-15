@@ -128,6 +128,7 @@ public class Special_Events_Fragment extends Fragment implements Daily_Wishes_Ca
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     CategoryModel categoryModel=new CategoryModel();
+                                    categoryModel.setMainCategoryName("Special Events");
                                     categoryModel.setImageLink(uri.toString());
                                     categoryModel.setName(item.getName().split("\\.")[0]);
                                     categoryModel.setPath(item.getPath().split("\\.")[0]);

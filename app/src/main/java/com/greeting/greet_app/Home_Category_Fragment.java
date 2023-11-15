@@ -127,7 +127,7 @@ public class Home_Category_Fragment extends Fragment implements Daily_Wishes_Cat
         view_All1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(),AllFamilyActivity.class);
+                Intent intent = new Intent(getContext(), AllFestivalesActivity.class);
                 intent.putExtra(Utils.TAB_NAME,"All Festivals");
                 startActivity(intent);
             }

@@ -65,6 +65,7 @@ public class FamilyDetails extends AppCompatActivity implements Daily_Wishes_Cat
                                 public void onSuccess(Uri uri) {
                                     CategoryModel categoryModel = new CategoryModel();
                                     categoryModel.setImageLink(uri.toString());
+                                    categoryModel.setMainCategoryName("Family_Details");
                                     categoryModel.setName(item.getName().split("\\.")[0]);
                                     categoryModel.setPath(item.getPath().split("\\.")[0]);
                                     special_events_list.add(categoryModel);

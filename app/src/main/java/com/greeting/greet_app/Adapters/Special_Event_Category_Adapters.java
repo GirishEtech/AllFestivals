@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.greeting.greet_app.AllCategory_Activity;
 import com.greeting.greet_app.Model.CategoryModel;
 import com.greeting.greet_app.R;
+import com.greeting.greet_app.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -62,7 +63,7 @@ public class Special_Event_Category_Adapters extends RecyclerView.Adapter<Specia
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Utils.categoryModel = model;
                     context.startActivity(new Intent(context, AllCategory_Activity.class)
                             .putExtra("model",model));
                 }
