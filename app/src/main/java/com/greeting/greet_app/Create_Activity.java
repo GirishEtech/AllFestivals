@@ -245,7 +245,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         bg_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottom_add_layout.setVisibility(View.GONE);
+                bottom_add_layout.setVisibility(View.VISIBLE);
                 bg_image.setVisibility(View.VISIBLE);
                 seekLayout.setVisibility(View.GONE);
                 quotation_adapters_bg.setOnClickListener(new BG_Adapters.OnClickListener() {
@@ -332,7 +332,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         color_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottom_add_layout.setVisibility(View.GONE);
+                bottom_add_layout.setVisibility(View.VISIBLE);
                 color.setVisibility(View.VISIBLE);
                 seekLayout.setVisibility(View.VISIBLE);
             }
@@ -359,7 +359,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         grediant_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottom_add_layout.setVisibility(View.GONE);
+                bottom_add_layout.setVisibility(View.VISIBLE);
                 grediant.setVisibility(View.VISIBLE);
                 seekLayout.setVisibility(View.VISIBLE);
                 grediant_Color.setLayoutManager(new LinearLayoutManager(Create_Activity.this, RecyclerView.HORIZONTAL, false));
@@ -418,7 +418,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             @Override
             public void onClick(View view) {
                 bottom_nav_card.setVisibility(View.GONE);
-                bottom_add_layout.setVisibility(View.GONE);
+                bottom_add_layout.setVisibility(View.VISIBLE);
                 bottom_add_sticker_layout.setVisibility(View.GONE);
                 bottom_add_filters_layout.setVisibility(View.GONE);
                 tv_title.setText(getString(R.string.Color));
