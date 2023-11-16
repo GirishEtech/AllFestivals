@@ -45,6 +45,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -128,7 +129,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
     RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView, gradiantList;
     TextView tv_title, tv_opacity_per;
-    RelativeLayout rv_cancel_done;
+    ConstraintLayout rv_cancel_done;
     ImageView ic_cross, ic_done;
     Gifs_Adapters quotation_adapters;
 
@@ -333,6 +334,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             public void onClick(View view) {
                 bottom_add_layout.setVisibility(View.GONE);
                 color.setVisibility(View.VISIBLE);
+                seekLayout.setVisibility(View.VISIBLE);
             }
         });
 
@@ -359,6 +361,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             public void onClick(View view) {
                 bottom_add_layout.setVisibility(View.GONE);
                 grediant.setVisibility(View.VISIBLE);
+                seekLayout.setVisibility(View.VISIBLE);
                 grediant_Color.setLayoutManager(new LinearLayoutManager(Create_Activity.this, RecyclerView.HORIZONTAL, false));
                 grediant_Color.setHasFixedSize(true);
                 ArrayList<SimpleColor> arrayList = new ArrayList<>();
@@ -407,7 +410,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 tv_title.setText(getString(R.string.Add));
                 bottom_add_layout.setVisibility(View.VISIBLE);
                 rv_cancel_done.setVisibility(View.VISIBLE);
-                seekLayout.setVisibility(View.VISIBLE);
+                seekLayout.setVisibility(View.GONE);
             }
         });
         nav_add_color.setOnClickListener(new View.OnClickListener() {

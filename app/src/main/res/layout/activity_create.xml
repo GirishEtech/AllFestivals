@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -120,7 +121,7 @@
             android:elevation="5dp"
             android:orientation="horizontal"
             android:padding="20dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:weightSum="5">
 
             <LinearLayout
@@ -279,7 +280,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="50sp"
             android:background="@color/search_bg_color"
             android:orientation="vertical"
             android:padding="5dp"
@@ -653,7 +654,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="90dp"
+            android:layout_marginBottom="40dp"
             android:background="@color/search_bg_color"
             android:orientation="vertical"
             android:padding="5dp"
@@ -675,14 +676,14 @@
 
                         <ImageView
                             android:id="@+id/ivoriginal"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/abc" />
 
                         <View
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:background="#00000000" />
                     </RelativeLayout>
 
@@ -693,14 +694,14 @@
 
                         <ImageView
                             android:id="@+id/ivOld"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/abc" />
 
                         <View
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:background="#66000000" />
                     </RelativeLayout>
 
@@ -711,14 +712,14 @@
 
                         <ImageView
                             android:id="@+id/ivBlur"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/abc" />
 
                         <View
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:background="#66F44336" />
                     </RelativeLayout>
 
@@ -729,14 +730,14 @@
 
                         <ImageView
                             android:id="@+id/ivBacksheet"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/abc" />
 
                         <View
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:background="#6600BCD4" />
                     </RelativeLayout>
 
@@ -747,14 +748,14 @@
 
                         <ImageView
                             android:id="@+id/ivReliefs"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/abc" />
 
                         <View
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:background="#664C0B0B" />
                     </RelativeLayout>
 
@@ -765,14 +766,14 @@
 
                         <ImageView
                             android:id="@+id/ivBW"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/abc" />
 
                         <View
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:background="#A64CAF50" />
                     </RelativeLayout>
 
@@ -783,14 +784,14 @@
 
                         <ImageView
                             android:id="@+id/ivMosaic"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/abc" />
 
                         <View
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:background="#66FFEB3B" />
                     </RelativeLayout>
 
@@ -801,14 +802,14 @@
 
                         <ImageView
                             android:id="@+id/ivDark"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/abc" />
 
                         <View
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:background="#66C39F93" />
                     </RelativeLayout>
 
@@ -819,38 +820,43 @@
 
                         <ImageView
                             android:id="@+id/ivPunch"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/abc" />
 
                         <View
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:background="#669C27B0" />
                     </RelativeLayout>
                 </LinearLayout>
             </HorizontalScrollView>
         </LinearLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rv_cancel_done"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/search_bg_color"
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/seekLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-               >
+                android:visibility="gone"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/ic_done"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.rtugeek.android.colorseekbar.AlphaSeekBar
                     android:id="@+id/alphaSeekBarBackground"
@@ -877,16 +883,17 @@
                     android:textSize="12sp"
                     android:textStyle="normal" />
             </LinearLayout>
+
             <ImageView
                 android:id="@+id/ic_cross"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginBottom="9dp"
                 android:padding="4dp"
-                android:src="@drawable/cancel" />
+                android:src="@drawable/cancel"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
                 android:id="@+id/ic_done"
@@ -894,11 +901,11 @@
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="9dp"
                 android:padding="4dp"
-                android:src="@drawable/done" />
-        </RelativeLayout>
+                android:src="@drawable/done"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </RelativeLayout>
