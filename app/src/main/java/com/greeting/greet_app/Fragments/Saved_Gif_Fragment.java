@@ -104,7 +104,6 @@ public class Saved_Gif_Fragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(activity,Utils.Span_Count));
         gifs_adapters =new Saved_Gifs_Adapters(activity,list);
         recyclerView.setAdapter(gifs_adapters);
-        Log.i("a", "as");
         Get_Saved_Items();
         return view;
     }

@@ -1,18 +1,9 @@
 package com.greeting.greet_app;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.CompositePageTransformer;
-import androidx.viewpager2.widget.MarginPageTransformer;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -26,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -36,11 +26,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.CompositePageTransformer;
+import androidx.viewpager2.widget.MarginPageTransformer;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
-import com.bumptech.glide.load.resource.gif.GifDrawableTransformation;
 import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -54,9 +53,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.greeting.greet_app.Adapters.SliderAdapter;
 import com.greeting.greet_app.Adapters.SlidersAdapter;
-import com.greeting.greet_app.Model.SliderItems;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -69,7 +66,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Preview_Activity extends AppCompatActivity implements View.OnTouchListener {
+public class Preview_Activity extends AppCompatActivity {
     int RESULT_LOAD_IMG = 100;
     private static final String TAG = "Touch";
     Matrix matrix = new Matrix();
@@ -131,9 +128,9 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
             sliderItems.add(previewList.get(i).toString());
         }
 
-        main_img.setOnTouchListener(this);
+        //main_img.setOnTouchListener(this);
 
-        Log.d("data", "Slider Items"+sliderItems.toString());
+        Log.d("data", "Slider Items" + sliderItems.toString());
         viewPager2.setAdapter(new SlidersAdapter(sliderItems, viewPager2, Preview_Activity.this));
         viewPager2.setClipToPadding(false);
         viewPager2.setClipChildren(false);
@@ -141,7 +138,28 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
         viewPager2.setCurrentItem(position);
         viewPager2.setOffscreenPageLimit(3);
         viewPager2.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
 
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+
+                if (previewList.size() <= position) {
+                    viewPager2.setClipToPadding(true);
+                    viewPager2.setClipChildren(true);
+                    Log.e(TAG, "onPageSelected: Pos ->" + position);
+                } else {
+                    Log.i(TAG, "onPageSelected: Array Size ->" + previewList.size());
+                    Link = previewList.get(position);
+                    Toast.makeText(Preview_Activity.this, "" + position, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
         CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
         compositePageTransformer.addTransformer(new MarginPageTransformer(40));
         compositePageTransformer.addTransformer(new ViewPager2.PageTransformer() {
@@ -212,15 +230,40 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
                 String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
                 String Key = UserSavedref.push().getKey();
                 UserSavedref.child(android_id).child(Type).child(Key).setValue(Link);
-                Toast.makeText(activity, "Downloaded", Toast.LENGTH_SHORT).show();
                 Saved_list.add(Link);
-                if (!checkPermission()){
+                if (!checkPermission()) {
                     getpermission();
-                }else {
-                    if (!Type.equals(Utils.Gifs)){
-                        download_img(bitmap);
-                    }else {
-                        storeGif(gif_file);
+                } else {
+                    try {
+                        if (!Type.equals(Utils.Gifs)) {
+                            Glide.with(Preview_Activity.this).asBitmap().load(Link).into(new CustomTarget<Bitmap>() {
+                                @Override
+                                public void onLoadStarted(@Nullable Drawable placeholder) {
+
+                                }
+
+                                @Override
+                                public void onLoadFailed(@Nullable Drawable errorDrawable) {
+
+                                }
+
+                                @Override
+                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                    bitmap = resource;
+                                    download_img(bitmap);
+                                }
+
+                                @Override
+                                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                                }
+
+                            });
+                        } else {
+                             Load_Gif(GetFileName());
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "onClick: ERROR", e);
                     }
                 }
             }
@@ -341,7 +384,73 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
                     }
                 });
     }
+    private void Load_Gif(File File) {
+        Glide.with(activity).asFile()
+                .load(Link)
+                .apply(new RequestOptions()
+                        .format(DecodeFormat.PREFER_ARGB_8888)
+                        .override(Target.SIZE_ORIGINAL))
+                .into(new Target<File>() {
+                    @Override
+                    public void onStart() {
 
+                    }
+
+                    @Override
+                    public void onStop() {
+
+                    }
+
+                    @Override
+                    public void onDestroy() {
+
+                    }
+
+                    @Override
+                    public void onLoadStarted(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onResourceReady(@NonNull File resource, @Nullable Transition<? super File> transition) {
+                        //  storeImage(resource);
+                        //  img_preview.setImageURI(Uri.fromFile(resource));
+                        gif_file = resource;
+                        storeGif(gif_file);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void getSize(@NonNull SizeReadyCallback cb) {
+
+                    }
+
+                    @Override
+                    public void removeCallback(@NonNull SizeReadyCallback cb) {
+
+                    }
+
+                    @Override
+                    public void setRequest(@Nullable Request request) {
+
+                    }
+
+                    @Nullable
+                    @Override
+                    public Request getRequest() {
+                        return null;
+                    }
+                });
+    }
     private void storeGif(File image) {
         File file = GetFileName();
         if (file == null) {
@@ -548,8 +657,6 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
-
-
         if (reqCode == RESULT_LOAD_IMG && resultCode == RESULT_OK) {
             try {
                 final Uri imageUri = data.getData();
@@ -566,70 +673,70 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
         }
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        ImageView view = (ImageView) v;
-        view.setScaleType(ImageView.ScaleType.MATRIX);
-        float scale;
-
-        dumpEvent(event);
-        // Handle touch events here...
-
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN: // first finger down only
-                savedMatrix.set(matrix);
-                start.set(event.getX(), event.getY());
-                Log.d(TAG, "mode=DRAG"); // write to LogCat
-                mode = DRAG;
-                break;
-
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
-
-                mode = NONE;
-                Log.d(TAG, "mode=NONE");
-                break;
-
-            case MotionEvent.ACTION_POINTER_DOWN:
-                oldDist = spacing(event);
-                Log.d(TAG, "oldDist=" + oldDist);
-                if (oldDist > 5f) {
-                    savedMatrix.set(matrix);
-                    midPoint(mid, event);
-                    mode = ZOOM;
-                    Log.d(TAG, "mode=ZOOM");
-                }
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-
-                if (mode == DRAG) {
-                    matrix.set(savedMatrix);
-                    matrix.postTranslate(event.getX() - start.x, event.getY() - start.y); /*
-                     * create the transformation in the matrix
-                     * of points
-                     */
-                } else if (mode == ZOOM) {
-                    // pinch zooming
-                    float newDist = spacing(event);
-                    Log.d(TAG, "newDist=" + newDist);
-                    if (newDist > 5f) {
-                        matrix.set(savedMatrix);
-                        scale = newDist / oldDist;
-                        /*
-                         * setting the scaling of the matrix...if scale > 1 means
-                         * zoom in...if scale < 1 means zoom out
-                         */
-                        matrix.postScale(scale, scale, mid.x, mid.y);
-                    }
-                }
-                break;
-        }
-
-        view.setImageMatrix(matrix); // display the transformation on screen
-
-        return true;
-    }
+    // @Override
+//    public boolean onTouch(View v, MotionEvent event) {
+//        ImageView view = (ImageView) v;
+//        view.setScaleType(ImageView.ScaleType.MATRIX);
+//        float scale;
+//
+//        dumpEvent(event);
+//        // Handle touch events here...
+//
+//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+//            case MotionEvent.ACTION_DOWN: // first finger down only
+//                savedMatrix.set(matrix);
+//                start.set(event.getX(), event.getY());
+//                Log.d(TAG, "mode=DRAG"); // write to LogCat
+//                mode = DRAG;
+//                break;
+//
+//            case MotionEvent.ACTION_UP:
+//            case MotionEvent.ACTION_POINTER_UP:
+//
+//                mode = NONE;
+//                Log.d(TAG, "mode=NONE");
+//                break;
+//
+//            case MotionEvent.ACTION_POINTER_DOWN:
+//                oldDist = spacing(event);
+//                Log.d(TAG, "oldDist=" + oldDist);
+//                if (oldDist > 5f) {
+//                    savedMatrix.set(matrix);
+//                    midPoint(mid, event);
+//                    mode = ZOOM;
+//                    Log.d(TAG, "mode=ZOOM");
+//                }
+//                break;
+//
+//            case MotionEvent.ACTION_MOVE:
+//
+//                if (mode == DRAG) {
+//                    matrix.set(savedMatrix);
+//                    matrix.postTranslate(event.getX() - start.x, event.getY() - start.y); /*
+//                     * create the transformation in the matrix
+//                     * of points
+//                     */
+//                } else if (mode == ZOOM) {
+//                    // pinch zooming
+//                    float newDist = spacing(event);
+//                    Log.d(TAG, "newDist=" + newDist);
+//                    if (newDist > 5f) {
+//                        matrix.set(savedMatrix);
+//                        scale = newDist / oldDist;
+//                        /*
+//                         * setting the scaling of the matrix...if scale > 1 means
+//                         * zoom in...if scale < 1 means zoom out
+//                         */
+//                        matrix.postScale(scale, scale, mid.x, mid.y);
+//                    }
+//                }
+//                break;
+//        }
+//
+//        view.setImageMatrix(matrix); // display the transformation on screen
+//
+//        return true;
+//    }
 
     private float spacing(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
@@ -667,6 +774,44 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
 
         sb.append("]");
         Log.d("Touch Event", sb.toString());
+    }
+
+    public Bitmap uriToBitmap(Uri uri) throws IOException {
+        ContentResolver resolver = getContentResolver();
+        InputStream inputStream = resolver.openInputStream(uri);
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+        if (inputStream != null) {
+            inputStream.close();
+        }
+        return bitmap;
+    }
+
+    public File uriToFile(Context context, Uri uri, String fileName) throws IOException {
+        ContentResolver contentResolver = context.getContentResolver();
+        InputStream inputStream = contentResolver.openInputStream(uri);
+        File file = createTempFile(context, fileName);
+
+        if (inputStream != null) {
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                byte[] buffer = new byte[4 * 1024]; // 4k buffer
+                int read;
+                while ((read = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, read);
+                }
+                outputStream.flush();
+            } finally {
+                inputStream.close();
+            }
+        }
+
+        return file;
+    }
+
+    private File createTempFile(Context context, String fileName) throws IOException {
+        File cacheDir = context.getCacheDir();
+        File tempFile = new File(cacheDir, fileName);
+        tempFile.createNewFile();
+        return tempFile;
     }
 
 }

@@ -4,6 +4,37 @@ import java.io.Serializable;
 
 public class CategoryModel implements Serializable {
     String Name;
+
+    public String getWishType() {
+        switch (wishType) {
+            case "anniversary": {
+                return "Anniversary";
+            }
+            case "good morning": {
+                return "Good Morning";
+            }
+            case "birthday": {
+                return "Birthday";
+            }
+            case "love": {
+                return "Love";
+            }
+            case "good night": {
+                return "Good Night";
+            }
+            case "retirement": {
+                return "Retirement";
+            }
+            default:
+                return "";
+        }
+    }
+
+    public void setWishType(String wishType) {
+        this.wishType = wishType;
+    }
+
+    String wishType;
     String Path;
     String MainCategoryName;
     int Image;

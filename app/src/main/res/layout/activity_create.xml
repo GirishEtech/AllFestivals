@@ -121,7 +121,7 @@
             android:elevation="5dp"
             android:orientation="horizontal"
             android:padding="20dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:weightSum="5">
 
             <LinearLayout
@@ -461,7 +461,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="95dp"
+            android:layout_marginBottom="50dp"
             android:orientation="vertical"
             android:padding="5dp"
             android:visibility="gone"
@@ -844,7 +844,7 @@
             android:paddingTop="10dp"
             android:paddingRight="20dp"
             android:paddingBottom="10dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/seekLayout"

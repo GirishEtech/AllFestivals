@@ -98,7 +98,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     private com.greeting.greet_app.sticker.TextSticker TextSticker;
     private Boolean isColor = true;
     private EditText tv_feedback_text;
-    private AlphaSeekBar kavehColorAlphaSlider,kavehColorAlphaBackground;
+    private AlphaSeekBar kavehColorAlphaSlider, kavehColorAlphaBackground;
     @SuppressWarnings("unused")
     StickersAdapter stickersAdapter;
 
@@ -120,12 +120,12 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     PointF start = new PointF();
     PointF mid = new PointF();
     float oldDist = 1f;
-    ImageView main_img,ic_backBtn;
+    ImageView main_img, ic_backBtn;
     Activity activity;
     Toolbar toolbar;
     String UserMobileId = "";
     ColorWheelPalette add_color_btn, add_gradiant_color;
-    LinearLayout bottom_nav_card, add_gradiant_layout, seekLayout,nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
+    LinearLayout bottom_nav_card, add_gradiant_layout, seekLayout, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
     RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView, gradiantList;
     TextView tv_title, tv_opacity_per;
@@ -141,7 +141,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     LinearLayout gallery_img, camera_img, color, color_btn, grediant, grediant_btn;
     RecyclerView simple_Color, grediant_Color, listColors;
-    TextView text,tv_opacity_perBg;
+    TextView text, tv_opacity_perBg;
     ImageView ivOld;
 
     ImageView ivBlur;
@@ -222,7 +222,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         nav_add_color = findViewById(R.id.nav_add_color);
         camera_img = findViewById(R.id.camera_img);
         main_img.setOnTouchListener(this);
-        colorBox = new ColorBox(this, this,this);
+        colorBox = new ColorBox(this, this, this);
         ivoriginal = findViewById(R.id.ivoriginal);
         main_view = findViewById(R.id.main_view);
         ivOld = findViewById(R.id.ivOld);
@@ -234,7 +234,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         ivDark = (ImageView) findViewById(R.id.ivDark);
         ivPunch = (ImageView) findViewById(R.id.ivPunch);
         simple_image = findViewById(R.id.simple_image);
-        simple_image.setLayoutManager(new LinearLayoutManager(Create_Activity.this,LinearLayoutManager.HORIZONTAL,false));
+        simple_image.setLayoutManager(new LinearLayoutManager(Create_Activity.this, LinearLayoutManager.HORIZONTAL, false));
         quotation_adapters_bg = new BG_Adapters(getApplicationContext(), list_bg, Utils.Background);
         simple_image.setAdapter(quotation_adapters_bg);
         Get_Storage();
@@ -254,7 +254,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                         Glide.with(Create_Activity.this).load(model).into(main_img);
                     }
                 });
-
+                setLeftRightClick(simple_image);
             }
         });
         add_color_btn.setOnClickListener(this::showColorPickerDiologe);
@@ -335,6 +335,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 bottom_add_layout.setVisibility(View.VISIBLE);
                 color.setVisibility(View.VISIBLE);
                 seekLayout.setVisibility(View.VISIBLE);
+                setLeftRightClick(simple_Color);
             }
         });
 
@@ -345,7 +346,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         for (int i = 0; i < colorNames.length; i++) {
             SimpleColor m = new SimpleColor();
             TypedArray ta = getResources().obtainTypedArray(R.array.colors);
-            m.setColor(ta.getColor(i,0));
+            m.setColor(ta.getColor(i, 0));
             int colorToUse = ta.getResourceId(i, 0);
             m.setColorToUse(colorToUse);
             arrayList.add(m);
@@ -381,6 +382,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                         setAlphaForBackground();
                     }
                 });
+                setLeftRightClick(grediant_Color);
             }
         });
         dataAdapter.setOnClickListener(new DataAdapter.OnClickListener() {
@@ -427,6 +429,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 rv_cancel_done.setVisibility(View.VISIBLE);
                 setGradiantColorList();
                 setColorsList();
+                defaultClick();
             }
         });
         nav_add_text.setOnClickListener(new View.OnClickListener() {
@@ -440,6 +443,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 bottom_add_sticker_layout.setVisibility(View.GONE);
                 bottom_add_filters_layout.setVisibility(View.GONE);
                 Show_Add_Text_Dialog();
+                defaultClick();
             }
         });
         stickersAdapter = new StickersAdapter(Create_Activity.this, list);
@@ -455,6 +459,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 rv_cancel_done.setVisibility(View.VISIBLE);
                 bottom_add_filters_layout.setVisibility(View.GONE);
                 Choose_Sticker_RecyclerView.setVisibility(View.VISIBLE);
+                defaultClick();
             }
         });
         stickersAdapter.setOnClickListener(new StickersAdapter.OnClickListener() {
@@ -477,23 +482,10 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 bottom_add_filters_layout.setVisibility(View.VISIBLE);
 //                quotation_adapters = new Gifs_Adapters(activity, list);
 //                Choose_Filters_RecyclerView.setAdapter(quotation_adapters);
+                defaultClick();
             }
         });
-        ic_cross.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Set_Layout_Gone();
-            }
-        });
-        ic_done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Set_Layout_Gone();
-            }
-
-
-        });
-
+        defaultClick();
         stickerView = (com.xiaopo.flying.sticker.StickerView) findViewById(R.id.sticker_view);
         BitmapStickerIcon deleteIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this,
                 com.xiaopo.flying.sticker.R.drawable.sticker_ic_close_white_18dp),
@@ -581,6 +573,47 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 //            loadSticker();
         }
 
+    }
+
+    private void defaultClick() {
+        ic_cross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Set_Layout_Gone();
+            }
+        });
+        ic_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Set_Layout_Gone();
+            }
+
+
+        });
+    }
+
+    private void setLeftRightClick(View view1) {
+        bottom_add_layout.setVisibility(View.GONE);
+        view1.setVisibility(View.VISIBLE);
+        ic_cross.setOnClickListener(view -> {
+            if (view1.getVisibility() == View.VISIBLE) {
+                rv_cancel_done.setVisibility(View.VISIBLE);
+                bottom_add_layout.setVisibility(View.VISIBLE);
+                view1.setVisibility(View.GONE);
+                seekLayout.setVisibility(View.GONE);
+            } else {
+                bottom_add_layout.setVisibility(View.GONE);
+                view1.setVisibility(View.GONE);
+                rv_cancel_done.setVisibility(View.GONE);
+                bottom_nav_card.setVisibility(View.VISIBLE);
+            }
+
+        });
+        ic_done.setOnClickListener(view -> {
+            bottom_add_layout.setVisibility(View.GONE);
+            view1.setVisibility(View.GONE);
+            bottom_nav_card.setVisibility(View.VISIBLE);
+        });
     }
 
     private void setAlphaForBackground() {
@@ -770,8 +803,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             } else {
                 Log.i(TAG, "In_it_List: TEST CAT - >" + Category);
                 Log.i(TAG, "In_it_List: TEST NAME ->" + child);
-                StorageReference ref = FirebaseStorage.getInstance().getReference(Category).child(child).child("Stickers");
-                Log.i(TAG, "In_it_List: REFERENCE PATH"+ref.getPath());
+                StorageReference ref = FirebaseStorage.getInstance().getReference(Utils.categoryModel.getPath() + "/" + Utils.Stickers);
+                Log.i(TAG, "In_it_List: REFERENCE PATH" + ref.getPath());
                 ref.listAll().addOnSuccessListener(listResult -> {
                             for (StorageReference item : listResult.getItems()) {
                                 item.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -957,6 +990,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     public void testLock() {
         stickerView.setLocked(!stickerView.isLocked());
+        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        
     }
 
     public void testRemove(View view) {
@@ -994,9 +1029,9 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         list_bg.clear();
         String Category = getIntent().getStringExtra(Utils.CAT_TYPE);
         String child = getIntent().getStringExtra(Utils.TAB_NAME);
-        Log.i(TAG, "Get_Storage: Category : -> "+Category +"\n"+"Child ->"+child);
+        Log.i(TAG, "Get_Storage: Category : -> " + Category + "\n" + "Child ->" + child);
         try {
-            StorageReference listRef = FirebaseStorage.getInstance().getReference(Category).child(child).child(Utils.Background);
+            StorageReference listRef = FirebaseStorage.getInstance().getReference(Utils.categoryModel.getPath() + "/" + Utils.Background);
             if (listRef != null && listRef.getStorage() != null) {
                 listRef.listAll()
                         .addOnSuccessListener(new OnSuccessListener<ListResult>() {
@@ -1029,9 +1064,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                             }
                         });
             }
-        }
-        catch (Exception exception){
-            Log.e(TAG, "Get_Storage: Exception",exception);
+        } catch (Exception exception) {
+            Log.e(TAG, "Get_Storage: Exception", exception);
             //viewDialog.hideDialog();
         }
     }
@@ -1090,7 +1124,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             SimpleColor m = new SimpleColor();
             TypedArray ta = getResources().obtainTypedArray(R.array.colors);
             int colorToUse = ta.getResourceId(i, 0);
-            m.setColor(ta.getColor(i,0));
+            m.setColor(ta.getColor(i, 0));
             m.setColorToUse(colorToUse);
             arrayList.add(m);
         }
@@ -1098,11 +1132,11 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         this.listColors.setAdapter(dataAdapter);
         dataAdapter.setOnClickListener((position, model) -> {
             if (TextSticker != null) {
-                Log.i(TAG, "setColorsList: Color is "+model.getColorToUse());
-               TextSticker.setTextColor(model.getColor());
-               originalColor = model.getColor();
-               setSeekBarOposity();
-               stickerView.invalidate();
+                Log.i(TAG, "setColorsList: Color is " + model.getColorToUse());
+                TextSticker.setTextColor(model.getColor());
+                originalColor = model.getColor();
+                setSeekBarOposity();
+                stickerView.invalidate();
             }
         });
     }

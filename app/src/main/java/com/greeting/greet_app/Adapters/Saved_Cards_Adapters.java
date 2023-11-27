@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class Saved_Cards_Adapters extends RecyclerView.Adapter<Saved_Cards_Adapt
         if (list.size()>0){
          //   holder.setIsRecyclable(false);
             String model= list.get(position);
+            Log.i("TESTIMAGE", "onBindViewHolder: "+model);
             Glide.with(context).asGif().load(R.raw.loading).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.ic_pro);
             Glide.with(context).asBitmap().load(model).diskCacheStrategy(DiskCacheStrategy.ALL).into(new CustomTarget<Bitmap>() {
                 @Override

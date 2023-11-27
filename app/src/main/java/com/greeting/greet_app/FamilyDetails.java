@@ -24,6 +24,8 @@ import com.greeting.greet_app.Model.CategoryModel;
 
 import java.util.ArrayList;
 
+import kotlin.text.Regex;
+
 public class FamilyDetails extends AppCompatActivity implements Daily_Wishes_Category_Adapters.EventListener,
         AllFestivals_Category_Adapters.EventListener {
     TextView tv_no;
@@ -65,10 +67,14 @@ public class FamilyDetails extends AppCompatActivity implements Daily_Wishes_Cat
                                 public void onSuccess(Uri uri) {
                                     CategoryModel categoryModel = new CategoryModel();
                                     categoryModel.setImageLink(uri.toString());
-                                    categoryModel.setMainCategoryName("Family_Details");
-                                    categoryModel.setName(item.getName().split("\\.")[0]);
-                                    categoryModel.setPath(item.getPath().split("\\.")[0]);
+                                    categoryModel.setMainCategoryName("Family Wishes");
+                                    categoryModel.setWishType(item.getName().replace(".png",""));
+                                    categoryModel.setName(name);
+                                    categoryModel.setPath(categoryModel.getMainCategoryName()+"/"+name+"/"+categoryModel.getWishType());
                                     special_events_list.add(categoryModel);
+                                    Log.i("TEST", "onSuccess: Main Category :"+categoryModel.getMainCategoryName()+"\n Name " +
+                                                    categoryModel.getName() + " \nWish Type -- "+categoryModel.getPath()
+                                            );
                                     special_event_category_adapters.notifyDataSetChanged();
                                     Log.e("url", uri.toString());
                                 }
