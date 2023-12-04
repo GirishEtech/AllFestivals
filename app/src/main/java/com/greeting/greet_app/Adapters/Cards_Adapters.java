@@ -20,8 +20,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.fxn.stash.Stash;
+import com.greeting.greet_app.CreateFramePhoto_Activity;
 import com.greeting.greet_app.Preview_Activity;
 import com.greeting.greet_app.R;
+import com.greeting.greet_app.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -87,9 +89,16 @@ public class Cards_Adapters extends RecyclerView.Adapter<Cards_Adapters.Students
                 public void onClick(View view) {
                     Stash.put("position", position);
                     Stash.put("preview_list", list);
-                    context.startActivity(new Intent(context, Preview_Activity.class)
-                            .putExtra("type",Type)
-                            .putExtra("Link",model));
+                    if (Type == Utils.Frames){
+                        context.startActivity(new Intent(context, CreateFramePhoto_Activity.class)
+                                .putExtra("type", Type)
+                                .putExtra("Link", model));
+                    }
+                    else {
+                        context.startActivity(new Intent(context, Preview_Activity.class)
+                                .putExtra("type", Type)
+                                .putExtra("Link", model));
+                    }
                 }
             });
         }

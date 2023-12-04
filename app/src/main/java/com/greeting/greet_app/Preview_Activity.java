@@ -66,7 +66,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Preview_Activity extends AppCompatActivity {
+public class Preview_Activity extends AppCompatActivity implements View.OnTouchListener {
     int RESULT_LOAD_IMG = 100;
     private static final String TAG = "Touch";
     Matrix matrix = new Matrix();
@@ -128,8 +128,10 @@ public class Preview_Activity extends AppCompatActivity {
             sliderItems.add(previewList.get(i).toString());
         }
 
-        //main_img.setOnTouchListener(this);
 
+        if (Type.equals(Utils.Frames)){
+            //main_img.setOnTouchListener(this);
+        }
         Log.d("data", "Slider Items" + sliderItems.toString());
         viewPager2.setAdapter(new SlidersAdapter(sliderItems, viewPager2, Preview_Activity.this));
         viewPager2.setClipToPadding(false);
@@ -155,7 +157,6 @@ public class Preview_Activity extends AppCompatActivity {
                 } else {
                     Log.i(TAG, "onPageSelected: Array Size ->" + previewList.size());
                     Link = previewList.get(position);
-                    Toast.makeText(Preview_Activity.this, "" + position, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -209,7 +210,6 @@ public class Preview_Activity extends AppCompatActivity {
 
                 @Override
                 public void onLoadCleared(@Nullable Drawable placeholder) {
-
                 }
             });
         }
@@ -260,7 +260,7 @@ public class Preview_Activity extends AppCompatActivity {
 
                             });
                         } else {
-                             Load_Gif(GetFileName());
+                            Load_Gif(GetFileName());
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "onClick: ERROR", e);
@@ -272,7 +272,7 @@ public class Preview_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!Type.equals(Utils.Gifs)) {
-                    share_img(bitmap);
+                    share_img();
                 } else {
                     share_gif();
                 }
@@ -298,6 +298,30 @@ public class Preview_Activity extends AppCompatActivity {
         }*/
     }
 
+    private void loadShareFile(){
+        Glide.with(Preview_Activity.this).asBitmap().load(Link).into(new CustomTarget<Bitmap>() {
+            @Override
+            public void onLoadStarted(@Nullable Drawable placeholder) {
+
+            }
+
+            @Override
+            public void onLoadFailed(@Nullable Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                bitmap = resource;
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+
+        });
+    }
     private void Get_Saved_Items() {
         String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         UserSavedref.child(android_id).child(Type).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -384,6 +408,72 @@ public class Preview_Activity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void Load_Gif(File File, Boolean loaded) {
+        Glide.with(activity).asFile()
+                .load(Link)
+                .apply(new RequestOptions()
+                        .format(DecodeFormat.PREFER_ARGB_8888)
+                        .override(Target.SIZE_ORIGINAL))
+                .into(new Target<File>() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onStop() {
+
+                    }
+
+                    @Override
+                    public void onDestroy() {
+
+                    }
+
+                    @Override
+                    public void onLoadStarted(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onResourceReady(@NonNull File resource, @Nullable Transition<? super File> transition) {
+                        gif_file = resource;
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+
+                    @Override
+                    public void getSize(@NonNull SizeReadyCallback cb) {
+
+                    }
+
+                    @Override
+                    public void removeCallback(@NonNull SizeReadyCallback cb) {
+
+                    }
+
+                    @Override
+                    public void setRequest(@Nullable Request request) {
+
+                    }
+
+                    @Nullable
+                    @Override
+                    public Request getRequest() {
+                        return null;
+                    }
+                });
+    }
+
     private void Load_Gif(File File) {
         Glide.with(activity).asFile()
                 .load(Link)
@@ -451,6 +541,7 @@ public class Preview_Activity extends AppCompatActivity {
                     }
                 });
     }
+
     private void storeGif(File image) {
         File file = GetFileName();
         if (file == null) {
@@ -502,60 +593,76 @@ public class Preview_Activity extends AppCompatActivity {
         Snackbar.make(findViewById(R.id.rv_main), "Shared", Snackbar.LENGTH_LONG).show();
     }
 
-    private void share_img(Bitmap imgbitmap) {
-        File imgfolder = new File(getCacheDir(), "images");
-        Uri uri = null;
-        try {
-            imgfolder.mkdir();
-            File file = new File(imgfolder, "shared_img.png");
-            FileOutputStream stream = new FileOutputStream(file);
-            imgbitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            stream.flush();
-            stream.close();
-            uri = FileProvider.getUriForFile(getApplicationContext(),
-                    "com.greeting.greet_app.fileprovider", file);
-        } catch (IOException e) {
+    private void share_img() {
+        loadShareFile();
+        new Handler(getMainLooper()).postDelayed(() -> {
+            runOnUiThread(()->{
+                File imgfolder = new File(getCacheDir(), "images");
+                Uri uri = null;
+                try {
+                    imgfolder.mkdir();
+                    File file = new File(imgfolder, "shared_img.png");
+                    FileOutputStream stream = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    stream.flush();
+                    stream.close();
+                    uri = FileProvider.getUriForFile(getApplicationContext(),
+                            "com.greeting.greet_app.fileprovider", file);
+                } catch (IOException e) {
 
-        }
-        Intent shareintent = new Intent(Intent.ACTION_SEND);
-        shareintent.setType("image/*");
-        shareintent.putExtra(Intent.EXTRA_STREAM, uri);
-        shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(Intent.createChooser(shareintent, "share"));
-        Snackbar.make(findViewById(R.id.rv_main), "Shared", Snackbar.LENGTH_LONG).show();
+                }
+                Intent shareintent = new Intent(Intent.ACTION_SEND);
+                shareintent.setType("image/*");
+                shareintent.putExtra(Intent.EXTRA_STREAM, uri);
+                shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(shareintent, "share"));
+                Snackbar.make(findViewById(R.id.rv_main), "Shared", Snackbar.LENGTH_LONG).show();
+            });
+        },1500);
+
     }
 
     private void share_gif() {
-        File imgfolder = new File(getCacheDir(), "images");
-        if (imgfolder == null) {
-            return;
-        }
-        try {
-            imgfolder.mkdir();
-            File file = new File(imgfolder, "gifshared_img.gif");
-            FileOutputStream output = new FileOutputStream(file);
-            FileInputStream input = new FileInputStream(gif_file);
+        Load_Gif(GetFileName(), true);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                File imgfolder = new File(getCacheDir(), "images");
+                if (imgfolder == null) {
+                    return;
+                }
+                runOnUiThread(() -> {
+                    try {
+                        imgfolder.mkdir();
+                        File file = new File(imgfolder, "gifshared_img.gif");
+                        FileOutputStream output = new FileOutputStream(file);
+                        FileInputStream input = new FileInputStream(gif_file);
 
-            FileChannel inputChannel = input.getChannel();
-            FileChannel outputChannel = output.getChannel();
+                        FileChannel inputChannel = input.getChannel();
+                        FileChannel outputChannel = output.getChannel();
 
-            inputChannel.transferTo(0, inputChannel.size(), outputChannel);
-            output.close();
-            input.close();
-            Uri uri = null;
-            uri = FileProvider.getUriForFile(getApplicationContext(),
-                    "com.greeting.greet_app.fileprovider", file);
-            Intent shareintent = new Intent(Intent.ACTION_SEND);
-            shareintent.setType("image/*");
-            shareintent.putExtra(Intent.EXTRA_STREAM, uri);
-            shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(Intent.createChooser(shareintent, "share"));
-            Snackbar.make(findViewById(R.id.rv_main), "Shared", Snackbar.LENGTH_LONG).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                        inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+                        output.close();
+                        input.close();
+                        Uri uri = null;
+                        uri = FileProvider.getUriForFile(getApplicationContext(),
+                                "com.greeting.greet_app.fileprovider", file);
+                        Intent shareintent = new Intent(Intent.ACTION_SEND);
+                        shareintent.setType("image/*");
+                        shareintent.putExtra(Intent.EXTRA_STREAM, uri);
+                        shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(Intent.createChooser(shareintent, "share"));
+                        Snackbar.make(findViewById(R.id.rv_main), "Shared", Snackbar.LENGTH_LONG).show();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                });
+
+            }
+        }, 1500);
 
     }
 
@@ -663,6 +770,13 @@ public class Preview_Activity extends AppCompatActivity {
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 main_img.setImageBitmap(selectedImage);
+               viewPager2.setOnTouchListener((view, motionEvent) -> {
+                   view.setEnabled(false);
+                   return true;
+               });
+                img_preview.setEnabled(false);
+                main_img.setOnTouchListener(Preview_Activity.this);
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(Preview_Activity.this, "Something went wrong", Toast.LENGTH_LONG).show();
@@ -673,70 +787,72 @@ public class Preview_Activity extends AppCompatActivity {
         }
     }
 
-    // @Override
-//    public boolean onTouch(View v, MotionEvent event) {
-//        ImageView view = (ImageView) v;
-//        view.setScaleType(ImageView.ScaleType.MATRIX);
-//        float scale;
-//
-//        dumpEvent(event);
-//        // Handle touch events here...
-//
-//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-//            case MotionEvent.ACTION_DOWN: // first finger down only
-//                savedMatrix.set(matrix);
-//                start.set(event.getX(), event.getY());
-//                Log.d(TAG, "mode=DRAG"); // write to LogCat
-//                mode = DRAG;
-//                break;
-//
-//            case MotionEvent.ACTION_UP:
-//            case MotionEvent.ACTION_POINTER_UP:
-//
-//                mode = NONE;
-//                Log.d(TAG, "mode=NONE");
-//                break;
-//
-//            case MotionEvent.ACTION_POINTER_DOWN:
-//                oldDist = spacing(event);
-//                Log.d(TAG, "oldDist=" + oldDist);
-//                if (oldDist > 5f) {
-//                    savedMatrix.set(matrix);
-//                    midPoint(mid, event);
-//                    mode = ZOOM;
-//                    Log.d(TAG, "mode=ZOOM");
-//                }
-//                break;
-//
-//            case MotionEvent.ACTION_MOVE:
-//
-//                if (mode == DRAG) {
-//                    matrix.set(savedMatrix);
-//                    matrix.postTranslate(event.getX() - start.x, event.getY() - start.y); /*
-//                     * create the transformation in the matrix
-//                     * of points
-//                     */
-//                } else if (mode == ZOOM) {
-//                    // pinch zooming
-//                    float newDist = spacing(event);
-//                    Log.d(TAG, "newDist=" + newDist);
-//                    if (newDist > 5f) {
-//                        matrix.set(savedMatrix);
-//                        scale = newDist / oldDist;
-//                        /*
-//                         * setting the scaling of the matrix...if scale > 1 means
-//                         * zoom in...if scale < 1 means zoom out
-//                         */
-//                        matrix.postScale(scale, scale, mid.x, mid.y);
-//                    }
-//                }
-//                break;
-//        }
-//
-//        view.setImageMatrix(matrix); // display the transformation on screen
-//
-//        return true;
-//    }
+     @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        ImageView view = (ImageView) v;
+        view.setScaleType(ImageView.ScaleType.MATRIX);
+        float scale;
+        dumpEvent(event);
+        // Handle touch events here...
+
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN: // first finger down only
+                savedMatrix.set(matrix);
+                start.set(event.getX(), event.getY());
+                Log.d(TAG, "mode=DRAG"); // write to LogCat
+                mode = DRAG;
+                break;
+
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+
+                mode = NONE;
+                Log.d(TAG, "mode=NONE");
+                break;
+
+            case MotionEvent.ACTION_POINTER_DOWN:
+                oldDist = spacing(event);
+                Log.d(TAG, "oldDist=" + oldDist);
+                if (oldDist > 5f) {
+                    savedMatrix.set(matrix);
+                    midPoint(mid, event);
+                    mode = ZOOM;
+                    Log.d(TAG, "mode=ZOOM");
+                }
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+
+                if (mode == DRAG) {
+                    matrix.set(savedMatrix);
+                    matrix.postTranslate(event.getX() - start.x, event.getY() - start.y); /*
+                     * create the transformation in the matrix
+                     * of points
+                     */
+                    // Load the image you want to overlay
+
+                    Bitmap overLay = Bitmap.createBitmap(bitmap);
+                } else if (mode == ZOOM) {
+                    // pinch zooming
+                    float newDist = spacing(event);
+                    Log.d(TAG, "newDist=" + newDist);
+                    if (newDist > 5f) {
+                        matrix.set(savedMatrix);
+                        scale = newDist / oldDist;
+                        /*
+                         * setting the scaling of the matrix...if scale > 1 means
+                         * zoom in...if scale < 1 means zoom out
+                         */
+                        matrix.postScale(scale, scale, mid.x, mid.y);
+                    }
+                }
+                break;
+        }
+
+        view.setImageMatrix(matrix); // display the transformation on screen
+
+        return true;
+    }
 
     private float spacing(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
@@ -784,27 +900,6 @@ public class Preview_Activity extends AppCompatActivity {
             inputStream.close();
         }
         return bitmap;
-    }
-
-    public File uriToFile(Context context, Uri uri, String fileName) throws IOException {
-        ContentResolver contentResolver = context.getContentResolver();
-        InputStream inputStream = contentResolver.openInputStream(uri);
-        File file = createTempFile(context, fileName);
-
-        if (inputStream != null) {
-            try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                byte[] buffer = new byte[4 * 1024]; // 4k buffer
-                int read;
-                while ((read = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, read);
-                }
-                outputStream.flush();
-            } finally {
-                inputStream.close();
-            }
-        }
-
-        return file;
     }
 
     private File createTempFile(Context context, String fileName) throws IOException {

@@ -56,28 +56,40 @@
     </androidx.cardview.widget.CardView>
 
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPagerImageSlider"
+    <FrameLayout
+        android:id="@+id/tmo"
         android:layout_width="match_parent"
-        android:layout_height="290dp"
-        android:layout_below="@id/carview"
-        android:layout_marginTop="30dp"
-        android:paddingLeft="40dp"
-        android:paddingEnd="40dp"/>
-    <ImageView
-        android:id="@+id/main_img"
-        android:layout_width="match_parent"
-        android:layout_height="290dp"
-        android:layout_below="@id/carview"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:paddingLeft="40dp"
-        android:paddingEnd="40dp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/carview">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="290dp">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/main_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/carview"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:adjustViewBounds="true"
+                app:riv_corner_radius="12sp" />
+        </FrameLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPagerImageSlider"
+            android:layout_width="match_parent"
+            android:layout_height="290dp"
+            android:layout_below="@id/carview"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="40dp"
+            android:paddingEnd="40dp" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/viewPagerImageSlider"
+        android:layout_below="@+id/tmo"
         android:layout_marginTop="60dp"
         android:orientation="horizontal"
         android:weightSum="3">

@@ -26,11 +26,7 @@ import com.greeting.greet_app.ViewDialog;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Frames_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class Frames_Fragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match

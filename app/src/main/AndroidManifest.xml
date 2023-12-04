@@ -40,6 +40,9 @@
             android:name=".FamilyDetails"
             android:exported="false" />
         <activity
+            android:name=".CreateFramePhoto_Activity"
+            android:exported="false" />
+        <activity
             android:name=".AllFamilyActivity"
             android:exported="false" />
         <activity

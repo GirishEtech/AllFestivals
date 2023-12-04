@@ -61,11 +61,4 @@ public class SlidersAdapter extends RecyclerView.Adapter<SlidersAdapter.SliderVi
         }
     }
 
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            sliderItems.addAll(sliderItems);
-            notifyDataSetChanged();
-        }
-    };
 }

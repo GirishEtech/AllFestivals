@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rv_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/teal_700"
-    tools:context=".Preview_Activity">
+    tools:context=".Quote_Preview_Activity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/black">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/ic_nav_menu"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:tint="@color/white"
-                android:src="@drawable/material_ic_keyboard_arrow_left_black_24dp"/>
+                android:src="@drawable/material_ic_keyboard_arrow_left_black_24dp"
+                app:tint="@color/white" />
+
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
@@ -30,34 +37,36 @@
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/lobster_regular"
                 android:text="@string/Quote_Preview"
-                android:textSize="20dp"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textSize="20dp" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
-    <androidx.cardview.widget.CardView
+
+    <FrameLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@id/toolbar"
-        android:id="@+id/carview"
-        app:cardCornerRadius="15dp"
-        android:layout_margin="10dp">
-        <TextView
-            android:id="@+id/tv_quotes"
+        android:layout_height="320dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPagerImageSlider"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/text_templete"
-            android:textColor="@color/white"
-            android:background="@drawable/bg_quote"
-            android:gravity="center"
-            android:padding="10dp"/>
-    </androidx.cardview.widget.CardView>
+            android:paddingLeft="40dp"
+            android:paddingEnd="40dp" />
+    </FrameLayout>
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/carview"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainLayout">
 
         <LinearLayout
             android:id="@+id/llDownload"
@@ -120,4 +129,6 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </LinearLayout>
-    </LinearLayout></RelativeLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

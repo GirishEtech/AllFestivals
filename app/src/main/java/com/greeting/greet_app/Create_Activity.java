@@ -991,7 +991,6 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     public void testLock() {
         stickerView.setLocked(!stickerView.isLocked());
         String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        
     }
 
     public void testRemove(View view) {

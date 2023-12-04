@@ -11,27 +11,30 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.fxn.stash.Stash;
-import com.greeting.greet_app.Preview_Activity;
 import com.greeting.greet_app.Quote_Preview_Activity;
 import com.greeting.greet_app.R;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class Quotation_Adapters extends RecyclerView.Adapter<Quotation_Adapters.StudentsViewHolder> {
+public class Quotation_AdaptersSlider extends RecyclerView.Adapter<Quotation_AdaptersSlider.StudentsViewHolder> {
+    private ViewPager2 viewPager2;
     Context context;
     ArrayList<String> list;
     private LayoutInflater inflater;
     String type = "";
 
-    public Quotation_Adapters(Context context, ArrayList<String> clientModelArrayList) {
+    public Quotation_AdaptersSlider(Context context, ArrayList<String> clientModelArrayList, ViewPager2 viewPager2) {
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.list = clientModelArrayList;
+        this.viewPager2 = viewPager2;
     }
 
     final Random mRandom = new Random(System.currentTimeMillis());
@@ -55,7 +58,7 @@ public class Quotation_Adapters extends RecyclerView.Adapter<Quotation_Adapters.
     @NotNull
     @Override
     public StudentsViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.single_quotation_item, parent, false);
+        View view = inflater.inflate(R.layout.single_quotation_slideritem, parent, false);
         StudentsViewHolder viewHolder = new StudentsViewHolder(view);
         return viewHolder;
     }
@@ -67,17 +70,6 @@ public class Quotation_Adapters extends RecyclerView.Adapter<Quotation_Adapters.
             String model = list.get(position);
             holder.text.setText(model);
             holder.text.setBackgroundColor(generateRandomColor());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Stash.put("position", position);
-                    Stash.put("preview_list", list);
-                    context.startActivity(new Intent(context, Quote_Preview_Activity.class)
-                            .putExtra("list_preview", list)
-                            .putStringArrayListExtra("lst_preview",list)
-                           );
-                }
-            });
         }
     }
 

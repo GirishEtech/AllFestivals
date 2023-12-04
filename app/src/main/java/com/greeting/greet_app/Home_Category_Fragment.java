@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
+import com.greeting.greet_app.Adapters.AllFamilyListAdapter;
 import com.greeting.greet_app.Adapters.AllFestivals_Category_Adapters;
 import com.greeting.greet_app.Adapters.Daily_Wishes_Category_Adapters;
 import com.greeting.greet_app.Adapters.SliderAdapter;
@@ -292,13 +293,14 @@ public class Home_Category_Fragment extends Fragment implements Daily_Wishes_Cat
 
     ArrayList<CategoryModel> list_family = new ArrayList<>();
     List<SliderItem> sliderItems = new ArrayList<>();
-    SliderAdapter adapter;
+    AllFamilyListAdapter adapter;
 
+    RecyclerView family_list;
     private void Set_Slider() {
         SliderView sliderView;
 
         sliderView = view.findViewById(R.id.imageSlider);
-
+        family_list = view.findViewById(R.id.list_family);
 /*        list_family.add(new CategoryModel("Mother",R.drawable.mother));
         list_family.add(new CategoryModel("Father",R.drawable.father));
         list_family.add(new CategoryModel("Son",R.drawable.son));
@@ -307,9 +309,8 @@ public class Home_Category_Fragment extends Fragment implements Daily_Wishes_Cat
         list_family.add(new CategoryModel("GrandMother",R.drawable.grandmother));
         list_family.add(new CategoryModel("Uncle",R.drawable.uncle));
         list_family.add(new CategoryModel("Aunt",R.drawable.aunt));*/
-        sliderItems.add(new SliderItem(list_family));
-        adapter = new SliderAdapter(getActivity(), sliderItems);
-        sliderView.setSliderAdapter(adapter);
+        adapter = new AllFamilyListAdapter(list_family);
+        family_list.setAdapter(adapter);
     }
 
     private void in_it() {
