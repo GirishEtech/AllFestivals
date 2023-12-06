@@ -30,7 +30,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.greeting.greet_app.Adapters.Saved_Cards_Adapters;
-import com.greeting.greet_app.Adapters.Saved_Gifs_Adapters;
 import com.greeting.greet_app.R;
 import com.greeting.greet_app.Utils;
 
@@ -42,7 +41,7 @@ import java.util.ArrayList;
  * Use the {@link Saved_Frames_Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Saved_Frames_Fragment extends Fragment {
+public class Saved_Frames_Fragment extends BaseFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,32 +56,7 @@ public class Saved_Frames_Fragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Gif_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Saved_Frames_Fragment newInstance(String param1, String param2) {
-        Saved_Frames_Fragment fragment = new Saved_Frames_Fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     View view;
     RecyclerView recyclerView;

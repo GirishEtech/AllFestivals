@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     ActionBarDrawerToggle toggle;
 
+    public static void reloadFragment(){}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity=this;
         setContentView(R.layout.activity_main);
         getWindow().setStatusBarColor(getResources().getColor(R.color.teal_200));
-        activity=this;
         UserMobileId=Settings.Secure.getString(this.getContentResolver(),Settings.Secure.ANDROID_ID);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -103,8 +103,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.nav4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Saved_Fragment()).commit();
-                Set_Bottom_Nav(5);
+                setSaved();
             }
         });
         findViewById(R.id.llHome).setOnClickListener(new View.OnClickListener() {
@@ -157,6 +156,12 @@ public class MainActivity extends AppCompatActivity {
         });
       //  Set_Tab_layout();
     }
+
+    private void setSaved() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Saved_Fragment()).commit();
+        Set_Bottom_Nav(5);
+    }
+
     private void Share_App() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
