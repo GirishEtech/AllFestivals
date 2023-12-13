@@ -608,15 +608,18 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
                     stream.close();
                     uri = FileProvider.getUriForFile(getApplicationContext(),
                             "com.greeting.greet_app.fileprovider", file);
+
+                    Intent shareintent = new Intent(Intent.ACTION_SEND);
+                    shareintent.setType("image/*");
+                    shareintent.putExtra(Intent.EXTRA_STREAM, uri);
+                    shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(Intent.createChooser(shareintent, "share"));
+                    Snackbar.make(findViewById(R.id.rv_main), "Shared", Snackbar.LENGTH_LONG).show();
+
                 } catch (IOException e) {
 
                 }
-                Intent shareintent = new Intent(Intent.ACTION_SEND);
-                shareintent.setType("image/*");
-                shareintent.putExtra(Intent.EXTRA_STREAM, uri);
-                shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(shareintent, "share"));
-                Snackbar.make(findViewById(R.id.rv_main), "Shared", Snackbar.LENGTH_LONG).show();
+
             });
         },1500);
 

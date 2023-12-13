@@ -158,7 +158,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSaved() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Saved_Fragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame, new Saved_Fragment()).
+                commit();
         Set_Bottom_Nav(5);
     }
 
@@ -263,7 +264,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (i==5){
             nav0_img.setImageResource(R.drawable.baseline_home_24);
-
             nav1_img.setImageResource(R.drawable.ic_categories1);
             nav2_img.setImageResource(R.drawable.ic_special_events1);
             nav3_img.setImageResource(R.drawable.ic_best_quotes1);

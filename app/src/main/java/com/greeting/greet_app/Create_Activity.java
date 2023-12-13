@@ -15,6 +15,8 @@ import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -88,6 +91,9 @@ import top.defaults.colorpicker.ColorWheelPalette;
 
 public class Create_Activity extends AppCompatActivity implements View.OnTouchListener, ColorListner {
 
+    top.defaults.colorpicker.ColorWheelPalette color_bg, GradiantColorBg;
+
+    ConstraintLayout layoutGif;
     private int originalColor = 1;
     private ColorBox colorBox;
     private ViewDialog viewDialog;
@@ -120,12 +126,12 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     PointF start = new PointF();
     PointF mid = new PointF();
     float oldDist = 1f;
-    ImageView main_img, ic_backBtn;
+    ImageView main_img, ic_backBtn,tempImage;
     Activity activity;
     Toolbar toolbar;
     String UserMobileId = "";
     ColorWheelPalette add_color_btn, add_gradiant_color;
-    LinearLayout bottom_nav_card, add_gradiant_layout, seekLayout, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker;
+    LinearLayout bottom_nav_card, add_gradiant_layout, seekLayout, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker, colorForbg;
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
     RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView, gradiantList;
     TextView tv_title, tv_opacity_per;
@@ -139,7 +145,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     ArrayList<String> list_bg = new ArrayList<>();
 
-    LinearLayout gallery_img, camera_img, color, color_btn, grediant, grediant_btn;
+    LinearLayout gallery_img, camera_img, color_btn, grediant, grediant_btn;
     RecyclerView simple_Color, grediant_Color, listColors;
     TextView text, tv_opacity_perBg;
     ImageView ivOld;
@@ -170,7 +176,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 }
             });
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "NewApi"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,13 +186,17 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         activity = this;
         UserMobileId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         toolbar = findViewById(R.id.toolbar);
+        color_bg = findViewById(R.id.color_bg);
+        GradiantColorBg = findViewById(R.id.Gradiant_bgPalate);
+        colorForbg = findViewById(R.id.colorForbg);
         bg_img = findViewById(R.id.bg_img);
         bg_image = findViewById(R.id.bg_image);
         simple_image = findViewById(R.id.simple_image);
         gallery_img = findViewById(R.id.gallery_img);
         simple_Color = findViewById(R.id.simple_Color);
         main_img = findViewById(R.id.main_img);
-        color = findViewById(R.id.color);
+        tempImage = findViewById(R.id.tempImage);
+        layoutGif = findViewById(R.id.Layoutgif);
         color_btn = findViewById(R.id.color_btn);
         ic_backBtn = findViewById(R.id.ic_nav_menu);
         grediant = findViewById(R.id.grediant);
@@ -222,7 +232,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         nav_add_color = findViewById(R.id.nav_add_color);
         camera_img = findViewById(R.id.camera_img);
         main_img.setOnTouchListener(this);
-        colorBox = new ColorBox(this, this, this);
+        colorBox = new ColorBox(this, this, this, "COLOR");
         ivoriginal = findViewById(R.id.ivoriginal);
         main_view = findViewById(R.id.main_view);
         ivOld = findViewById(R.id.ivOld);
@@ -237,6 +247,11 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         simple_image.setLayoutManager(new LinearLayoutManager(Create_Activity.this, LinearLayoutManager.HORIZONTAL, false));
         quotation_adapters_bg = new BG_Adapters(getApplicationContext(), list_bg, Utils.Background);
         simple_image.setAdapter(quotation_adapters_bg);
+        //main_img.setBackgroundColor(getColor(R.color.white));
+        Glide.with(this)
+                .asGif().load(R.raw.bg_gif)
+                .into(tempImage);
+
         Get_Storage();
         ic_backBtn.setOnClickListener(view -> {
             onBackPressed();
@@ -251,6 +266,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 quotation_adapters_bg.setOnClickListener(new BG_Adapters.OnClickListener() {
                     @Override
                     public void onClick(int position, String model) {
+                        setLayoutParams();
                         Glide.with(Create_Activity.this).load(model).into(main_img);
                     }
                 });
@@ -332,10 +348,31 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         color_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                colorForbg.setVisibility(View.VISIBLE);
+                color_bg.setOnClickListener(view1 -> {
+                    new ColorPickerPopup.Builder(Create_Activity.this)
+                            .initialColor(Color.RED)
+                            .enableBrightness(true)
+                            .enableAlpha(true)
+                            .okTitle("Choose")
+                            .cancelTitle("Cencel")
+                            .showIndicator(true)
+                            .showValue(false)
+                            .build()
+                            .show(view, new ColorPickerPopup.ColorPickerObserver() {
+                                @Override
+                                public void onColorPicked(int color) {
+                                    setLayoutParams();
+                                    Bitmap bitmap = Bitmap.createBitmap(main_img.getWidth(), main_img.getHeight(), Bitmap.Config.ARGB_8888);
+                                    bitmap.eraseColor(color);
+                                    main_img.setImageBitmap(bitmap);
+                                }
+                            });
+                });
                 bottom_add_layout.setVisibility(View.VISIBLE);
-                color.setVisibility(View.VISIBLE);
+                color_bg.setVisibility(View.VISIBLE);
                 seekLayout.setVisibility(View.VISIBLE);
-                setLeftRightClick(simple_Color);
+                setLeftRightClick(colorForbg);
             }
         });
 
@@ -353,13 +390,17 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         }
         DataAdapter dataAdapter = new DataAdapter(this, arrayList);
         this.simple_Color.setAdapter(dataAdapter);
-
         add_gradiant_color.setOnClickListener(view -> {
             showGradiantDioloue();
         });
         grediant_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                colorBox = new ColorBox(Create_Activity.this, Create_Activity.this, Create_Activity.this, "GRADIANT");
+                GradiantColorBg.setOnClickListener(view1 -> {
+                    isColor = false;
+                    colorBox.showDialog();
+                });
                 bottom_add_layout.setVisibility(View.VISIBLE);
                 grediant.setVisibility(View.VISIBLE);
                 seekLayout.setVisibility(View.VISIBLE);
@@ -382,7 +423,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                         setAlphaForBackground();
                     }
                 });
-                setLeftRightClick(grediant_Color);
+                setLeftRightClick(grediant);
             }
         });
         dataAdapter.setOnClickListener(new DataAdapter.OnClickListener() {
@@ -508,7 +549,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         //default icon layout
         //stickerView.configDefaultIcons();
 
-        stickerView.setBackgroundColor(Color.WHITE);
+//        stickerView.setBackgroundColor(Color.WHITE);
         stickerView.setLocked(false);
         stickerView.setConstrained(true);
 
@@ -612,6 +653,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         ic_done.setOnClickListener(view -> {
             bottom_add_layout.setVisibility(View.GONE);
             view1.setVisibility(View.GONE);
+            rv_cancel_done.setVisibility(View.GONE);
             bottom_nav_card.setVisibility(View.VISIBLE);
         });
     }
@@ -711,7 +753,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         bottom_color_layout.setVisibility(View.GONE);
         bottom_add_sticker_layout.setVisibility(View.GONE);
         bottom_add_filters_layout.setVisibility(View.GONE);
-        color.setVisibility(View.GONE);
+        color_bg.setVisibility(View.GONE);
         bg_image.setVisibility(View.GONE);
         grediant.setVisibility(View.GONE);
         seekLayout.setVisibility(View.GONE);
@@ -1079,6 +1121,12 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         stickerView.invalidate();
     }
 
+    @Override
+    public void setBackground(GradientDrawable drawable) {
+        setLayoutParams();
+        main_img.setImageDrawable(drawable);
+    }
+
     public com.greeting.greet_app.sticker.TextSticker getSelected() {
         return (com.greeting.greet_app.sticker.TextSticker) stickerView.getCurrentSticker();
     }
@@ -1138,5 +1186,12 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 stickerView.invalidate();
             }
         });
+    }
+
+    void setLayoutParams() {
+        if (layoutGif.getVisibility() == View.VISIBLE){
+            layoutGif.setVisibility(View.GONE);
+            main_img.setVisibility(View.VISIBLE);
+        }
     }
 }

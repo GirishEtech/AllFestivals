@@ -3,6 +3,7 @@ package com.greeting.greet_app;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,20 +11,22 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Layout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,22 +38,18 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.fxn.stash.Stash;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
-import com.google.firebase.storage.StorageReference;
 import com.greeting.greet_app.Adapters.BG_Adapters;
+import com.greeting.greet_app.Adapters.Frames_Adapters;
 import com.xiaopo.flying.sticker.BitmapStickerIcon;
 import com.xiaopo.flying.sticker.DeleteIconEvent;
 import com.xiaopo.flying.sticker.FlipHorizontallyEvent;
@@ -65,17 +64,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-public class CreateFramePhoto_Activity extends AppCompatActivity implements View.OnTouchListener, ColorListner,BG_Adapters.OnClickListener {
+public class CreateFramePhoto_Activity extends AppCompatActivity implements  View.OnTouchListener,BG_Adapters.OnClickListener, Frames_Adapters.frameListner {
 
-    private ViewDialog viewDialog;
+    private FrameBox dialog;
+
     private static final String TAG = "Touch";
     public static final int PERM_RQST_CODE = 110;
     private com.xiaopo.flying.sticker.StickerView stickerView;
     private TextSticker sticker;
     private com.greeting.greet_app.sticker.TextSticker TextSticker;
 
+    private ArrayList<String> arrFrameList;
     private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
     int RESULT_LOAD_IMG = 100;
 
@@ -104,7 +104,7 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements View
 
     ArrayList<String> list_bg = new ArrayList<>();
 
-    LinearLayout gallery_img, camera_img, bg_imageLayout;
+    LinearLayout camera_img,add_Frame,llShare,llDownload;
     View main_view;
     LinearLayout bg_image;
     RecyclerView simple_image;
@@ -131,22 +131,20 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements View
         setContentView(R.layout.activity_create_framephoto);
         getWindow().setStatusBarColor(getResources().getColor(R.color.teal_200));
         activity = this;
+        arrFrameList = getIntent().getStringArrayListExtra("previewList");
         UserMobileId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         toolbar = findViewById(R.id.toolbar);
-        bg_image = findViewById(R.id.bg_image);
-        simple_image = findViewById(R.id.simple_image);
-        bg_imageLayout = findViewById(R.id.bg_img);
-        gallery_img = findViewById(R.id.gallery_img);
         main_img = findViewById(R.id.main_img);
         ic_backBtn = findViewById(R.id.ic_nav_menu);
         tempImage = findViewById(R.id.temp_image);
         tv_done = findViewById(R.id.tv_done);
+        add_Frame = findViewById(R.id.add_Frame);
+        llShare = findViewById(R.id.llShare);
+        llDownload = findViewById(R.id.llDownload);
         setSupportActionBar(toolbar);
-        viewDialog = new ViewDialog(this);
-        camera_img = findViewById(R.id.camera_img);
+        camera_img = findViewById(R.id.add_frame_image);
         main_view = findViewById(R.id.main_view);
         quotation_adapters_bg = new BG_Adapters(getApplicationContext(), list_bg, Utils.Background);
-        simple_image.setAdapter(quotation_adapters_bg);
         Get_Storage();
         quotation_adapters_bg.setOnClickListener(this);
         String model = getIntent().getStringExtra("Link");
@@ -159,20 +157,14 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements View
         camera_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                permission();
-            }
-        });
-        gallery_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+                permission();
             }
         });
-        bg_imageLayout.setOnClickListener(view -> {
-            bg_image.setVisibility(View.VISIBLE);
+        add_Frame.setOnClickListener(view -> {
+            Show_Frame_Dialog();
         });
         findViewById(R.id.tv_done).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,11 +174,17 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements View
                 finish();
             }
         });
-
+        llDownload.setOnClickListener(view -> {
+            Bitmap bitmap = stickerView.createBitmap();
+            download_img(bitmap,false);
+        });
         tv_done.setOnClickListener(view -> {
             stickerView.setLocked(true);
             Bitmap bitmap = stickerView.createBitmap();
-            download_img(bitmap);
+            download_img(bitmap,true);
+        });
+        llShare.setOnClickListener(view -> {
+            share_img();
         });
         stickerView = (com.xiaopo.flying.sticker.StickerView) findViewById(R.id.sticker_view);
         BitmapStickerIcon deleteIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this,
@@ -278,21 +276,48 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements View
     }
 
 
-
+    private void Show_Frame_Dialog() {
+        Frames_Adapters adapters = new Frames_Adapters(this,arrFrameList,Utils.Frames,this);
+        dialog = new FrameBox(this,this,adapters);
+        dialog.showDialog();
+    }
 
     private void permission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 2);
             permission();
         } else {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                someActivityResultLauncher.launch(takePictureIntent);
-            }
             Toast.makeText(this, "Permission is Granted", Toast.LENGTH_SHORT).show();
         }
     }
+    private void share_img() {
+        new Handler(getMainLooper()).postDelayed(() -> {
+            runOnUiThread(()->{
+                File imgfolder = new File(getCacheDir(), "images");
+                Uri uri = null;
+                try {
+                    imgfolder.mkdir();
+                    File file = new File(imgfolder, "shared_img.png");
+                    FileOutputStream stream = new FileOutputStream(file);
+                    Bitmap bitmap = stickerView.createBitmap();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    stream.flush();
+                    stream.close();
+                    uri = FileProvider.getUriForFile(getApplicationContext(),
+                            "com.greeting.greet_app.fileprovider", file);
+                } catch (IOException e) {
 
+                }
+                Intent shareintent = new Intent(Intent.ACTION_SEND);
+                shareintent.setType("image/*");
+                shareintent.putExtra(Intent.EXTRA_STREAM, uri);
+                shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(shareintent, "share"));
+                Snackbar.make(findViewById(R.id.rv_main), "Shared", Snackbar.LENGTH_LONG).show();
+            });
+        },1500);
+
+    }
 
     @Override
     protected void onResume() {
@@ -524,15 +549,6 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements View
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void setDrawable(int colors[]) {
-        Log.i(TAG, "setDrawable: Listner is Click");
-        if (TextSticker != null) {
-            TextSticker.setGradientColor(colors[0], colors[1]);
-        }
-        stickerView.invalidate();
-    }
 
     public com.greeting.greet_app.sticker.TextSticker getSelected() {
         return (com.greeting.greet_app.sticker.TextSticker) stickerView.getCurrentSticker();
@@ -554,7 +570,7 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements View
         File file = new File(root, Name);
         return file;
     }
-    private void download_img(Bitmap imgbitmap) {
+    private void download_img(Bitmap imgbitmap,boolean isback) {
         File file = GetFileName();
         try {
             FileOutputStream stream = new FileOutputStream(file);
@@ -570,14 +586,22 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements View
                         }
                     });
             Toast.makeText(this, "Frame Saved SuccessFully \n "+file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> {
-                runOnUiThread(() -> {
-                    onBackPressed();
-                });
-            },700);
+            if (isback) {
+                new Handler().postDelayed(() -> {
+                    runOnUiThread(() -> {
+                        onBackPressed();
+                    });
+                }, 700);
 
+            }
         } catch (IOException e) {
             Snackbar.make(findViewById(R.id.tempview), (CharSequence) "Error In Download", Snackbar.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void setFrame(String frame) {
+        Glide.with(CreateFramePhoto_Activity.this).load(frame).into(main_img);
+        dialog.hideDialog();
     }
 }

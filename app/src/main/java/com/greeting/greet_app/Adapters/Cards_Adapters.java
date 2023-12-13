@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ import com.greeting.greet_app.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Random;
 
 public class Cards_Adapters extends RecyclerView.Adapter<Cards_Adapters.StudentsViewHolder> {
@@ -69,21 +70,13 @@ public class Cards_Adapters extends RecyclerView.Adapter<Cards_Adapters.Students
     public void onBindViewHolder(@NonNull @NotNull StudentsViewHolder holder, int position) {
         if (list.size()>0){
          //   holder.setIsRecyclable(false);
-            String model= list.get(position);
-            Glide.with(context).asGif().load(R.raw.loading).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.ic_pro);
-            Glide.with(context).asBitmap().load(model).diskCacheStrategy(DiskCacheStrategy.ALL).into(new CustomTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    holder.ic_img.setVisibility(View.VISIBLE);
-                    holder.ic_pro.setVisibility(View.GONE);
-                    holder.ic_img.setImageBitmap(resource);
-                }
-
-                @Override
-                public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                }
-            });
+            String model = list.get(position);
+            Glide.with(context).load(R.raw.loading).into(holder.ic_pro);
+            new Handler().postDelayed(() -> {
+                holder.ic_pro.setVisibility(View.GONE);
+                holder.ic_img.setVisibility(View.VISIBLE);
+                Glide.with(context).asBitmap().load(model).into(holder.ic_img);
+            },300);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -92,6 +85,7 @@ public class Cards_Adapters extends RecyclerView.Adapter<Cards_Adapters.Students
                     if (Type == Utils.Frames){
                         context.startActivity(new Intent(context, CreateFramePhoto_Activity.class)
                                 .putExtra("type", Type)
+                                .putStringArrayListExtra("previewList",list)
                                 .putExtra("Link", model));
                     }
                     else {

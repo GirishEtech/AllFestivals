@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.View;
@@ -41,10 +42,13 @@ public class ColorBox {
     Activity activity;
     Dialog dialog;
 
-    public ColorBox(Activity activity, ColorListner listner, Context context) {
+    private String colorSettingType;
+
+    public ColorBox(Activity activity, ColorListner listner, Context context,String colorSettingType) {
         this.context = context;
         this.activity = activity;
         this.listner = listner;
+        this.colorSettingType = colorSettingType;
     }
 
 
@@ -87,9 +91,13 @@ public class ColorBox {
             dialog.dismiss();
         });
         btnDone.setOnClickListener(view1 -> {
-            listner.setDrawable(colors);
             dialog.dismiss();
-            listner.setDrawable(colors);
+            if (colorSettingType.equals("GRADIANT")){
+                listner.setBackground(drawable);
+            }
+            else {
+                listner.setDrawable(colors);
+            }
         });
         dialog.show();
     }
@@ -116,4 +124,6 @@ public class ColorBox {
 
 interface ColorListner {
     public void setDrawable(int colors[]);
+
+    public void setBackground(GradientDrawable drawable);
 }

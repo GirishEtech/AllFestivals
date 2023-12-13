@@ -72,52 +72,54 @@ public class Frames_Fragment extends Fragment {
     View view;
     RecyclerView recyclerView;
     Activity activity;
-    ArrayList<String> list=new ArrayList<>();
+    ArrayList<String> list = new ArrayList<>();
     Cards_Adapters quotation_adapters;
     ViewDialog viewDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_gif, container, false);
-        activity=getActivity();
-        if (AllCategory_Activity.tv_title!=null){
+        view = inflater.inflate(R.layout.fragment_gif, container, false);
+        activity = getActivity();
+        if (AllCategory_Activity.tv_title != null) {
             AllCategory_Activity.tv_title.setText(Utils.Frames);
         }
-        viewDialog=new ViewDialog(activity);
-        recyclerView=view.findViewById(R.id.RecyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(activity,Utils.Span_Count));
-        quotation_adapters=new Cards_Adapters(activity,list,Utils.Frames);
+        viewDialog = new ViewDialog(activity);
+        recyclerView = view.findViewById(R.id.RecyclerView);
+        recyclerView.setLayoutManager(new GridLayoutManager(activity, Utils.Span_Count));
+        quotation_adapters = new Cards_Adapters(activity, list, Utils.Frames);
         recyclerView.setAdapter(quotation_adapters);
         Get_Storage();
         return view;
     }
+
     private void Get_Storage() {
         list.clear();
         view.findViewById(R.id.tv_no).setVisibility(View.GONE);
-        StorageReference listRef = FirebaseStorage.getInstance().getReference(Utils.categoryModel.getPath()+"/"+Utils.Frames);
+        StorageReference listRef = FirebaseStorage.getInstance().getReference(Utils.categoryModel.getPath() + "/" + Utils.Frames);
 
         listRef.listAll()
                 .addOnSuccessListener(new OnSuccessListener<ListResult>() {
                     @Override
                     public void onSuccess(ListResult listResult) {
-                        if (listResult.getItems().size()==0){
+                        if (listResult.getItems().size() == 0) {
                             view.findViewById(R.id.tv_no).setVisibility(View.VISIBLE);
                         }
                         for (StorageReference prefix : listResult.getPrefixes()) {
-                            Log.e("Path",""+prefix.getName());
+                            Log.e("Path", "" + prefix.getName());
                             // All the prefixes under listRef.
                             // You may call listAll() recursively on them.
                         }
                         for (StorageReference item : listResult.getItems()) {
                             // All the items under listRef.
-                            Log.e("Path",""+item.getPath());
+                            Log.e("Path", "" + item.getPath());
                             item.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     list.add(uri.toString());
                                     quotation_adapters.notifyDataSetChanged();
-                                    Log.e("url",uri.toString());
+                                    Log.e("url", uri.toString());
                                 }
                             });
                         }
@@ -136,7 +138,7 @@ public class Frames_Fragment extends Fragment {
         super.setUserVisibleHint(true);
 
         if (this.isVisible()) {
-            if (AllCategory_Activity.tv_title!=null){
+            if (AllCategory_Activity.tv_title != null) {
                 AllCategory_Activity.tv_title.setText(Utils.Frames);
             }
         }

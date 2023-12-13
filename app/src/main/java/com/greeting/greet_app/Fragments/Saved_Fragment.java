@@ -29,6 +29,7 @@ import com.greeting.greet_app.MainActivity;
 import com.greeting.greet_app.R;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -47,7 +48,6 @@ public class Saved_Fragment extends BaseFragment {
     private ViewGroup container;
 
     private LayoutInflater inflater;
-
 
 
     public Saved_Fragment() {
@@ -95,40 +95,46 @@ public class Saved_Fragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-       // Toast.makeText(requireContext(), "this is CreateView", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(requireContext(), "this is CreateView", Toast.LENGTH_SHORT).show();
         this.inflater = inflater;
         this.container = container;
         this.savedInstanceState = savedInstanceState;
         view = inflater.inflate(R.layout.fragment_saved, container, false);
-        refresh();
         Set_Tab_layout();
         return view;
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
-        if(view != null){
-          refresh();
+        if (view != null) {
+            refresh();
         }
         super.onAttach(context);
     }
 
     private void refresh() {
-       // Fragment frg  = (BaseFragment) getActivity().getSupportFragmentManager().findViewById(R.id.frame);
+        // Fragment frg  = (BaseFragment) getActivity().getSupportFragmentManager().findViewById(R.id.frame);
         final FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
-        ft.detach(this);
-        ft.attach(this);
+        Fragment fragment = requireActivity().getSupportFragmentManager().findFragmentById(R.id.frame);
+        ft.detach(fragment);
+        ft.attach(fragment);
         ft.commit();
+        Set_Tab_layout();
     }
 
     @Override
     public void onDetach() {
+        final FragmentManager main = requireActivity().getSupportFragmentManager();
+        main.popBackStack();
+        onDestroy();
+        Toast.makeText(requireContext(), "this is Detach", Toast.LENGTH_SHORT).show();
         super.onDetach();
     }
 
     private void Set_Tab_layout() {
         activity = getActivity();
         tab_name_list.clear();
+        tab_icon_list.clear();
         tab_name_list.add(getString(R.string.Gifs));
         tab_name_list.add(getString(R.string.Cards));
         tab_name_list.add(getString(R.string.All_Quotes));
@@ -145,7 +151,6 @@ public class Saved_Fragment extends BaseFragment {
         viewPageAdapter.addFragment(new Saved_Gif_Fragment(), getString(R.string.Gifs));
         viewPageAdapter.addFragment(new Saved_Cards_Fragment(), getString(R.string.Cards));
         viewPageAdapter.addFragment(new Saved_Quotation_Fragment(), getString(R.string.All_Quotes));
-        // viewPageAdapter.addFragment(new Gif_Fragment(), getString(R.string.Emoji));
         viewPageAdapter.addFragment(new Saved_Frames_Fragment(), getString(R.string.Frames));
         viewPageAdapter.addFragment(new Saved_Sticker_Fragment(), getString(R.string.Stickers));
         viewPager.setAdapter(viewPageAdapter);
@@ -157,8 +162,7 @@ public class Saved_Fragment extends BaseFragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Set_Tab1();
-                Log.i("a", "as");
-
+                Log.i("a", "Tab Text " + tab.getText());
             }
 
             @Override
@@ -171,7 +175,6 @@ public class Saved_Fragment extends BaseFragment {
 
             }
         });
-        // for (int i = 0; i < tabLayout.getTabCount(); i++) {tabLayout.getTabAt(i).setIcon(image[i]);}
     }
 
     private void Set_Tab() {
@@ -179,7 +182,6 @@ public class Saved_Fragment extends BaseFragment {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             tab.setCustomView(viewPageAdapter.getTabView(i));
             Log.i("a", "as");
-
         }
     }
 
@@ -209,12 +211,11 @@ public class Saved_Fragment extends BaseFragment {
         private ArrayList<Fragment> fragments;
         private ArrayList<String> titles;
 
-        public void clearAll()
-        {
+        public void clearAll() {
             fragments.clear();
-            titles.clear();
             notifyDataSetChanged();
         }
+
         private FragmentManager fragmentManager;
 
         public ViewPageAdapter(FragmentManager fm) {
@@ -234,9 +235,7 @@ public class Saved_Fragment extends BaseFragment {
             return fragments.size();
         }
 
-        private void refresh(){
-            fragmentManager.beginTransaction().commit();
-        }
+
         public void addFragment(Fragment fragment, String title) {
             fragments.add(fragment);
             titles.add(title);
@@ -247,7 +246,7 @@ public class Saved_Fragment extends BaseFragment {
             return super.getItemPosition(object);
         }
 
-        
+
         public View getTabView(int position) {
             // Given you have a custom layout in `res/layout/custom_tab.xml` with a TextView and ImageView
             View v = LayoutInflater.from(activity).inflate(R.layout.tab_item, null);

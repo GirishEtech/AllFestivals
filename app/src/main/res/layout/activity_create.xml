@@ -93,19 +93,53 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/main_img"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
-                            android:background="#616161"
+                            android:visibility="gone"
                             android:scaleType="centerCrop" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/Layoutgif"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/bg_color"
+                            android:layout_gravity="center_vertical">
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/tempImage"
+                                android:layout_width="140dp"
+                                android:layout_height="0dp"
+                                android:layout_marginTop="66dp"
+                                android:layout_marginBottom="20dp"
+                                android:scaleType="centerCrop"
+                                app:layout_constraintBottom_toTopOf="@+id/textView"
+                                app:layout_constraintStart_toStartOf="@+id/textView"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="48dp"
+                                android:fontFamily="@font/regular"
+                                android:text="@string/Select_Background"
+                                android:textColor="#4D4D78"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tempImage" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                         <View
                             android:id="@+id/main_view"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="#007FFFD4" />
+                            android:layout_height="match_parent" />
                     </com.xiaopo.flying.sticker.StickerView>
 
                 </RelativeLayout>
@@ -284,7 +318,7 @@
             android:background="@color/search_bg_color"
             android:orientation="vertical"
             android:padding="5dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:weightSum="4">
 
             <LinearLayout
@@ -436,24 +470,52 @@
             </LinearLayout>
 
         </LinearLayout>
-
         <LinearLayout
-            android:id="@+id/color"
+            android:id="@+id/colorForbg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="90dp"
+            android:layout_marginBottom="96dp"
             android:orientation="vertical"
             android:padding="5dp"
-            android:visibility="gone"
-            android:weightSum="4">
+            android:background="@color/search_bg_color"
+            android:visibility="gone">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/simple_Color"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingRight="4dp"
+                android:text="@string/Color"
+                android:textAllCaps="true"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+
+                <top.defaults.colorpicker.ColorWheelPalette
+                    android:id="@+id/color_bg"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/simple_Color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="10dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </LinearLayout>
         </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/bg_image"
@@ -479,29 +541,54 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="90dp"
+            android:layout_marginBottom="95dp"
             android:orientation="vertical"
+            android:background="@color/search_bg_color"
             android:padding="5dp"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/grediant_Color"
+            <TextView
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/Gradient"
+                android:textSize="15sp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/white"
+                />
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              >
+              <top.defaults.colorpicker.ColorWheelPalette
+                  android:id="@+id/Gradiant_bgPalate"
+                  android:layout_width="80dp"
+                  android:layout_height="80dp"
+                  android:layout_marginStart="3dp"
+                  android:layout_marginBottom="10dp"
+                  android:layout_marginTop="10dp" />
+
+              <androidx.recyclerview.widget.RecyclerView
+                  android:id="@+id/grediant_Color"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:layout_gravity="center"
+                  android:layout_marginStart="10dp"
+                  app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+          </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/bottom_color_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_above="@id/rv_cancel_done"
             android:background="@color/search_bg_color"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:padding="5dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -519,26 +606,26 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="16sp" />
 
-               <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   >
-                   <top.defaults.colorpicker.ColorWheelPalette
-                       android:id="@+id/add_color_layout"
-                       android:layout_width="50dp"
-                       android:layout_height="50dp"
-                       android:layout_marginTop="10dp" />
-                   <androidx.recyclerview.widget.RecyclerView
-                       android:id="@+id/listColors"
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:orientation="horizontal"
-                       android:layout_marginBottom="10dp"
-                       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                       android:layout_margin="5sp"
-                       />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-               </LinearLayout>
+                    <top.defaults.colorpicker.ColorWheelPalette
+                        android:id="@+id/add_color_layout"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listColors"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -558,26 +645,26 @@
                     android:textColor="@android:color/darker_gray"
                     android:textSize="16sp" />
 
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="horizontal"
-               >
-               <top.defaults.colorpicker.ColorWheelPalette
-                   android:id="@+id/add_gradiant_color"
-                   android:layout_width="50dp"
-                   android:layout_height="50dp"
-                   android:layout_marginTop="10dp" />
-               <androidx.recyclerview.widget.RecyclerView
-                   android:id="@+id/listGradiant"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:orientation="horizontal"
-                   android:layout_marginBottom="10dp"
-                   app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                   android:layout_margin="5sp"
-                   />
-           </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <top.defaults.colorpicker.ColorWheelPalette
+                        android:id="@+id/add_gradiant_color"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listGradiant"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -606,10 +693,10 @@
                         android:id="@+id/alphaSeekBar"
                         android:layout_width="328dp"
                         android:layout_height="30dp"
+                        android:backgroundTint="@color/yellow"
+                        android:foregroundTintMode="screen"
                         app:alphaSeekBarDirection="LEFT_TO_RIGHT"
                         app:alphaSeekBarHeight="17dp"
-                        android:foregroundTintMode="screen"
-                        android:backgroundTint="@color/yellow"
                         app:alphaSeekBarShowThumb="true" />
 
                     <TextView
@@ -850,9 +937,9 @@
                 android:id="@+id/seekLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
                 android:visibility="gone"
-                android:layout_marginBottom="10dp"
                 app:layout_constraintBottom_toTopOf="@+id/ic_done"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
