@@ -20,6 +20,7 @@ import com.greeting.greet_app.CreateFramePhoto_Activity;
 import com.greeting.greet_app.Preview_Activity;
 import com.greeting.greet_app.R;
 import com.greeting.greet_app.Utils;
+import com.theophrast.ui.widget.SquareImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -60,8 +61,8 @@ public class Frames_Adapters extends RecyclerView.Adapter<Frames_Adapters.Studen
             new Handler().postDelayed(() -> {
                 holder.ic_pro.setVisibility(View.GONE);
                 holder.ic_img.setVisibility(View.VISIBLE);
-                Glide.with(context).asBitmap().load(model).into(holder.ic_img);
-            }, 300);
+                Glide.with(context).load(model).into(holder.ic_img);
+            }, 200);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -78,7 +79,7 @@ public class Frames_Adapters extends RecyclerView.Adapter<Frames_Adapters.Studen
 
     class StudentsViewHolder extends RecyclerView.ViewHolder {
         TextView text;
-        ImageView ic_img, ic_pro;
+        SquareImageView ic_img, ic_pro;
 
         public StudentsViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -48,8 +49,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.fxn.stash.Stash;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.greeting.greet_app.Adapters.BG_Adapters;
 import com.greeting.greet_app.Adapters.Frames_Adapters;
+import com.greeting.greet_app.Model.StickerView;
 import com.xiaopo.flying.sticker.BitmapStickerIcon;
 import com.xiaopo.flying.sticker.DeleteIconEvent;
 import com.xiaopo.flying.sticker.FlipHorizontallyEvent;
@@ -64,17 +68,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CreateFramePhoto_Activity extends AppCompatActivity implements  View.OnTouchListener,BG_Adapters.OnClickListener, Frames_Adapters.frameListner {
 
+    String TAG = "CreateFramePhoto_Activity";
     private FrameBox dialog;
-
-    private static final String TAG = "Touch";
+    private static DatabaseReference UserSavedref;
     public static final int PERM_RQST_CODE = 110;
     private com.xiaopo.flying.sticker.StickerView stickerView;
     private TextSticker sticker;
+    String mainLink = "";
     private com.greeting.greet_app.sticker.TextSticker TextSticker;
-
+    ArrayList<String> Saved_list = new ArrayList<>();
     private ArrayList<String> arrFrameList;
     private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
     int RESULT_LOAD_IMG = 100;
@@ -146,12 +152,14 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements  Vie
         main_view = findViewById(R.id.main_view);
         quotation_adapters_bg = new BG_Adapters(getApplicationContext(), list_bg, Utils.Background);
         Get_Storage();
+        UserSavedref = FirebaseDatabase.getInstance().getReference(Utils.UserSavedItems);
         quotation_adapters_bg.setOnClickListener(this);
         String model = getIntent().getStringExtra("Link");
+        mainLink = model;
         Glide.with(CreateFramePhoto_Activity.this).load(model).into(main_img);
         ic_backBtn.setOnClickListener(view -> {
             onBackPressed();
-            Log.i(TAG, "onCreate: BackPress Clicked");
+            Log.i("TAG", "onCreate: BackPress Clicked");
         });
 
         camera_img.setOnClickListener(new View.OnClickListener() {
@@ -166,22 +174,18 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements  Vie
         add_Frame.setOnClickListener(view -> {
             Show_Frame_Dialog();
         });
-        findViewById(R.id.tv_done).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                testLock();
-                Toast.makeText(activity, "Saved Successfully", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
         llDownload.setOnClickListener(view -> {
             Bitmap bitmap = stickerView.createBitmap();
             download_img(bitmap,false);
         });
         tv_done.setOnClickListener(view -> {
             stickerView.setLocked(true);
-            Bitmap bitmap = stickerView.createBitmap();
-            download_img(bitmap,true);
+            String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+            String Key = UserSavedref.push().getKey();
+            UserSavedref.child(android_id).child(Utils.Frames).child(Key).setValue(mainLink);
+            Saved_list.add(mainLink);
+            Toast.makeText(activity, "Saved Successfully", Toast.LENGTH_SHORT).show();
+            finish();
         });
         llShare.setOnClickListener(view -> {
             share_img();
@@ -299,21 +303,29 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements  Vie
                     imgfolder.mkdir();
                     File file = new File(imgfolder, "shared_img.png");
                     FileOutputStream stream = new FileOutputStream(file);
-                    Bitmap bitmap = stickerView.createBitmap();
+                    Bitmap bitmap = getBitmapFromStickerView(stickerView);
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     stream.flush();
                     stream.close();
                     uri = FileProvider.getUriForFile(getApplicationContext(),
                             "com.greeting.greet_app.fileprovider", file);
-                } catch (IOException e) {
+                    Intent shareintent = new Intent(Intent.ACTION_SEND);
+                    shareintent.setType("image/*");
+                    shareintent.putExtra(Intent.EXTRA_STREAM, uri);
+                    shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    Intent chooser = Intent.createChooser(shareintent, "share");
+                    List<ResolveInfo> resInfoList = this.getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
 
+                    for (ResolveInfo resolveInfo : resInfoList) {
+                        String packageName = resolveInfo.activityInfo.packageName;
+                        this.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    }
+
+                    startActivity(chooser);
+                    Snackbar.make(findViewById(R.id.rv_main), "Shared", Snackbar.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Log.i(TAG, "share_img: ERROR "+e);
                 }
-                Intent shareintent = new Intent(Intent.ACTION_SEND);
-                shareintent.setType("image/*");
-                shareintent.putExtra(Intent.EXTRA_STREAM, uri);
-                shareintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(shareintent, "share"));
-                Snackbar.make(findViewById(R.id.rv_main), "Shared", Snackbar.LENGTH_LONG).show();
             });
         },1500);
 
@@ -601,7 +613,19 @@ public class CreateFramePhoto_Activity extends AppCompatActivity implements  Vie
 
     @Override
     public void setFrame(String frame) {
+        mainLink = frame;
         Glide.with(CreateFramePhoto_Activity.this).load(frame).into(main_img);
         dialog.hideDialog();
+    }
+    public  Bitmap getBitmapFromStickerView(com.xiaopo.flying.sticker.StickerView stickerView) {
+        // Enable drawing cache on the StickerView
+        stickerView.setDrawingCacheEnabled(true);
+        // Create a Bitmap from the drawing cache
+        Bitmap bitmap = Bitmap.createBitmap(stickerView.getDrawingCache());
+
+        // Disable drawing cache to release resources
+        stickerView.setDrawingCacheEnabled(false);
+
+        return bitmap;
     }
 }

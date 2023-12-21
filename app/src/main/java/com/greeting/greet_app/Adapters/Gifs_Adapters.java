@@ -34,6 +34,7 @@ import com.greeting.greet_app.Preview_Activity;
 import com.greeting.greet_app.R;
 import com.greeting.greet_app.Utils;
 import com.squareup.picasso.Picasso;
+import com.theophrast.ui.widget.SquareImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -90,8 +91,8 @@ public class Gifs_Adapters extends RecyclerView.Adapter<Gifs_Adapters.StudentsVi
             new Handler().postDelayed(() -> {
                 holder.ic_pro.setVisibility(View.GONE);
                 holder.img.setVisibility(View.VISIBLE);
-                Glide.with(context).asBitmap().load(model).into(holder.img);
-            },300);
+                Glide.with(context).load(model).into(holder.img);
+            },200);
 
 //            Glide.with(context).asGif().load(model).diskCacheStrategy(DiskCacheStrategy.ALL).into(new CustomTarget<GifDrawable>() {
 //                @Override
@@ -128,7 +129,7 @@ public class Gifs_Adapters extends RecyclerView.Adapter<Gifs_Adapters.StudentsVi
 
     class StudentsViewHolder extends RecyclerView.ViewHolder {
         TextView text;
-        ImageView img, ic_pro;
+        SquareImageView img, ic_pro;
 
         Drawable drawable;
 

@@ -116,7 +116,7 @@
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
                             android:background="@android:color/transparent"
-                            android:scaleType="centerCrop" />
+                            android:scaleType="fitXY" />
 
                         <View
                             android:id="@+id/main_view"
@@ -166,7 +166,7 @@
                     android:gravity="center"
                     android:text="Add Photo"
                     android:textColor="@color/white"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/_9ssp" />
             </LinearLayout>
 
             <LinearLayout
@@ -200,7 +200,7 @@
                     android:gravity="center"
                     android:text="@string/Frames"
                     android:textColor="@color/white"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/_9ssp" />
             </LinearLayout>
 
             <LinearLayout
@@ -225,7 +225,7 @@
                     android:gravity="center"
                     android:text="Share"
                     android:textColor="@color/white"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/_9ssp" />
             </LinearLayout>
 
             <LinearLayout
@@ -262,7 +262,7 @@
                     android:gravity="center"
                     android:text="Download"
                     android:textColor="@color/white"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/_9ssp" />
             </LinearLayout>
 
 

@@ -157,6 +157,7 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
                 } else {
                     Log.i(TAG, "onPageSelected: Array Size ->" + previewList.size());
                     Link = previewList.get(position);
+                    Link = previewList.get(position);
                 }
             }
 

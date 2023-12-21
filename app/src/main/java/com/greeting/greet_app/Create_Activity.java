@@ -126,7 +126,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     PointF start = new PointF();
     PointF mid = new PointF();
     float oldDist = 1f;
-    ImageView main_img, ic_backBtn,tempImage;
+    ImageView main_img, ic_backBtn, tempImage;
     Activity activity;
     Toolbar toolbar;
     String UserMobileId = "";
@@ -171,6 +171,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                         // Here, no request code
                         Intent data = result.getData();
                         Bitmap photo = (Bitmap) data.getExtras().get("data");
+                        setLayoutParams();
                         main_img.setImageBitmap(photo);
                     }
                 }
@@ -362,10 +363,14 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                             .show(view, new ColorPickerPopup.ColorPickerObserver() {
                                 @Override
                                 public void onColorPicked(int color) {
-                                    setLayoutParams();
-                                    Bitmap bitmap = Bitmap.createBitmap(main_img.getWidth(), main_img.getHeight(), Bitmap.Config.ARGB_8888);
-                                    bitmap.eraseColor(color);
-                                    main_img.setImageBitmap(bitmap);
+                                    try {
+                                        setLayoutParams();
+                                        Bitmap bitmap = Bitmap.createBitmap(main_img.getWidth(), main_img.getHeight(), Bitmap.Config.ARGB_8888);
+                                        bitmap.eraseColor(color);
+                                        main_img.setImageBitmap(bitmap);
+                                    } catch (Exception e) {
+                                        Log.e(TAG, "onColorPicked: Exception", e);
+                                    }
                                 }
                             });
                 });
@@ -419,6 +424,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 dataAdapter1.setOnClickListener(new DataAdapter.OnClickListener() {
                     @Override
                     public void onClick(int position, SimpleColor model) {
+                        setLayoutParams();
                         main_img.setImageResource(model.getColorToUse());
                         setAlphaForBackground();
                     }
@@ -429,6 +435,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         dataAdapter.setOnClickListener(new DataAdapter.OnClickListener() {
             @Override
             public void onClick(int position, SimpleColor model) {
+                setLayoutParams();
                 main_img.setImageResource(arrayList.get(position).getColorToUse());
                 setAlphaForBackground();
             }
@@ -506,6 +513,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         stickersAdapter.setOnClickListener(new StickersAdapter.OnClickListener() {
             @Override
             public void onClick(int position) {
+                setLayoutParams();
+                stickerView.setBackgroundColor(getColor(R.color.bg_color));
                 Toast.makeText(activity, "as" + position, Toast.LENGTH_SHORT).show();
                 loadSticker(list.get(position));
             }
@@ -778,6 +787,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+                setLayoutParams();
                 tv_feedback_text = v.findViewById(R.id.tv_feedback_text);
                 testAdd(tv_feedback_text.getText().toString() + "");
                 Log.i(TAG, "onClick: " + tv_feedback_text.getText().toString());
@@ -878,6 +888,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                setLayoutParams();
                 main_img.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -1128,7 +1139,12 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     }
 
     public com.greeting.greet_app.sticker.TextSticker getSelected() {
-        return (com.greeting.greet_app.sticker.TextSticker) stickerView.getCurrentSticker();
+        try {
+            return (com.greeting.greet_app.sticker.TextSticker) stickerView.getCurrentSticker();
+        } catch (Exception e) {
+            Log.e(TAG, "getSelected: ERROR BUT NO PROBLEM", e);
+        }
+        return null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -1189,7 +1205,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     }
 
     void setLayoutParams() {
-        if (layoutGif.getVisibility() == View.VISIBLE){
+        if (layoutGif.getVisibility() == View.VISIBLE) {
             layoutGif.setVisibility(View.GONE);
             main_img.setVisibility(View.VISIBLE);
         }
