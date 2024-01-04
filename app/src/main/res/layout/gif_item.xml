@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/carview"
     android:layout_width="@dimen/_70sdp"
     android:layout_height="@dimen/_70sdp"
-    android:id="@+id/carview"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="@dimen/_5sdp"
-    android:layout_margin="@dimen/_3sdp">
+    android:layout_margin="@dimen/_3sdp"
+    app:cardCornerRadius="@dimen/_5sdp">
+
     <com.theophrast.ui.widget.SquareImageView
         android:id="@+id/ic_img"
         android:layout_width="@dimen/_75sdp"
         android:layout_height="@dimen/_75sdp"
-        app:hwRatio="1"
-        android:scaleType="fitXY"
-        />
+        android:scaleType="centerCrop"
+        app:hwRatio="1" />
+
     <com.theophrast.ui.widget.SquareImageView
         android:id="@+id/ic_pro"
         android:layout_width="@dimen/_75sdp"
         android:layout_height="@dimen/_75sdp"
         android:scaleType="centerCrop"
-        app:hwRatio="1"
-        />
+        app:hwRatio="1" />
 </androidx.cardview.widget.CardView>

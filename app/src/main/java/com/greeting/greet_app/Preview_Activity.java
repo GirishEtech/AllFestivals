@@ -133,7 +133,12 @@ public class Preview_Activity extends AppCompatActivity implements View.OnTouchL
             //main_img.setOnTouchListener(this);
         }
         Log.d("data", "Slider Items" + sliderItems.toString());
-        viewPager2.setAdapter(new SlidersAdapter(sliderItems, viewPager2, Preview_Activity.this));
+        if (Type.equals(Utils.Gifs)){
+            viewPager2.setAdapter(new SlidersAdapter(sliderItems, viewPager2, Preview_Activity.this,Utils.Gifs));
+        }
+        else{
+            viewPager2.setAdapter(new SlidersAdapter(sliderItems, viewPager2, Preview_Activity.this,"SAMPLE"));
+        }
         viewPager2.setClipToPadding(false);
         viewPager2.setClipChildren(false);
         int position = Stash.getInt("position");

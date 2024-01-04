@@ -98,8 +98,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
-                            android:visibility="gone"
-                            android:scaleType="centerCrop" />
+                            android:scaleType="fitXY"
+                            android:visibility="gone" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/Layoutgif"
@@ -472,6 +472,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/colorForbg"
             android:layout_width="match_parent"
@@ -479,9 +480,9 @@
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="96dp"
+            android:background="@color/search_bg_color"
             android:orientation="vertical"
             android:padding="5dp"
-            android:background="@color/search_bg_color"
             android:visibility="gone">
 
             <TextView
@@ -503,16 +504,16 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginStart="3dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/simple_Color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:orientation="horizontal"
                     android:layout_marginStart="10dp"
+                    android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             </LinearLayout>
@@ -533,7 +534,10 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/simple_image"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 android:layout_width="match_parent"
+                app:spanCount="4"
+                android:orientation="vertical"
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
@@ -544,42 +548,42 @@
             android:layout_above="@id/rv_cancel_done"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="95dp"
-            android:orientation="vertical"
             android:background="@color/search_bg_color"
+            android:orientation="vertical"
             android:padding="5dp"
             android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/Gradient"
-                android:textSize="15sp"
                 android:layout_marginStart="13dp"
                 android:layout_marginTop="5dp"
+                android:text="@string/Gradient"
                 android:textColor="@color/white"
-                />
-          <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              >
-              <top.defaults.colorpicker.ColorWheelPalette
-                  android:id="@+id/Gradiant_bgPalate"
-                  android:layout_width="80dp"
-                  android:layout_height="80dp"
-                  android:layout_marginStart="3dp"
-                  android:layout_marginBottom="10dp"
-                  android:layout_marginTop="10dp" />
+                android:textSize="15sp" />
 
-              <androidx.recyclerview.widget.RecyclerView
-                  android:id="@+id/grediant_Color"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:layout_gravity="center"
-                  android:layout_marginStart="10dp"
-                  app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-          </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <top.defaults.colorpicker.ColorWheelPalette
+                    android:id="@+id/Gradiant_bgPalate"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/grediant_Color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -721,19 +725,24 @@
         <LinearLayout
             android:id="@+id/bottom_add_sticker_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_165sdp"
             android:layout_above="@id/rv_cancel_done"
             android:background="@color/search_bg_color"
             android:orientation="vertical"
-            android:padding="5dp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_5sdp"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_8sdp"
             android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/Choose_Sticker_RecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/_3sdp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="4" />
         </LinearLayout>
 

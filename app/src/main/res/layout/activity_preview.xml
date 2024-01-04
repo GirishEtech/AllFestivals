@@ -65,6 +65,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="290dp">
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/main_img"
                 android:layout_width="match_parent"
@@ -75,10 +76,11 @@
                 android:adjustViewBounds="true"
                 app:riv_corner_radius="12sp" />
         </FrameLayout>
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPagerImageSlider"
             android:layout_width="match_parent"
-            android:layout_height="290dp"
+            android:layout_height="@dimen/_250sdp"
             android:layout_below="@id/carview"
             android:layout_marginTop="30dp"
             android:paddingLeft="40dp"

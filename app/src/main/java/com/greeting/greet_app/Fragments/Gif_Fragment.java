@@ -1,6 +1,7 @@
 package com.greeting.greet_app.Fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -25,6 +26,7 @@ import com.google.firebase.storage.StorageReference;
 import com.greeting.greet_app.Adapters.Gifs_Adapters;
 import com.greeting.greet_app.Adapters.Quotation_Adapters;
 import com.greeting.greet_app.AllCategory_Activity;
+import com.greeting.greet_app.MainActivity;
 import com.greeting.greet_app.R;
 import com.greeting.greet_app.Utils;
 
@@ -88,7 +90,9 @@ public class Gif_Fragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_gif, container, false);
         activity=getActivity();
-
+        view.findViewById(R.id.btn_home).setOnClickListener(view1 -> {
+            startActivity(new Intent(requireActivity(), MainActivity.class));
+        });
         recyclerView=view.findViewById(R.id.RecyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(activity,Utils.Span_Count));
         quotation_adapters=new Gifs_Adapters(activity,list);

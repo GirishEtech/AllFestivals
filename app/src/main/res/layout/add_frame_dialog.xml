@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/_320sdp"
     android:background="@android:color/transparent"
-    android:layout_height="@dimen/_300sdp"
+    android:layout_height="@dimen/_280sdp"
    >
 
     <FrameLayout
+        android:id="@+id/content"
         android:layout_width="@dimen/_290sdp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_add_frame_dialog"
         android:minHeight="250dp"
+        android:layout_margin="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -32,18 +34,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
+        android:layout_marginTop="@dimen/_12sdp"
+        app:layout_constraintBottom_toTopOf="@+id/content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/ic_Cross_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
             android:layout_gravity="end"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_5sdp"
-            android:layout_marginTop="@dimen/_1sdp"
-            android:src="@drawable/ic_cross"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/ic_cross" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -16,11 +17,9 @@ import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Layout;
@@ -30,12 +29,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,10 +45,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -70,8 +65,9 @@ import com.greeting.greet_app.Adapters.Gifs_Adapters;
 import com.greeting.greet_app.Adapters.GradiantColorAdapter;
 import com.greeting.greet_app.Adapters.StickersAdapter;
 import com.greeting.greet_app.Model.SimpleColor;
-import com.madrapps.pikolo.RGBColorPicker;
 import com.rtugeek.android.colorseekbar.AlphaSeekBar;
+import com.skydoves.colorpickerview.ColorPickerDialog;
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 import com.xiaopo.flying.sticker.BitmapStickerIcon;
 import com.xiaopo.flying.sticker.DeleteIconEvent;
 import com.xiaopo.flying.sticker.DrawableSticker;
@@ -84,15 +80,14 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import top.defaults.colorpicker.ColorPickerPopup;
 import top.defaults.colorpicker.ColorWheelPalette;
 
-public class Create_Activity extends AppCompatActivity implements View.OnTouchListener, ColorListner {
+public class Create_Activity extends AppCompatActivity implements View.OnTouchListener, ColorListner, SimpleColorListner {
 
     top.defaults.colorpicker.ColorWheelPalette color_bg, GradiantColorBg;
 
+    MyColorPicker bgPicker, TextPicker;
     ConstraintLayout layoutGif;
     private int originalColor = 1;
     private ColorBox colorBox;
@@ -252,7 +247,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         Glide.with(this)
                 .asGif().load(R.raw.bg_gif)
                 .into(tempImage);
-
+        TextPicker = new MyColorPicker(this, this, this, "TEXT");
+        bgPicker = new MyColorPicker(this, this, this, "BACKGROUND");
         Get_Storage();
         ic_backBtn.setOnClickListener(view -> {
             onBackPressed();
@@ -351,12 +347,36 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             public void onClick(View view) {
                 colorForbg.setVisibility(View.VISIBLE);
                 color_bg.setOnClickListener(view1 -> {
-                    new ColorPickerPopup.Builder(Create_Activity.this)
+                    bgPicker.showDialog();
+                    /*new ColorPickerDialog.Builder(Create_Activity.this)
+                            .setTitle("ColorPicker Dialog")
+                            .setPreferenceName("MyColorPickerDialog")
+                            .setPositiveButton(getString(R.string.Confirm),
+                                    (ColorEnvelopeListener) (envelope, fromUser) -> {
+                                        try {
+
+                                        } catch (Exception e) {
+                                            Log.e(TAG, "onColorPicked: Exception", e);
+                                        }
+                                    })
+                            .setNegativeButton(getString(R.string.Cancel),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    })
+                            .attachAlphaSlideBar(true) // the default value is true.
+                            .attachBrightnessSlideBar(true)  // the default value is true.
+                            .show();*/
+
+
+                    /*new ColorPickerPopup.Builder(Create_Activity.this)
                             .initialColor(Color.RED)
                             .enableBrightness(true)
                             .enableAlpha(true)
                             .okTitle("Choose")
-                            .cancelTitle("Cencel")
+                            .cancelTitle("Cancel")
                             .showIndicator(true)
                             .showValue(false)
                             .build()
@@ -372,7 +392,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                                         Log.e(TAG, "onColorPicked: Exception", e);
                                     }
                                 }
-                            });
+                            });*/
                 });
                 bottom_add_layout.setVisibility(View.VISIBLE);
                 color_bg.setVisibility(View.VISIBLE);
@@ -694,27 +714,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         isColor = true;
         TextSticker = getSelected();
         setSeekBarOposity();
-        new ColorPickerPopup.Builder(this)
-                .initialColor(Color.RED)
-                .enableBrightness(true)
-                .enableAlpha(true)
-                .okTitle("Choose")
-                .cancelTitle("Cencel")
-                .showIndicator(true)
-                .showValue(false)
-                .build()
-                .show(view, new ColorPickerPopup.ColorPickerObserver() {
-                    @Override
-                    public void onColorPicked(int color) {
-                        if (TextSticker != null) {
-                            TextSticker.setTextColor(color);
-                            originalColor = color;
-                            kavehColorAlphaSlider.setBackgroundTintList(ColorStateList.valueOf(color));
-                            stickerView.invalidate();
-                        }
-                    }
-                });
-        ;
+        TextPicker.showDialog();
     }
 
     public void setSeekBarOposity() {
@@ -748,9 +748,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             permission();
         } else {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                someActivityResultLauncher.launch(takePictureIntent);
-            }
+            someActivityResultLauncher.launch(takePictureIntent);
             Toast.makeText(this, "Permission is Granted", Toast.LENGTH_SHORT).show();
         }
     }
@@ -1127,6 +1125,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     public void setDrawable(int colors[]) {
         Log.i(TAG, "setDrawable: Listner is Click");
         if (TextSticker != null) {
+            TextSticker = (com.greeting.greet_app.sticker.TextSticker) stickerView.getCurrentSticker();
             TextSticker.setGradientColor(colors[0], colors[1]);
         }
         stickerView.invalidate();
@@ -1208,6 +1207,40 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         if (layoutGif.getVisibility() == View.VISIBLE) {
             layoutGif.setVisibility(View.GONE);
             main_img.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void setDrawable(GradientDrawable drawable, int Alpha, int progress) {
+        int percentage;
+        setLayoutParams();
+        if (progress == 0) {
+            percentage = 1;
+        } else {
+            int max = kavehColorAlphaBackground.getMaxProgress();
+            percentage = (int) ((int) progress / (float) max * 100.0f);
+            tv_opacity_perBg.setText("" + percentage + "%");
+        }
+        main_img.setImageDrawable(drawable);
+        kavehColorAlphaBackground.setAlphaValue(Alpha);
+        setAlphaForBackground();
+    }
+
+    @Override
+    public void setTextStickerColor(int color, int Alpha, int progress) {
+        int percentage;
+        if (TextSticker != null) {
+            TextSticker.setTextColor(color);
+            originalColor = color;
+            kavehColorAlphaSlider.setAlphaValue(Alpha);
+            if (progress == 0) {
+                percentage = 1;
+            } else {
+                int max = kavehColorAlphaSlider.getMaxProgress();
+                percentage = (int) ((int) progress / (float) max * 100.0f);
+                tv_opacity_perBg.setText("" + percentage + "%");
+            }
+            stickerView.invalidate();
         }
     }
 }

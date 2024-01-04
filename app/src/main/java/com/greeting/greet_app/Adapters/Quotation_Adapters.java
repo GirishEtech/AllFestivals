@@ -62,7 +62,7 @@ public class Quotation_Adapters extends RecyclerView.Adapter<Quotation_Adapters.
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull StudentsViewHolder holder, int position) {
-        if (list.size() > 0) {
+        if (!list.isEmpty()) {
             //   holder.setIsRecyclable(false);
             String model = list.get(position);
             holder.text.setText(model);

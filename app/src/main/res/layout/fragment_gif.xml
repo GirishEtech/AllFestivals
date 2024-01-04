@@ -1,34 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Gif_Fragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
-        android:id="@+id/RecyclerView"/>
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/tv_no"
-        android:visibility="gone"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:padding="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true">
-        <com.airbnb.lottie.LottieAnimationView
+        android:padding="@dimen/_50sdp"
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/_100sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <ImageView
             android:id="@+id/tv_delete_all"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_200sdp"
             android:layout_gravity="center"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            android:visibility="visible"
-            app:lottie_rawRes="@raw/error_failed"
-            app:lottie_speed="1" />
+            android:src="@drawable/data_not_found" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/bold_italic"
+            android:gravity="center"
+            android:text="@string/No_Data_Found"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15ssp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_home"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:src="@drawable/go_home_btn" />
     </LinearLayout>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

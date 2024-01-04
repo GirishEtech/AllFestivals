@@ -1,6 +1,7 @@
 package com.greeting.greet_app.Fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.greeting.greet_app.Adapters.Cards_Adapters;
 import com.greeting.greet_app.AllCategory_Activity;
+import com.greeting.greet_app.MainActivity;
 import com.greeting.greet_app.R;
 import com.greeting.greet_app.Utils;
 import com.greeting.greet_app.ViewDialog;
@@ -85,6 +87,9 @@ public class Frames_Fragment extends Fragment {
         if (AllCategory_Activity.tv_title != null) {
             AllCategory_Activity.tv_title.setText(Utils.Frames);
         }
+        view.findViewById(R.id.btn_home).setOnClickListener(view1 -> {
+            startActivity(new Intent(requireActivity(), MainActivity.class));
+        });
         viewDialog = new ViewDialog(activity);
         recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(activity, Utils.Span_Count));

@@ -42,6 +42,8 @@ public class ColorBox {
     Activity activity;
     Dialog dialog;
 
+
+
     private String colorSettingType;
 
     public ColorBox(Activity activity, ColorListner listner, Context context,String colorSettingType) {

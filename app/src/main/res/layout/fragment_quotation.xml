@@ -12,21 +12,36 @@
         android:id="@+id/RecyclerView"/>
     <LinearLayout
         android:id="@+id/tv_no"
-        android:visibility="gone"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:padding="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:layout_centerInParent="true">
-        <com.airbnb.lottie.LottieAnimationView
+        android:padding="@dimen/_50sdp"
+        android:visibility="gone">
+
+        <ImageView
             android:id="@+id/tv_delete_all"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_200sdp"
             android:layout_gravity="center"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            android:visibility="visible"
-            app:lottie_rawRes="@raw/error_failed"
-            app:lottie_speed="1" />
+            android:src="@drawable/data_not_found" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/bold_italic"
+            android:gravity="center"
+            android:text="@string/No_Data_Found"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_20ssp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_home"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:src="@drawable/go_home_btn" />
     </LinearLayout>
 </RelativeLayout>
