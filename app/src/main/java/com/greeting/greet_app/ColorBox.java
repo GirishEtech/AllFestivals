@@ -1,31 +1,22 @@
 package com.greeting.greet_app;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.cardview.widget.CardView;
 
-import com.madrapps.pikolo.RGBColorPicker;
-import com.madrapps.pikolo.listeners.SimpleColorSelectionListener;
-import com.skydoves.colorpickerview.ColorEnvelope;
-import com.skydoves.colorpickerview.ColorPickerDialog;
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
+import com.skydoves.colorpickerview.ColorPickerView;
+import com.skydoves.colorpickerview.listeners.ColorListener;
 
+import kotlin.jvm.functions.FunctionN;
 import top.defaults.colorpicker.ColorWheelView;
 
 public class ColorBox {
@@ -34,19 +25,20 @@ public class ColorBox {
     GradientDrawable drawable;
     Button btnCencel, btnDone;
     int[] colors;
+
+    GradientDrawable FinalDrawable;
     TextView txtfirst, txtsecond;
-    View view;
+    View outputTest;
     Context context;
-    CardView testBgColor;
-    ColorWheelView firstColor, SecondColor;
+    View testBgColor1, testBgColor2;
+    ColorPickerView firstColor, SecondColor;
     Activity activity;
     Dialog dialog;
 
 
-
     private String colorSettingType;
 
-    public ColorBox(Activity activity, ColorListner listner, Context context,String colorSettingType) {
+    public ColorBox(Activity activity, ColorListner listner, Context context, String colorSettingType) {
         this.context = context;
         this.activity = activity;
         this.listner = listner;
@@ -66,27 +58,43 @@ public class ColorBox {
         View v = activity.getLayoutInflater().inflate(R.layout.color_picker, null);
         dialog.setContentView(v);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        testBgColor = dialog.findViewById(R.id.outPutTest);
-        firstColor = dialog.findViewById(R.id.firstcolor);
-        SecondColor = dialog.findViewById(R.id.secondcolor);
+        testBgColor1 = (android.view.View) dialog.findViewById(R.id.tempTest1);
+        testBgColor2 = dialog.findViewById(R.id.tempTest2);
+        outputTest = dialog.findViewById(R.id.outputTest);
+        firstColor = dialog.findViewById(R.id.firstColor);
+        SecondColor = dialog.findViewById(R.id.SecondColor);
         btnCencel = dialog.findViewById(R.id.btnCencel);
         btnDone = dialog.findViewById(R.id.btnDone);
         colors = new int[]{1, 2};
         drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
-
-        firstColor.subscribe((color, fromUser, shouldPropagate) -> {
-            if (fromUser){
-                colors[0] =color;
-                drawable.setColors(colors);
-                testBgColor.setBackground(drawable);
+        FinalDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
+        testBgColor1.setOnClickListener(v1 -> {
+            firstColor.setVisibility(View.VISIBLE);
+            SecondColor.setVisibility(View.INVISIBLE);
+        });
+        testBgColor2.setOnClickListener(v1 -> {
+            firstColor.setVisibility(View.INVISIBLE);
+            SecondColor.setVisibility(View.VISIBLE);
+        });
+        firstColor.setColorListener((ColorListener) (color, fromUser) -> {
+            if (fromUser) {
+                colors[0] = color;
+                drawable.setColor(color);
+                testBgColor1.setBackground(drawable);
+                FinalDrawable.setColors(colors);
+                outputTest.setBackground(FinalDrawable);
             }
         });
-
-        SecondColor.subscribe((color, fromUser, shouldPropagate) -> {
-            if (fromUser){
-                colors[1] =color;
-                drawable.setColors(colors);
-                testBgColor.setBackground(drawable);
+        SecondColor.setColorListener(new ColorListener() {
+            @Override
+            public void onColorSelected(int color, boolean fromUser) {
+                if (fromUser) {
+                    colors[1] = color;
+                    drawable.setColor(color);
+                    testBgColor2.setBackground(drawable);
+                    FinalDrawable.setColors(colors);
+                    outputTest.setBackground(FinalDrawable);
+                }
             }
         });
         btnCencel.setOnClickListener(view1 -> {
@@ -94,11 +102,10 @@ public class ColorBox {
         });
         btnDone.setOnClickListener(view1 -> {
             dialog.dismiss();
-            if (colorSettingType.equals("GRADIANT")){
-                listner.setBackground(drawable);
-            }
-            else {
-                listner.setDrawable(colors);
+            if (colorSettingType.equals("GRADIANTBACK")) {
+                listner.setBackgroundColor(FinalDrawable);
+            } else {
+                listner.setTxtColor(colors);
             }
         });
         dialog.show();
@@ -125,7 +132,7 @@ public class ColorBox {
 }
 
 interface ColorListner {
-    public void setDrawable(int colors[]);
+    public void setTxtColor(int[] colors);
 
-    public void setBackground(GradientDrawable drawable);
+    public void setBackgroundColor(GradientDrawable drawable);
 }

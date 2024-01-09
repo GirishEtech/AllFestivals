@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="Confirm">Done</string>
+    <string name="Confirm">Select</string>
 
-    <string name="Cancel">Cancel</string>
+    <string name="Cancel">Presets</string>
 
     <string name="app_name">All Festivals &amp; Wishes</string>
     <string name="Add">Add</string>

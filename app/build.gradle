@@ -66,6 +66,7 @@ dependencies {
 //rounded imageview
     implementation "com.makeramen:roundedimageview:2.3.0"
     implementation 'com.flying.xiaopo:sticker:1.4.0'
+    implementation 'com.github.antonpopoff:colorwheel:1.1.13'
     implementation 'com.karumi:dexter:4.1.0'
     implementation "com.github.duanhong169:colorpicker:1.1.6"
     implementation "com.github.Mohammad3125:KavehColorPicker:v1.0.0"

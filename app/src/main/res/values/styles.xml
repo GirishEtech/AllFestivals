@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="item_bg_style">
+        <item name="android:layout_width">@dimen/_45sdp</item>
+        <item name="android:layout_height">@dimen/_45sdp</item>
+        <item name="android:gravity">center|center_vertical|center_horizontal</item>
+        <item name="android:layout_marginEnd">@dimen/_10sdp</item>
+        <item name="android:background">@drawable/item_bg</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="item_txt_Style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_gravity">center|center_horizontal</item>
+        <item name="android:layout_toEndOf">@+id/img_nav_menu</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_marginTop">@dimen/_4sdp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_7ssp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="item_img_Style">
+        <item name="android:layout_width">@dimen/_21sdp</item>
+        <item name="android:layout_height">@dimen/_21sdp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginStart">@dimen/_minus2sdp</item>
+        <item name="android:tint">@color/white</item>
+    </style>
+</resources>
