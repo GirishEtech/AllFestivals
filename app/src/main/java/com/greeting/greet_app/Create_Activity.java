@@ -40,6 +40,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -63,9 +64,11 @@ import com.google.firebase.storage.StorageReference;
 import com.greeting.greet_app.Adapters.BG_Adapters;
 import com.greeting.greet_app.Adapters.ColorListAdapter;
 import com.greeting.greet_app.Adapters.DataAdapter;
+import com.greeting.greet_app.Adapters.FilterAdapter;
 import com.greeting.greet_app.Adapters.Gifs_Adapters;
 import com.greeting.greet_app.Adapters.GradiantColorAdapter;
 import com.greeting.greet_app.Adapters.StickersAdapter;
+import com.greeting.greet_app.Model.FilterData;
 import com.greeting.greet_app.Model.SimpleColor;
 import com.rtugeek.android.colorseekbar.AlphaSeekBar;
 import com.xiaopo.flying.sticker.BitmapStickerIcon;
@@ -76,21 +79,30 @@ import com.xiaopo.flying.sticker.Sticker;
 import com.xiaopo.flying.sticker.TextSticker;
 import com.xiaopo.flying.sticker.ZoomIconEvent;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import top.defaults.colorpicker.ColorWheelPalette;
 
-public class Create_Activity extends AppCompatActivity implements View.OnTouchListener, ColorListner, SimpleColorListner {
+public class Create_Activity extends AppCompatActivity implements View.OnTouchListener, ColorListner, SimpleColorListner, FilterAdapter.FilterClickListner {
 
 
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
+                    // Handle the returned Uri
+                }
+            });
     ImageView it_image, it_gradiant, it_color, it_gallary, it_bg;
 
-    TextView txt_image, txt_gradiant, txt_color, txt_gallary, txt_bg;
+    TextView txt_image, txt_gradiant, txt_color, txt_gallary, txt_bg, txtOpacity;
     top.defaults.colorpicker.ColorWheelPalette color_bg, GradiantColorBg;
 
     MyColorPicker bgPicker, TextPicker;
@@ -100,11 +112,13 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     private ViewDialog viewDialog;
     private static final String TAG = "Touch";
     public static final int PERM_RQST_CODE = 110;
+    public static final int CAMERA_REQUEST = 192;
     private com.xiaopo.flying.sticker.StickerView stickerView;
     private TextSticker sticker;
     private com.greeting.greet_app.sticker.TextSticker TextSticker;
     private Boolean isColor = true;
     private EditText tv_feedback_text;
+    private FilterAdapter filterAdapter;
     private AlphaSeekBar kavehColorAlphaSlider, kavehColorAlphaBackground;
     @SuppressWarnings("unused")
     StickersAdapter stickersAdapter;
@@ -134,7 +148,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     ColorWheelPalette add_color_btn, add_gradiant_color;
     LinearLayout bottom_nav_card, add_gradiant_layout, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker, colorForbg;
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
-    RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView, gradiantList;
+    RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView, gradiantList,filterList;
     TextView tv_title, tv_opacity_per;
     ConstraintLayout rv_cancel_done, seekLayout;
     ImageView ic_cross, ic_done, ic_crossSticker, ic_doneSticker, ic_crossFilter, ic_doneFilter;
@@ -203,8 +217,13 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         txt_color = findViewById(R.id.txt_color);
         txt_gallary = findViewById(R.id.txt_galary);
         txt_gradiant = findViewById(R.id.txt_gradiant);
+        txtOpacity = findViewById(R.id.txtOpacity);
 
 
+        filterList = findViewById(R.id.filterList);
+        List<FilterData> data = getFilterList();
+        filterAdapter = new FilterAdapter(data,this);
+        filterList.setAdapter(filterAdapter);
         color_bg = findViewById(R.id.color_bg);
         GradiantColorBg = findViewById(R.id.Gradiant_bgPalate);
         colorForbg = findViewById(R.id.colorForbg);
@@ -289,6 +308,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 colorForbg.setVisibility(View.GONE);
                 bg_image.setVisibility(View.VISIBLE);
                 seekLayout.setVisibility(View.GONE);
+                txtOpacity.setVisibility(View.GONE);
                 setDefaultColor("BG");
                 quotation_adapters_bg.setOnClickListener((position, model) -> {
                     setLayoutParams();
@@ -298,60 +318,6 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             }
         });
         add_color_btn.setOnClickListener(this::showColorPickerDiologe);
-        ivOld.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                main_view.setBackgroundColor(0x66000000);
-            }
-        });
-        ivBlur.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                main_view.setBackgroundColor(0x66F44336);
-            }
-        });
-        ivBacksheet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                main_view.setBackgroundColor(0x6600BCD4);
-            }
-        });
-        ivReliefs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                main_view.setBackgroundColor(0x664C0B0B);
-            }
-        });
-        ivBW.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                main_view.setBackgroundColor(0xA64CAF50);
-            }
-        });
-        ivMosaic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                main_view.setBackgroundColor(0x66FFEB3B);
-            }
-        });
-        ivDark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                main_view.setBackgroundColor(0x66C39F93);
-            }
-        });
-        ivPunch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                main_view.setBackgroundColor(0x669C27B0);
-            }
-        });
-        ivoriginal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                main_view.setBackgroundColor(0x00000000);
-            }
-        });
 
 
         ic_crossFilter.setOnClickListener(v -> {
@@ -387,6 +353,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 bg_image.setVisibility(View.GONE);
                 colorForbg.setVisibility(View.GONE);
                 seekLayout.setVisibility(View.GONE);
+                txtOpacity.setVisibility(View.GONE);
                 startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
             }
         });
@@ -397,6 +364,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 bg_image.setVisibility(View.GONE);
                 colorForbg.setVisibility(View.VISIBLE);
                 seekLayout.setVisibility(View.VISIBLE);
+                txtOpacity.setVisibility(View.VISIBLE);
                 setDefaultColor("COLOR");
                 // this is for Custom Color wheel
                 color_bg.setOnClickListener(view1 -> {
@@ -436,6 +404,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 bg_image.setVisibility(View.GONE);
                 colorForbg.setVisibility(View.GONE);
                 seekLayout.setVisibility(View.VISIBLE);
+                txtOpacity.setVisibility(View.VISIBLE);
                 grediant_Color.setLayoutManager(new LinearLayoutManager(Create_Activity.this, RecyclerView.HORIZONTAL, false));
                 grediant_Color.setHasFixedSize(true);
                 ArrayList<SimpleColor> arrayList = new ArrayList<>();
@@ -488,6 +457,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 bottom_add_layout.setVisibility(View.VISIBLE);
                 rv_cancel_done.setVisibility(View.VISIBLE);
                 seekLayout.setVisibility(View.GONE);
+                txtOpacity.setVisibility(View.GONE);
             }
         });
         nav_add_color.setOnClickListener(new View.OnClickListener() {
@@ -758,9 +728,8 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 2);
             permission();
         } else {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(takePictureIntent,RESULT_LOAD_IMG);
-            Toast.makeText(this, "Permission is Granted", Toast.LENGTH_SHORT).show();
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
         }
     }
 
@@ -890,20 +859,24 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
-        if (reqCode == RESULT_LOAD_IMG && resultCode == RESULT_OK) {
+        if (reqCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            main_img.setImageBitmap(photo);
+            setLayoutParams();
+        } else if (reqCode == RESULT_LOAD_IMG && resultCode == RESULT_OK) {
             try {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                setLayoutParams();
                 main_img.setImageBitmap(selectedImage);
-            } catch (Exception e) {
+                setLayoutParams();
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(Create_Activity.this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
 
         } else {
-
+            Toast.makeText(Create_Activity.this, "You haven't picked Image", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1300,5 +1273,27 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         setWhiteColor(it_bg, txt_bg);
         setWhiteColor(it_color, txt_color);
         setWhiteColor(it_image, txt_image);
+    }
+
+    @Override
+    public void onFilterClick(int color) {
+        if (main_img.getVisibility() != View.VISIBLE){}
+        else {
+            setLayoutParams();
+            main_view.setBackgroundColor(color);
+        }
+    }
+    private List<FilterData> getFilterList(){
+        List<FilterData> data = new ArrayList<>();
+        data.add(new FilterData(0x66000000,R.drawable.abc));
+        data.add(new FilterData(0x66F44336,R.drawable.abc));
+        data.add(new FilterData(0x6600BCD4,R.drawable.abc));
+        data.add(new FilterData(0x664C0B0B,R.drawable.abc));
+        data.add(new FilterData(0xA64CAF50,R.drawable.abc));
+        data.add(new FilterData(0x66FFEB3B,R.drawable.abc));
+        data.add(new FilterData(0x66C39F93,R.drawable.abc));
+        data.add(new FilterData(0x669C27B0,R.drawable.abc));
+        data.add(new FilterData(0x00000000,R.drawable.abc));
+        return data;
     }
 }

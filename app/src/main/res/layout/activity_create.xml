@@ -322,7 +322,7 @@
             android:background="@color/search_bg_color"
             android:orientation="vertical"
             android:padding="5dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/bg_image"
@@ -396,17 +396,17 @@
                 android:background="@color/search_bg_color"
                 android:orientation="vertical"
                 android:padding="5dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:paddingRight="4dp"
                     android:text="@string/Gradient"
                     android:textAllCaps="true"
                     android:textColor="@android:color/darker_gray"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/_13ssp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -431,6 +431,16 @@
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                 </LinearLayout>
             </LinearLayout>
+            <TextView
+                android:id="@+id/txtOpacity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:text="@string/Opacity"
+                android:textAllCaps="true"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/_13ssp" />
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/seekMain"
                 android:layout_width="match_parent"
@@ -893,191 +903,31 @@
         <LinearLayout
             android:id="@+id/bottom_add_filters_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_200sdp"
             android:layout_alignParentBottom="true"
             android:background="@color/search_bg_color"
             android:orientation="vertical"
-            android:padding="5dp"
-            android:visibility="gone">
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:visibility="visible">
 
-            <HorizontalScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/filterList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/_150sdp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="4" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="6dp">
-
-                        <ImageView
-                            android:id="@+id/ivoriginal"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/abc" />
-
-                        <View
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:background="#00000000" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="6dp">
-
-                        <ImageView
-                            android:id="@+id/ivOld"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/abc" />
-
-                        <View
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:background="#66000000" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="6dp">
-
-                        <ImageView
-                            android:id="@+id/ivBlur"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/abc" />
-
-                        <View
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:background="#66F44336" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="6dp">
-
-                        <ImageView
-                            android:id="@+id/ivBacksheet"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/abc" />
-
-                        <View
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:background="#6600BCD4" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="6dp">
-
-                        <ImageView
-                            android:id="@+id/ivReliefs"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/abc" />
-
-                        <View
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:background="#664C0B0B" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="6dp">
-
-                        <ImageView
-                            android:id="@+id/ivBW"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/abc" />
-
-                        <View
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:background="#A64CAF50" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="6dp">
-
-                        <ImageView
-                            android:id="@+id/ivMosaic"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/abc" />
-
-                        <View
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:background="#66FFEB3B" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="6dp">
-
-                        <ImageView
-                            android:id="@+id/ivDark"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/abc" />
-
-                        <View
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:background="#66C39F93" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="6dp">
-
-                        <ImageView
-                            android:id="@+id/ivPunch"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/abc" />
-
-                        <View
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
-                            android:background="#669C27B0" />
-                    </RelativeLayout>
-                </LinearLayout>
-            </HorizontalScrollView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/handleFilterCross"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
+                android:layout_gravity="bottom"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_5sdp">
 
