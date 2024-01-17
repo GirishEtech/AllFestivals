@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class Daily_Wishes_Category_Adapters extends RecyclerView.Adapter<Daily_Wishes_Category_Adapters.StudentsViewHolder> {
+public class Daily_Wishes_Category_Adapters_All extends RecyclerView.Adapter<Daily_Wishes_Category_Adapters_All.StudentsViewHolder> {
     EventListener listener;
 
     public interface EventListener {
@@ -34,13 +34,13 @@ public class Daily_Wishes_Category_Adapters extends RecyclerView.Adapter<Daily_W
     private LayoutInflater inflater;
     String type = "";
 
-    public Daily_Wishes_Category_Adapters(Context context, ArrayList<CategoryModel> clientModelArrayList) {
+    public Daily_Wishes_Category_Adapters_All(Context context, ArrayList<CategoryModel> clientModelArrayList) {
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.clientModelArrayList = clientModelArrayList;
     }
 
-    public Daily_Wishes_Category_Adapters(Context context, ArrayList<CategoryModel> clientModelArrayList, EventListener listener) {
+    public Daily_Wishes_Category_Adapters_All(Context context, ArrayList<CategoryModel> clientModelArrayList, EventListener listener) {
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.clientModelArrayList = clientModelArrayList;
@@ -51,7 +51,7 @@ public class Daily_Wishes_Category_Adapters extends RecyclerView.Adapter<Daily_W
     @NotNull
     @Override
     public StudentsViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.daily_wishes_item, parent, false);
+        View view = inflater.inflate(R.layout.daily_wishes_item_all, parent, false);
         StudentsViewHolder viewHolder = new StudentsViewHolder(view);
         return viewHolder;
     }

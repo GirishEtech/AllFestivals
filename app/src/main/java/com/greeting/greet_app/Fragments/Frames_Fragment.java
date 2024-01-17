@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -88,6 +89,7 @@ public class Frames_Fragment extends Fragment {
             AllCategory_Activity.tv_title.setText(Utils.Frames);
         }
         view.findViewById(R.id.btn_home).setOnClickListener(view1 -> {
+            Toast.makeText(activity, "home btn is Click", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(requireActivity(), MainActivity.class));
         });
         viewDialog = new ViewDialog(activity);
@@ -103,13 +105,19 @@ public class Frames_Fragment extends Fragment {
         list.clear();
         view.findViewById(R.id.tv_no).setVisibility(View.GONE);
         StorageReference listRef = FirebaseStorage.getInstance().getReference(Utils.categoryModel.getPath() + "/" + Utils.Frames);
-
         listRef.listAll()
                 .addOnSuccessListener(new OnSuccessListener<ListResult>() {
                     @Override
                     public void onSuccess(ListResult listResult) {
                         if (listResult.getItems().size() == 0) {
                             view.findViewById(R.id.tv_no).setVisibility(View.VISIBLE);
+                            view.findViewById(R.id.btn_home).setOnClickListener(view1 -> {
+                                Toast.makeText(activity, "home btn is Click", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(requireActivity(), MainActivity.class));
+                            });
+                        }
+                        else{
+                            view.findViewById(R.id.tv_no).setVisibility(View.GONE);
                         }
                         for (StorageReference prefix : listResult.getPrefixes()) {
                             Log.e("Path", "" + prefix.getName());

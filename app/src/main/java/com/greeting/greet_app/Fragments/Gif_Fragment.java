@@ -91,6 +91,7 @@ public class Gif_Fragment extends Fragment {
         view= inflater.inflate(R.layout.fragment_gif, container, false);
         activity=getActivity();
         view.findViewById(R.id.btn_home).setOnClickListener(view1 -> {
+            Toast.makeText(activity, "home btn is Click", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(requireActivity(), MainActivity.class));
         });
         recyclerView=view.findViewById(R.id.RecyclerView);
@@ -111,6 +112,10 @@ public class Gif_Fragment extends Fragment {
                     public void onSuccess(ListResult listResult) {
                         if (listResult.getItems().size()==0){
                             view.findViewById(R.id.tv_no).setVisibility(View.VISIBLE);
+                            view.findViewById(R.id.btn_home).setOnClickListener(view1 -> {
+                                Toast.makeText(activity, "home btn is Click", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(requireActivity(), MainActivity.class));
+                            });
                         }
                         for (StorageReference prefix : listResult.getPrefixes()) {
                             Log.e("Path",""+prefix.getName());

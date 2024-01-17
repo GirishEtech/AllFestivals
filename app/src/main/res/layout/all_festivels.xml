@@ -3,14 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginStart="@dimen/_3sdp"
-    android:layout_marginTop="@dimen/_5sdp"
-    android:layout_marginEnd="@dimen/_2sdp"
+    android:layout_margin="8dp"
     android:orientation="vertical">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_100sdp"
-        app:cardCornerRadius="10dp">
+        android:layout_height="@dimen/_70sdp"
+        app:cardCornerRadius="@dimen/_8sdp">
         <ImageView
             android:id="@+id/img"
             android:layout_width="match_parent"
@@ -27,6 +25,5 @@
         android:gravity="center"
         android:text="Eid Mubarak"
         android:textSize="12sp"
-
         android:textColor="@color/black"/>
 </LinearLayout>

@@ -38,7 +38,7 @@
                 android:fontFamily="@font/lobster_regular"
                 android:text="@string/Quote_Preview"
                 android:textColor="@color/white"
-                android:textSize="20dp" />
+                android:textSize="@dimen/_22ssp" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
@@ -46,7 +46,7 @@
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="320dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/_3sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -80,9 +81,7 @@ public class Stickers_Fragment extends Fragment {
         if (AllCategory_Activity.tv_title!=null){
             AllCategory_Activity.tv_title.setText(Utils.Stickers);
         }
-        view.findViewById(R.id.btn_home).setOnClickListener(view1 -> {
-            startActivity(new Intent(requireActivity(), MainActivity.class));
-        });
+
         viewDialog=new ViewDialog(activity);
         recyclerView=view.findViewById(R.id.RecyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(activity,Utils.Span_Count));
@@ -102,7 +101,12 @@ public class Stickers_Fragment extends Fragment {
                     public void onSuccess(ListResult listResult) {
                         if (listResult.getItems().size()==0){
                             view.findViewById(R.id.tv_no).setVisibility(View.VISIBLE);
+                            view.findViewById(R.id.btn_home).setOnClickListener(view1 -> {
+                                Toast.makeText(activity, "home btn is Click", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(requireActivity(), MainActivity.class));
+                            });
                         }
+
                         for (StorageReference prefix : listResult.getPrefixes()) {
                             Log.e("Path",""+prefix.getName());
                             // All the prefixes under listRef.

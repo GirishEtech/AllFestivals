@@ -7,8 +7,8 @@
                 android:startColor="@color/search_bg_color"
                 android:endColor="@color/search_bg_color"/>
             <corners
-                android:topLeftRadius="20dp"
-                android:topRightRadius="20dp"/>
+                android:topLeftRadius="10dp"
+                android:topRightRadius="10dp"/>
         </shape>
     </item>
 </selector>

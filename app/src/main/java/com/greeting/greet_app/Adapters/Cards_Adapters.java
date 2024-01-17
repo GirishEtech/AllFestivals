@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -80,7 +81,12 @@ public class Cards_Adapters extends RecyclerView.Adapter<Cards_Adapters.Students
         if (list.size() > 0) {
             //   holder.setIsRecyclable(false);
             if (Type.equals(Utils.Stickers)) {
-                holder.itemView.setBackgroundTintList(ColorStateList.valueOf(context.getColor(android.R.color.transparent)));
+                ViewGroup.LayoutParams layoutParams = holder.ic_img.getLayoutParams();
+                holder.carview.setCardBackgroundColor(context.getColor(android.R.color.transparent));
+                //holder.itemView.setBackgroundTintList(ColorStateList.valueOf(context.getColor(android.R.color.transparent)));
+                layoutParams.height = 240;
+                layoutParams.width = 240;
+                holder.ic_img.setLayoutParams(layoutParams);
             }
             String model = list.get(position);
             Glide.with(context).load(R.raw.loading).into(holder.ic_pro);
@@ -116,10 +122,12 @@ public class Cards_Adapters extends RecyclerView.Adapter<Cards_Adapters.Students
 
     class StudentsViewHolder extends RecyclerView.ViewHolder {
         TextView text;
+        CardView carview;
         SquareImageView ic_img, ic_pro;
 
         public StudentsViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+            carview = itemView.findViewById(R.id.carview);
             ic_img = itemView.findViewById(R.id.ic_img);
             ic_pro = itemView.findViewById(R.id.ic_pro);
         }

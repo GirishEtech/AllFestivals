@@ -34,7 +34,7 @@
                 android:fontFamily="@font/lobster_regular"
                 android:text="@string/Gif_Preview"
                 android:textColor="@color/white"
-                android:textSize="27dp" />
+                android:textSize="@dimen/_22ssp" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 

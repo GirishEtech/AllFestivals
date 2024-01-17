@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -93,6 +94,7 @@ public class Quotation_Fragment extends Fragment {
             AllCategory_Activity.tv_title.setText(Utils.Quotes);
         }
         view.findViewById(R.id.btn_home).setOnClickListener(view1 -> {
+            Toast.makeText(activity, "home btn is Click", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(requireActivity(), MainActivity.class));
         });
         recyclerView=view.findViewById(R.id.RecyclerView);
@@ -118,6 +120,10 @@ public class Quotation_Fragment extends Fragment {
                 }else {
                     view.findViewById(R.id.tv_no).setVisibility(View.VISIBLE);
                     Log.i("FAILED", "onDataChange: DATA NOT FOUND");
+                    view.findViewById(R.id.btn_home).setOnClickListener(view1 -> {
+                        Toast.makeText(activity, "home btn is Click", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(requireActivity(), MainActivity.class));
+                    });
                 }
             }
 

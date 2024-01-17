@@ -32,7 +32,7 @@
                         android:id="@+id/ic_nav_menu"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/material_ic_keyboard_arrow_left_black_24dp"
+                        android:src="@drawable/icon_back"
                         app:tint="@color/white" />
 
                     <TextView
@@ -160,7 +160,7 @@
             android:elevation="5dp"
             android:orientation="horizontal"
             android:padding="20dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:weightSum="5"
             >
 
@@ -911,7 +911,7 @@
             android:paddingTop="@dimen/_5sdp"
             android:paddingEnd="@dimen/_5sdp"
             android:paddingBottom="@dimen/_8sdp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/filterList"
