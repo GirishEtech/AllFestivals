@@ -35,7 +35,7 @@ public class AllFestivalesActivity extends AppCompatActivity implements AllFesti
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_festivales);
         recyclerView_all_festivel = findViewById(R.id.recyclerView_all_festivel);
-        recyclerView_all_festivel.setLayoutManager(new GridLayoutManager(AllFestivalesActivity.this, 2));
+        recyclerView_all_festivel.setLayoutManager(new GridLayoutManager(AllFestivalesActivity.this, 3));
         allFestivals_category_adapters = new AllFestivalsAdapters(AllFestivalesActivity.this, all_festivel_list, AllFestivalesActivity.this);
         recyclerView_all_festivel.setAdapter(allFestivals_category_adapters);
         Get_Festivals();

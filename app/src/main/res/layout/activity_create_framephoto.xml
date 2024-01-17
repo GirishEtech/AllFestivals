@@ -34,7 +34,7 @@
                         android:id="@+id/ic_nav_menu"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/material_ic_keyboard_arrow_left_black_24dp"
+                        android:src="@drawable/icon_back"
                         app:tint="@color/white" />
 
                     <TextView

@@ -16,11 +16,9 @@ import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Layout;
@@ -40,7 +38,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -49,7 +46,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -79,8 +75,6 @@ import com.xiaopo.flying.sticker.Sticker;
 import com.xiaopo.flying.sticker.TextSticker;
 import com.xiaopo.flying.sticker.ZoomIconEvent;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -92,7 +86,8 @@ import top.defaults.colorpicker.ColorWheelPalette;
 
 public class Create_Activity extends AppCompatActivity implements View.OnTouchListener, ColorListner, SimpleColorListner, FilterAdapter.FilterClickListner {
 
-
+    private Uri fileUri;
+    ;
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             new ActivityResultCallback<Uri>() {
                 @Override
@@ -148,7 +143,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     ColorWheelPalette add_color_btn, add_gradiant_color;
     LinearLayout bottom_nav_card, add_gradiant_layout, nav_add_color, nav_add_text, nav_add_filters, nav_add_sticker, colorForbg;
     LinearLayout nav_add_img, bottom_add_layout, bottom_color_layout, bottom_add_sticker_layout, bottom_add_filters_layout;
-    RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView, gradiantList,filterList;
+    RecyclerView Choose_Sticker_RecyclerView, Choose_Filters_RecyclerView, gradiantList, filterList;
     TextView tv_title, tv_opacity_per;
     ConstraintLayout rv_cancel_done, seekLayout;
     ImageView ic_cross, ic_done, ic_crossSticker, ic_doneSticker, ic_crossFilter, ic_doneFilter;
@@ -222,7 +217,7 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
         filterList = findViewById(R.id.filterList);
         List<FilterData> data = getFilterList();
-        filterAdapter = new FilterAdapter(data,this);
+        filterAdapter = new FilterAdapter(data, this);
         filterList.setAdapter(filterAdapter);
         color_bg = findViewById(R.id.color_bg);
         GradiantColorBg = findViewById(R.id.Gradiant_bgPalate);
@@ -373,7 +368,6 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
                 //setLeftRightClick(colorForbg);
             }
         });
-
         this.simple_Color.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         this.simple_Color.setHasFixedSize(true);
         String[] colorNames = getResources().getStringArray(R.array.colorNames);
@@ -723,13 +717,19 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
         });
     }
 
+
     private void permission() throws IOException {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 2);
             permission();
         } else {
-            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            try {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            } catch (Exception ex) {
+                Log.e("PROJECT_TEST", ex.getMessage());
+            }
+
         }
     }
 
@@ -860,9 +860,16 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         if (reqCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            main_img.setImageBitmap(photo);
-            setLayoutParams();
+            try {
+
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                main_img.setImageBitmap(photo);
+                setLayoutParams();
+            }
+            catch (Exception exception){
+                Log.i(TAG, "onActivityResult: Exception"+exception);
+            }
+
         } else if (reqCode == RESULT_LOAD_IMG && resultCode == RESULT_OK) {
             try {
                 final Uri imageUri = data.getData();
@@ -1277,23 +1284,24 @@ public class Create_Activity extends AppCompatActivity implements View.OnTouchLi
 
     @Override
     public void onFilterClick(int color) {
-        if (main_img.getVisibility() != View.VISIBLE){}
-        else {
+        if (main_img.getVisibility() != View.VISIBLE) {
+        } else {
             setLayoutParams();
             main_view.setBackgroundColor(color);
         }
     }
-    private List<FilterData> getFilterList(){
+
+    private List<FilterData> getFilterList() {
         List<FilterData> data = new ArrayList<>();
-        data.add(new FilterData(0x66000000,R.drawable.abc));
-        data.add(new FilterData(0x66F44336,R.drawable.abc));
-        data.add(new FilterData(0x6600BCD4,R.drawable.abc));
-        data.add(new FilterData(0x664C0B0B,R.drawable.abc));
-        data.add(new FilterData(0xA64CAF50,R.drawable.abc));
-        data.add(new FilterData(0x66FFEB3B,R.drawable.abc));
-        data.add(new FilterData(0x66C39F93,R.drawable.abc));
-        data.add(new FilterData(0x669C27B0,R.drawable.abc));
-        data.add(new FilterData(0x00000000,R.drawable.abc));
+        data.add(new FilterData(0x66000000, R.drawable.abc));
+        data.add(new FilterData(0x66F44336, R.drawable.abc));
+        data.add(new FilterData(0x6600BCD4, R.drawable.abc));
+        data.add(new FilterData(0x664C0B0B, R.drawable.abc));
+        data.add(new FilterData(0xA64CAF50, R.drawable.abc));
+        data.add(new FilterData(0x66FFEB3B, R.drawable.abc));
+        data.add(new FilterData(0x66C39F93, R.drawable.abc));
+        data.add(new FilterData(0x669C27B0, R.drawable.abc));
+        data.add(new FilterData(0x00000000, R.drawable.abc));
         return data;
     }
 }

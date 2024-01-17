@@ -79,21 +79,23 @@ public class Categories_Fragment extends Fragment implements Daily_Wishes_Catego
     TextView tv_no;
     RecyclerView recyclerView_all_special;
     Special_Event_Category_Adapters special_event_category_adapters;
-    ArrayList<CategoryModel> special_events_list =new ArrayList<>();
+    ArrayList<CategoryModel> special_events_list = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_special_event, container, false);
-        activity=getActivity();
+        view = inflater.inflate(R.layout.fragment_special_event, container, false);
+        activity = getActivity();
 
-      //  ((MainActivity)getContext()).getSupportActionBar().setTitle(getActivity().getString(R.string.app_name));
-        tv_no=view.findViewById(R.id.tv_no);
-        recyclerView_all_special =view.findViewById(R.id.recyclerView_all_special);
+        //  ((MainActivity)getContext()).getSupportActionBar().setTitle(getActivity().getString(R.string.app_name));
+        tv_no = view.findViewById(R.id.tv_no);
+        recyclerView_all_special = view.findViewById(R.id.recyclerView_all_special);
         in_it();
         Get_Special_Events();
         return view;
     }
+
     private void Get_Special_Events() {
         special_events_list.clear();
         StorageReference listRef = FirebaseStorage.getInstance().getReference(Utils.Categories);
@@ -103,24 +105,24 @@ public class Categories_Fragment extends Fragment implements Daily_Wishes_Catego
                     @Override
                     public void onSuccess(ListResult listResult) {
                         for (StorageReference prefix : listResult.getPrefixes()) {
-                            Log.e("Path",""+prefix.getName());
+                            Log.e("Path", "" + prefix.getName());
                             // All the prefixes under listRef.
                             // You may call listAll() recursively on them.
                         }
                         for (StorageReference item : listResult.getItems()) {
                             // All the items under listRef.
-                            Log.e("Path",""+item.getPath());
+                            Log.e("Path", "" + item.getPath());
                             item.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    CategoryModel categoryModel=new CategoryModel();
+                                    CategoryModel categoryModel = new CategoryModel();
                                     categoryModel.setMainCategoryName("Categories");
                                     categoryModel.setImageLink(uri.toString());
                                     categoryModel.setName(item.getName().split("\\.")[0]);
                                     categoryModel.setPath(item.getPath().split("\\.")[0]);
                                     special_events_list.add(categoryModel);
                                     special_event_category_adapters.notifyDataSetChanged();
-                                    Log.e("url",uri.toString());
+                                    Log.e("url", uri.toString());
                                 }
                             });
                         }
@@ -133,17 +135,20 @@ public class Categories_Fragment extends Fragment implements Daily_Wishes_Catego
                     }
                 });
     }
+
     private void in_it() {
         recyclerView_all_special.setLayoutManager(new LinearLayoutManager(activity));
-        special_event_category_adapters =new Special_Event_Category_Adapters(activity, special_events_list);
+        special_event_category_adapters = new Special_Event_Category_Adapters(activity, special_events_list);
         recyclerView_all_special.setAdapter(special_event_category_adapters);
 
     }
+
     CategoryModel clientModel_Add;
-    int pos=-1;
+    int pos = -1;
+
     @Override
     public void onEvent(CategoryModel clientModel, int position) {
-        clientModel_Add=clientModel;
-        pos=position;
+        clientModel_Add = clientModel;
+        pos = position;
     }
 }
